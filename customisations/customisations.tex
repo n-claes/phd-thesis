@@ -1,0 +1,88 @@
+% Some personal modifications to chapter headers etc
+\usepackage{titlesec}
+\definecolor{skyblue}{HTML}{005398}
+\titleformat
+  {\chapter}
+  [display]
+  {\filcenter}
+  {
+    {
+      \color{skyblue}
+      \rule{0.3\textwidth}{2pt}
+      \hspace{1em}
+      \scalebox{4}{\textbf{\thechapter}}
+      \hspace{1em}
+      \rule{0.3\textwidth}{2pt}
+      \vspace*{-0.1\baselineskip}
+    }
+  }
+  {0ex}
+  {\LARGE\bfseries}
+\titleformat
+  {\section}
+  {\LARGE\bfseries}
+  {\color{skyblue}\LARGE{\thechapter}\enspace}
+  {0pt}
+  {}
+\titleformat
+  {\subsection}
+  {\Large\bfseries}
+  {\color{skyblue}\Large{\thesection}\enspace}
+  {0pt}
+  {}
+\titleformat
+  {\subsubsection}
+  {\large\bfseries}
+  {\color{skyblue}\large{\thesubsection}\enspace}
+  {0pt}
+  {}
+\numberwithin{equation}{chapter}
+\numberwithin{figure}{chapter}
+
+% Dedicated command for quotes
+\definecolor{quotemark}{gray}{0.7}
+\makeatletter
+\def\chapterquote{\@ifnextchar[{\chapterquote@i}{\chapterquote@i[]}}
+\def\chapterquote@i[#1]{
+  \def\tempa{#1}\@ifnextchar[{\chapterquote@ii}{\chapterquote@ii[]}
+}
+\def\chapterquote@ii[#1]{
+  \def\tempb{#1}\@ifnextchar[{\chapterquote@iii}{\chapterquote@iii[]}
+}
+\def\chapterquote@iii[#1]{
+  \def\tempc{#1}
+  \vspace{-4.5em}
+  \noindent
+  \begin{list}{}{
+    \setlength{\leftmargin}{0.3\textwidth}
+    \setlength{\rightmargin}{0.1\textwidth}
+  }
+  \item[]
+  \begin{picture}(0,0)
+  \put(-15,-5){\makebox(0,0){\scalebox{3}{\textcolor{quotemark}{``}}}}
+  \end{picture}
+  \begingroup
+    % contains the quote itself
+    \itshape\small
+}
+\def\endchapterquote{
+  \endgroup\par
+  \makebox[0pt][l]{
+    \hspace{0.58\textwidth}
+    \begin{picture}(0,0)(0,0)
+    \put(15,15){\makebox(0,0){\scalebox{3}{\color{quotemark}''}}}
+    \end{picture}
+  }
+  \ifx\tempa\empty
+  \else
+    \ifx \small{
+      \tempc\empty\hfill\rule{100pt}{0.5pt}\\\mbox{}\hfill\tempa,\ \emph{\tempb}
+    }
+    \else \small{
+      \hfill\rule{100pt}{0.5pt}\\\mbox{}\hfill\tempa,\ \emph{\tempb},\ \tempc
+    }
+    \fi\fi\par
+    \vspace{0.5em}
+  \end{list}
+}
+\makeatother
