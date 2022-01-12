@@ -1,0 +1,103 @@
+\documentclass[final, faculty=fw, department=wis, phddegree=mat]{adsphd}
+
+%%% COVER: Settings %%%
+\title{My thesis title}
+%\subtitle{Multiscale computing for Dummies}
+
+\author{Niels}{Claes}
+
+\supervisor{Prof.~dr. Rony Keppens}{}
+
+\president{Comittee Chair}{}
+\jurymember{Prof.~dr. Tom Van Doorsselaere}{}
+\jurymember{Prof.~dr. Jon Sundqvist}{}
+\externaljurymember{External jury member}{university}
+
+\researchgroup{Centre for mathematical Plasma-Astrophysics}
+\website{}
+\email{}
+
+\address{Celestijnenlaan 200B}
+\date{May 2022}
+\copyyear{2022}
+
+\setlength{\adsphdspinewidth}{9mm}
+
+% \setcustomcoverpage{mycoverpage.tex} % mycoverpage.tex is the default
+
+%%% COVER: End settings %%%
+
+\usepackage{nomencl}
+\renewcommand{\nomname}{List of Symbols}
+\newcommand{\myprintnomenclature}{
+  \cleardoublepage
+  \printnomenclature
+  \chaptermark{\nomname}
+  \addcontentsline{toc}{chapter}{\nomname}
+}
+\makenomenclature
+
+\usepackage{glossaries}
+\newcommand{\glossname}{List of Abbreviations}
+\newcommand{\myprintglossary}{
+  \renewcommand{\glossaryname}{\glossname}
+  \cleardoublepage
+  \printglossary[title=\glossname]
+  \chaptermark{\glossname}
+  \addcontentsline{toc}{chapter}{\glossname}
+}
+\makeglossaries
+
+\usepackage{textcomp} % nice greek alphabet
+\usepackage{pifont}   % Dingbats
+\usepackage{booktabs}
+\usepackage{amssymb,amsthm}
+\usepackage{amsmath}
+
+
+\begin{document}
+
+{
+   % suppress underfull hbox
+  \hbadness=10000
+  \makefrontcoverXII
+  \maketitle
+}
+
+\frontmatter
+\include{00a-preface/preface}
+\include{00b-abstract_en/abstract_en}
+\include{00c-abstract_nl/abstract_nl}
+
+\myprintnomenclature
+\myprintglossary
+
+\tableofcontents
+% \listoffigures
+% \listoftables
+
+\mainmatter
+\include{01-introduction/introduction}
+\include{02-MHD_spectroscopy/spectroscopy}
+\include{03-homogeneous_plasmas/homogeneous_plasmas}
+\include{04-legolas/legolas}
+\include{05-applying_legolas/legolas_applications}
+\include{06-conclusions/conclusions}
+
+\appendix
+\include{07-appendices/appendixA}
+
+\backmatter
+\includebibliography
+% BibTex
+\bibliographystyle{acm}
+\bibliography{bibfile}
+\instructionsbibliography
+
+{
+  % suppress overful hbox
+  \hfuzz=\maxdimen
+  \makebackcoverXII
+}
+
+\end{document}
