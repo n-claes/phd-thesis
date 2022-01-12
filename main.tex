@@ -1,11 +1,51 @@
 \documentclass[final, faculty=fw, department=wis, phddegree=mat]{adsphd}
 
+% Some personal modifications to chapter headers etc
+\usepackage{titlesec}
+\definecolor{skyblue}{HTML}{005398}
+\titleformat
+  {\chapter}
+  [display]
+  {\filcenter}
+  {
+    {
+      \color{skyblue}
+      \rule{0.3\textwidth}{2pt}
+      \hspace{1em}
+      \scalebox{4}{\textbf{\thechapter}}
+      \hspace{1em}
+      \rule{0.3\textwidth}{2pt}
+      \vspace*{-0.1\baselineskip}
+    }
+  }
+  {0ex}
+  {\LARGE\bfseries}
+\titleformat
+  {\section}
+  {\LARGE\bfseries}
+  {\color{skyblue}\LARGE{\thechapter}\enspace}
+  {0pt}
+  {}
+\titleformat
+  {\subsection}
+  {\Large\bfseries}
+  {\color{skyblue}\Large{\thesection}\enspace}
+  {0pt}
+  {}
+\titleformat
+  {\subsubsection}
+  {\large\bfseries}
+  {\color{skyblue}\large{\thesubsection}\enspace}
+  {0pt}
+  {}
+\numberwithin{equation}{chapter}
+\numberwithin{figure}{chapter}
+
+
 %%% COVER: Settings %%%
 \title{My thesis title}
-%\subtitle{Multiscale computing for Dummies}
 
 \author{Niels}{Claes}
-
 \supervisor{Prof.~dr. Rony Keppens}{}
 
 \president{Comittee Chair}{}
