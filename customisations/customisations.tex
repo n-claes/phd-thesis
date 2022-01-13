@@ -73,16 +73,25 @@
     \put(15,15){\makebox(0,0){\scalebox{3}{\color{quotemark}''}}}
     \end{picture}
   }
-  \ifx\tempa\empty
+  \ifx \tempa\empty
   \else
-    \ifx \small{
-      \tempc\empty\hfill\rule{100pt}{0.5pt}\\\mbox{}\hfill\tempa,\ \emph{\tempb}
-    }
-    \else \small{
-      \hfill\rule{100pt}{0.5pt}\\\mbox{}\hfill\tempa,\ \emph{\tempb},\ \tempc
-    }
-    \fi\fi\par
-    \vspace{0.5em}
+    \hfill\rule{100pt}{0.5pt}\\
+    \ifx \tempb\empty
+      \ifx \tempc\empty
+        \small{\mbox{}\hfill\tempa}
+      \else
+        \small{\mbox{}\hfill\tempa,\ \tempc}
+      \fi
+    \else
+      \ifx \tempc\empty
+        \small{\mbox{}\hfill\tempa,\ \emph{\tempb}}
+      \else
+        \small{\mbox{}\hfill\tempa,\ \emph{\tempb},\ \tempc}
+      \fi
+    \fi
+  \fi
+  \par
+  \vspace{0.5em}
   \end{list}
 }
 \makeatother
