@@ -21,23 +21,26 @@
 \titleformat
   {\section}
   {\LARGE\bfseries}
-  {\color{skyblue}\LARGE{\thechapter}\enspace}
+  {\color{skyblue}\LARGE{\thesection}\enspace}
   {0pt}
   {}
 \titleformat
   {\subsection}
   {\Large\bfseries}
-  {\color{skyblue}\Large{\thesection}\enspace}
+  {\color{skyblue}\Large{\thesubsection}\enspace}
   {0pt}
   {}
 \titleformat
   {\subsubsection}
   {\large\bfseries}
-  {\color{skyblue}\large{\thesubsection}\enspace}
+  {\color{skyblue}\large{\thesubsubsection}\enspace}
   {0pt}
   {}
+
+
 \numberwithin{equation}{chapter}
 \numberwithin{figure}{chapter}
+\usepackage[labelfont={color=skyblue, bf}, labelsep={period}]{caption}
 
 % Dedicated command for quotes
 \definecolor{quotemark}{gray}{0.7}
