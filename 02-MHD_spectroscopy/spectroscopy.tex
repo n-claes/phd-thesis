@@ -1,5 +1,180 @@
 \chapter{MHD waves and spectroscopy} \label{ch: spectroscopy}
 
+\graphicspath{{02-MHD_spectroscopy/figures/}}
+
+\begin{chapterquote}[Eugene Parker][][]
+  I'm proud of the fact that I thought of the solar wind. It was an exercise in pursuing curiosity, which is the main motivation for studying physics from a personal standpoint.
+\end{chapterquote}
+
+This Chapter provides an overview of the main principles of \gls{MHD} spectroscopy and how one usually goes about detailing all waves and instabilities of a given physical equilibrium. Doing so can either be straightforward and yield relatively simple results, or can be quite complicated to the point where solutions show so many detailed features and intricacies that it is difficult to see the forest for the trees. Due to this inherent range in complexity of the problem at hand we adopt a step-by-step approach. Focusing on uniform equilibria at first, we look into simple waves and instabilities present in these plasmas and pay special attention to how the spectrum changes when more physics are included. In this Chapter we will limit ourselves to non-adiabatic effects: heating, cooling and thermal conduction.
+
+This will already provide us with a myriad of information regarding the underlying physics at play in simple configurations, though eventually we want to move on to more realistic equilibria by introducing non-uniformity in the background. At that point we will hit the limit of what can be solved analytically, and the discussion in this chapter will shift to a more qualitatative approach. This will get picked up again in later Chapters, where we will go more in-depth on how to tackle this particular problem and take a closer look at all the interesting features that emerge when solving it.
+
+\section{Introduction}
+Magnetohydrodynamics (\gls{MHD}) is the cornerstone of plasma physics, and in an ideal setting describes the behaviour of a perfectly conducting fluid when it interacts with a magnetic field. In essence, \gls{MHD} combines the Euler equations of gas dynamics with Maxwell's equations to describe the evolution of a magnetised plasma on macroscopic scales. This is the direct opposite of \emph{kinetic theory} (basically the other cornerstone of plasma physics), which describes plasmas using a collection of microscopic particles.
+
+We will not go in-depth as to which theory is better suited for one particular problem or under which conditions they are valid approximations. Generally speaking if one is investigating very small spatial or temporal scales, or is interested in the motions of individual particles or particle species then kinetic theory is the best option. On the other hand, for ``larger'' applications in which one assumes that the collisions between individual particles happen so frequently that the plasma can be treated as a single continuous fluid then \gls{MHD} is the way to go. Throughout this thesis we will assume that the latter is always the case, and we stick with the \gls{MHD} representation.
+
+One beautiful feature of the \gls{MHD} equations is that they are \emph{scale-independent}. The equations themselves are made dimensionless by choosing (generally speaking) reference values for the typical length scale, magnetic field strength and plasma density. Depending on the problem at hand different reference values can be chosen to describe the situation, which in turn implies that \gls{MHD} can describe plasmas in astrophysical settings (accretion disks, jets around black holes, stellar atmospheres, etc.) as well as laboratory settings, all using the same set of equations!
+
+
+\section{Magnetohydrodynamics}
+\subsection{The ``simple'' MHD equations}
+We first start with ``simple'' \gls{MHD}, that is, constraining ourselves to the ideal equations. The word ``simple'' is placed between quotation marks here, as the ideal \gls{MHD} equations are rather straightforward compared to their counterparts in which various non-ideal physical effects have been added. However, from a mathematical point of view even these relatively simple equations still describe a system of eight hyperbolic partial differential equations, which are \emph{not at all} easy to solve. For that we have to rely on numerical methods and dedicated codes, which are whole topics in itself. As the explicit derivation of these equations is standard material in any textbook on plasma physics, my favourite being \citet{book_MHD}, we will simply give their final (ideal) form below.
+
+\begin{gather}
+  \frac{\partial \rho}{\partial t} = -\nabla \cdot (\rho \bv), \label{eq: ideal_continuity} \\
+  \rho \frac{\partial \bv}{\partial t} =
+    -\nabla p
+    - \rho \bv \cdot \nabla \bv
+    + (\nabla \times \bb) \times \bb, \label{eq: ideal_momentum}\\
+  \rho \frac{\partial T}{\partial t} =
+    -\rho \bv \cdot \nabla T
+    -\gmone p \nabla \cdot \bv, \label{eq: ideal_energy} \\
+  \frac{\partial \bb}{\partial t} = \nabla \times (\bv \times \bb), \label{eq: ideal_induction}
+\end{gather}
+consisting of the continuity equation \eqref{eq: ideal_continuity}, momentum equation \eqref{eq: ideal_momentum}, energy equation \eqref{eq: ideal_energy} and induction equation \eqref{eq: ideal_induction}. The quantities $\rho$, $\bv$, $p$, $\bb$ and $T$ denote the plasma density, velocity field, pressure, magnetic field and temperature, respectively. The ratio of specific heats is denoted by $\gamma$ and is taken to be equal to $5/3$. The system is constrained by the divergence-free condition on the magnetic field $\nabla \cdot \bb = 0$, ensuring no magnetic monopoles, and the (normalised) ideal gas law $p = \rho T$. In three dimensions this results in eight equations and eight unknown variables $(\rho, \bv, T, \bb)$.
+
+\subsection{The non-adiabatic MHD equations}
+In the previous Subsection we discussed ideal, adiabatic \gls{MHD}, meaning that no energy is gained or lost by the system and any change in internal energy is due to work. One can now wonder how everything is affected when this is not the case, that is, energy is gained by the system (though heating, for example), at the same time lost through radiation and on top of that there is internal energy transfer through the process of thermal conduction. When these effects are included in our representation we are talking about the \emph{non-adiabatic MHD equations}.
+
+Mathematically the heating and cooling terms are represented by a quantity known as the \emph{heat-loss function} $\HLF$, defined as energy losses minus energy gains
+\begin{equation} \label{eq: cooling_simple}
+  \HLF(\rho, T) = \rho \HLFcool - \HLFheat,
+\end{equation}
+which is generally dependent on density and temperature. In this representation the heating function $\HLFheat$ is assumed to be constant in time. The quantity $\HLFcool$ is a tabulated set of temperature-dependent values resulting from detailed atomic and molecular calculations, to which we hereafter refer to as the ``cooling curve''.
+
+For magnetised plasmas heat transfer through thermal conduction has a preferred direction, in this case the effect is a few orders of magnitude stronger along the magnetic field lines than across them. To model this anisotropy we make use of the thermal conductivity tensor $\bkappa$, given by
+\begin{equation} \label{eq: conduction}
+  \bkappa = \kappapara\unit{B}\unit{B} + \kappaperp\left(\idmat - \unit{B}\unit{B}\right).
+\end{equation}
+Here $\idmat$ is the identity matrix and $\unit{B} = \bb/B$ is a unit vector along the magnetic field. The quantities $\kappapara$ and $\kappaperp$ denote the thermal conduction coefficients parallel and perpendicular to the magnetic field lines and are taken equal to the Spitzer conductivity \citep{book_priest}
+\begin{equation} \label{eq: thermal_coeffs}
+  \begin{gathered}
+    \kappapara \approx 8 \times 10^{-7} T^{5/2}, \\
+    \kappaperp \approx 4 \times 10^{-10} n^2 B^{-2} T^{-3} \kappapara,
+  \end{gathered}
+\end{equation}
+both in units of erg cm$^{-1}$ s$^{-1}$ K$^{-1}$. Here $n$ denotes the number density, given by $n = \rho \massp$ with $\massp$ the proton mass.
+
+Both the cooling and conduction terms are then added to the appropriate \gls{MHD} equation, such that the adiabatic energy equation \eqref{eq: ideal_energy} transforms into the non-adiabatic energy equation
+\begin{equation} \label{eq: nonad_energy}
+  \rho \frac{\partial T}{\partial t} =
+    -\rho \bv \cdot \nabla T
+    -\gmone p \nabla \cdot \bv
+    -\gmone \rho \HLF
+    +\gmone \nabla \cdot \left(\bkappa \cdot \nabla T\right).
+\end{equation}
+
+
+Generally speaking, when numerically solving the system of \gls{MHD} equations one relies on a similar set of steps no matter the approach taken. First a geometry is chosen depending on the problem at hand: a Cartesian (rectangular) box is convenient when describing for example parts of the solar atmosphere, while cylindrical geometries are more useful to describe problems like expanding flux tubes or jets. Next an initial state is chosen at time $t = 0$ fitting the problem, which essentially boils down to choosing initial prescriptions for $(\rho, \bv, T, \bb)$:
+\begin{equation}
+  \begin{gathered}
+    \rho_i(\bx) \equiv \rho(\bx, t=0), \qquad T_i(\bx) \equiv T(\bx, t=0), \\
+    \bv_i(\bx) \equiv \bv(\bx, t=0), \qquad \bb_i(\bx) \equiv \bb(\bx, t=0),
+  \end{gathered}
+\end{equation}
+all depending on the position vector $\bx$. Since we are dealing with partial differential equations, appropriate boundary conditions must be chosen on all sides of the domain under consideration. Once the initial setup is chosen, the set of equations \eqref{eq: ideal_continuity}-\eqref{eq: ideal_induction} is written in conservative form and the domain is discretised using one particular resolution (or more in cases of mesh refinement). Then the iterative process can start: once one's favourite numerical scheme is chosen all fluxes through every cell in the domain are calculated and the system is advanced in time. These two steps are repeated until the simulation ends and/or the system reaches a stationary state.
+
+Naturally, it is clear that higher resolutions result in much finer cells, which in turn may reveal more features. The major downside here is that more cells require more calculations, and in three dimensions the number of calculations required to advance the simulation even a single timestep scales with the third power in resolution. This requirement can be somewhat mitigated by using mesh refinement, i.e. focusing high resolutions on regions of interest in the domain while keeping the other regions at lower resolutions. In most, if not all, of these cases however one usually has to resort to supercomputers in order to run these simulation at a decent resolution.
+
+
+
+\section{Spectroscopy in plasmas}
+The main question that spectroscopy tries to answer is ``\emph{How do you know, without explicitly solving the entire set of equations, whether a given dynamical system is stable or not}''? Figure \ref{fig: stability} gives an illustration of the theoretical approach to linear stability analysis. Consider a solid ball at rest at an initial time $t = 0$ on some sort of hill in a gravitational field. If no forces are acting on this ball, then it will remain in this initial position indefinitely. When a small perturbation is applied, i.e. moving the ball slightly away from its equilibrium position, a number of things may happen depending on the shape of the surface the ball is resting on.
+
+\begin{figure}[b]
+  \centering
+  \includegraphics[width=\textwidth]{stability.png}
+  \caption{(a) Unstable system; (b) Stable system; (c) Linearly stable, nonlinearly unstable system.}
+  \label{fig: stability}
+\end{figure}
+
+In panel (a) the ball is clearly laying on top of a hill, and any shift in initial position will cause it to roll downwards under the influence of gravity. This is called an \emph{unstable} configuration: no matter how small the perturbation is, there is no way to restore the initial equilibrium after the perturbation is applied.
+In panel (b) we have the exact opposite: shift the ball away from its initial location and it will simply roll downwards again, oscillating back and forth around its position at $t = 0$. Assuming there is some friction present between the ball and the surface, it will eventually come to a standstill again after some time $t$ in the same position as it started in. This is called a \emph{stable} configuration, and in this case even relatively large perturbations will have no major effect on the system as a whole.
+
+Panel (c) on the other hand is much more interesting. Following the same train of thought as for the other two panels, \emph{small} perturbations will return the ball to its equilibrium position. However, if the perturbation is large enough the ball may gain enough energy to reach the peak on the right, roll over, and it will never be able to reach its equilibrium position again. This is called \emph{nonlinear instability}: a system that is stable for small perturbations, but may become unstable for larger perturbations.
+
+Thermal instabilities (\gls{TI}), the main topic of the next Chapter, can be classified in this latter category. These instabilities are called \emph{thermal} since they originate from the non-adiabatic terms in the energy equation \eqref{eq: nonad_energy}, in particular the radiative cooling terms. A system that is loosing energy through radiation and gaining energy through background heating may be stable to small temperature fluctuations, where a restoring force such as magnetic tension/pressure or thermal conduction (which smoothens out variations in temperatures if they are small enough) can counteract the instability and bring the system back in thermal equilibrium. This is the linearly stable regime on the left side of panel (c), Figure \ref{fig: stability}. If the fluctuations are large enough to overcome the restoring forces analogeous to the right side of panel (c) then a thermal runaway reaction occurs (instability), drastically lowering the temperature. A thorough discussion on the nature of thermal instabilities will be given in the next Chapter.
+
+\subsection{Linearisation of the system}
+Now that we have given a simplified example as to get a feel for linear stability analysis, we can start tackling the problem mathematically. Starting with the simplest case, that of a homogeneous background, will already prove quite instructive and will pave the path for more complex treatments later on.
+
+Stability analysis of the MHD equations is done through a process called \emph{linearisation}, which essentially means splitting our equations in an equilibrium part and a dynamical part, where we assume that the latter is a small perturbation (subscript $1$) with respect to the equilibrium state (subscript $0$), such that a quantity $f$ can be written as
+\begin{equation} \label{eq: linear_split}
+  f(\bx, t) = f_0(\bx, t) + f_1(\bx, t).
+\end{equation}
+We start by defining the background equilibrium and we hence assume that the dynamics of the system take place around this state. Since we want to start as simple as possible the first assumption we can make is to have a static background, meaning there are no flow effects: $\bv_0 = 0$. The background is also assumed to be constant over time as it is in equilibrium, such that the temporal derivatives evaluate to zero. Furthermore, as mentioned earlier, we first look at a homogeneous background such that it is independent of position and the spatial derivatives become zero as well. The space-time dependence then only enters in the dynamical (perturbed) part of our assumption \eqref{eq: linear_split}. Mathematically this can be written as
+\begin{equation} \label{eq: linear_homogeneous}
+  \begin{gathered}
+    \rho(\bx, t) = \rho_0 + \rho_1(\bx, t), \\
+    \bv(\bx, t) = \bv_1(\bx, t), \\
+    T(\bx, t) = T_0 + T_1(\bx, t), \\
+    \bb(\bx, t) = \bb_0 + \bb_1(\bx, t).
+  \end{gathered}
+\end{equation}
+The next step is plugging these expressions into the system of non-adiabatic MHD equations, and since we are interested in \emph{linear} perturbations we can ignore all higher-order terms $\mathcal{O}(f_1^2(\bx, t))$. Because of our assumptions in \eqref{eq: linear_homogeneous} the divergence-free condition $\nabla \cdot \bb_0 = 0$ is automatically satisfied. This is not necessarily the case for $\bb_1$ though, so we rewrite the perturbed magnetic field in terms of a magnetic vector potential using $\bb_1 = \nabla \times \ba_1$ such that $\nabla \cdot \bb_1 = \nabla \cdot \left(\nabla \times \ba_1\right) = 0$ is naturally satisfied as the divergence of a curl is always zero by definition.
+
+When the non-adiabatic energy equation \eqref{eq: nonad_energy} is linearised this will contain a term $\rho_1\HLF_0$. Because we linearise around an equilibrium state, we require this state to be in \emph{thermal equilibrium}, implying that all energy gained through heating must be balanced by radiative cooling, resulting in a net difference of zero, hence $\HLF_0$ must be zero. As the heating is assumed to be constant this can be written as
+\begin{equation}
+  \HLF_0 = \rho_0\Lambda(T_0) - \HLFheat_0 = 0,
+\end{equation}
+such that the constant heating contribution $\HLFheat_0$ equals the radiative losses $\rho_0\Lambda(T_0)$ at $t = 0$, and the term with $\HLF_0$ drops out of the equations.
+
+The \emph{linearised MHD equations} then read
+\begin{gather}
+  \frac{\partial \rho_1}{\partial t} = -\rho_0 \nabla \cdot \bv_1, \\
+  \rho_0 \frac{\partial \bv_1}{\partial t} =
+    -\nabla\left(\rho_1 T_0 + \rho_0 T_1\right)
+    +\left(\nabla \times \bb_0\right) \times \left(\nabla \times \ba_1\right) \nonumber \\
+    +\left[\nabla \times \left(\nabla \times \ba_1\right)\right] \times \bb_0, \\
+  \rho_0\frac{\partial T_1}{\partial t} =
+    -\rho_0\bv_1 \cdot \nabla T_0
+    -\gmone \rho_0 T_0 \nabla \cdot \bv_1
+    -\gmone \rho_0 \left(\HLF_T T_1 + \HLF_\rho \rho_1\right) \nonumber \\
+    +\gmone \nabla \cdot \left(\bkappa_0 \cdot \nabla T_1\right)
+    +\gmone \nabla \cdot \left(\bkappa_1 \cdot \nabla T_0\right), \\
+  \frac{\partial \ba_1}{\partial t} = \bv_1 \times \bb_0,
+\end{gather}
+where the background dimensionless pressure is rewritten as $\rho_0 T_0$ and the perturbed pressure contribution $p_1$ has been replaced by $\rho_0 T_1 + \rho_1 T_0$ following the linearised ideal gas law. The quantities $\dHLFT$ and $\dHLFrho$ denote the temperature and density derivatives of the heat-loss function, respectively, which can be written as
+\begin{equation}
+  \begin{gathered}
+    \dHLFrho = \left.\frac{\partial \HLF}{\partial \rho}\right|_T = \Lambda(T_0), \\
+    \dHLFT = \left.\frac{\partial \HLF}{\partial T}\right|_\rho = \rho_0 \left.\frac{d\Lambda(T)}{dT}\right|_{T_0},
+  \end{gathered}
+\end{equation}
+which both have to be evaluated in the equilibrium quantities $\rho_0$ and $T_0$.
+
+This set of linearised equations is still a system of partial differential equations. However, since the homogeneous equilibrium quantities $(\rho_0, \bv_0, T_0, \bb_0)$ do not depend on time we can consider plane-wave perturbations of the form
+\begin{equation} \label{eq: plane_wave_homogeneous}
+  f_1(\bx, t) = \tilde{f_1}\exp\Bigl(i\bk \cdot \bx - i\omega t\Bigr),
+\end{equation}
+where $\bx = (x, y, z)$ is the (Cartesian) position vector, $\omega$ a complex frequency, $\bk = (k_x, k_y, k_z)$ the wave vector and $\tilde{f_1}$ a (complex) constant denoting the amplitude of the plane wave. The wonderful consequence of doing this is that it transforms the temporal and spatial derivatives of the perturbed variables $f_1(\bx, t)$ into
+\begin{equation}
+  \frac{\partial}{\partial t} \rightarrow -i\omega, \qquad\qquad
+  \nabla \rightarrow i\bk,
+\end{equation}
+which reduces the system of partial differential equations to a system of \emph{algebraic} equations given by
+\begin{gather}
+  \omega \rho_1 = \rho_0 \bk \cdot \bv_1, \label{eq: homo_continuity_algebraic}\\
+  \rho_0\omega \bv_1 = T_0 \bk \rho_1 + \rho_0\bk T_1 - i[\bk \times (\bk \times \ba_1)]\times\bb_0, \\
+  \rho_0\omega T_1 =
+    \gmone \rho_0T_0 \bk \cdot \bv_1
+    - i\gmone\rho_0\left(\HLF_T T_1 + \HLF_\rho \rho_1\right) \nonumber \\
+    - i\gmone \left(\kappapara \kpara^2 + \kappaperp\kperp^2\right)T_1, \\
+  \omega \ba_1 = i\bv_1 \times \bb_0, \label{eq: homo_induction_algebraic}
+\end{gather}
+with $\kpara$ and $\kperp$ denoting the wave vector components parallel and perpendicular to the background magnetic field $\bb_0$, respectively. As confusion is not possible the tilde notation used in Equation \eqref{eq: plane_wave_homogeneous} has been omitted.
+
+For general wave vectors $\bk = (k_x, k_y, k_z)$ and magnetic field vectors $\bb_0 = (B_x, B_y, B_z)$ the eight equations given in \eqref{eq: homo_continuity_algebraic}-\eqref{eq: homo_induction_algebraic} form a complete eigenvalue problem, with the eigenvectors containing the variables $\rho_1, \bv_1, T_1$ and $\ba_1$.
+\subsection{The ideal MHD spectrum}
+\subsection{The non-adiabatic MHD spectrum}
+\subsection{The effect of additional physics}
+
+\section{Spectroscopy in non-uniform plasmas}
+\subsection{Effects on linearisation}
+\subsection{Introduction to MHD continua}
+
 
 
 \cleardoublepage

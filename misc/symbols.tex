@@ -1,1 +1,50 @@
 % All shortcuts and symbols are to be defined here
+
+\newcommand{\unit}[1]{\hat{\mathbf{e}}_{#1}}
+\nomenclature{$\unit{B}$}{a unit vector along the magnetic field}
+
+% radiative cooling
+\newcommand{\HLF}{\mathscr{L}}
+\nomenclature{$\HLF$}{the heat-loss function, defined as energy losses minus energy gains}
+\newcommand{\HLFcool}{\Lambda(T)}
+\nomenclature{$\HLFcool$}{the cooling curve}
+\newcommand{\HLFheat}{\mathcal{H}}
+\nomenclature{$\HLFheat$}{the heating function}
+\newcommand{\dHLFT}{\HLF_T}
+\nomenclature{$\dHLFT$}{temperature derivative of the heat-loss function}
+\newcommand{\dHLFrho}{\HLF_\rho}
+\nomenclature{$\dHLFrho$}{density derivative of the heat-loss function}
+
+% thermal conduction
+\newcommand{\bkappa}{\boldsymbol{\kappa}}
+\nomenclature{$\bkappa$}{the thermal conductivity tensor}
+\newcommand{\idmat}{\boldsymbol{I}}
+\nomenclature{$\idmat$}{the identity matrix}
+\newcommand{\kappapara}{\kappa_\parallel}
+\nomenclature{$\kappapara$}{the thermal conduction coefficient parallel to the magnetic field lines}
+\newcommand{\kappaperp}{\kappa_\perp}
+\nomenclature{$\kappaperp$}{the thermal conduction coefficient perpendicular to the magnetic field lines}
+
+% vector quantities
+\newcommand{\bv}{\boldsymbol{v}}
+\nomenclature{$\bv$}{velocity vector}
+\newcommand{\bb}{\boldsymbol{B}}
+\nomenclature{$\bb$}{magnetic field vector}
+\newcommand{\bx}{\boldsymbol{x}}
+\nomenclature{$\bx$}{position vector}
+\newcommand{\ba}{\boldsymbol{A}}
+\nomenclature{$\ba$}{magnetic vector potential such that $\b1 = \nabla \times \ba$}
+\newcommand{\bk}{\boldsymbol{k}}
+\nomenclature{$\bk$}{wave vector}
+\newcommand{\kpara}{k_\parallel}
+\nomenclature{$\kpara$}{component of the wave vector $\bk$ parallel to $\bb$}
+\newcommand{\kperp}{k_\perp}
+\nomenclature{$\kperp$}{component of the wave vector $\bk$ perpendicular to $\bb$}
+
+% shortcuts
+\newcommand{\gmone}{(\gamma - 1)}
+\nomenclature{$\gamma$}{ratio of specific heats}
+
+% constants
+\newcommand{\massp}{m_p}
+\nomenclature{$\massp$}{the proton mass}
