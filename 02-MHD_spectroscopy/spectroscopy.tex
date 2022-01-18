@@ -166,12 +166,112 @@ which reduces the system of partial differential equations to a system of \emph{
 \end{gather}
 with $\kpara$ and $\kperp$ denoting the wave vector components parallel and perpendicular to the background magnetic field $\bb_0$, respectively. As confusion is not possible the tilde notation used in Equation \eqref{eq: plane_wave_homogeneous} has been omitted.
 
-For general wave vectors $\bk = (k_x, k_y, k_z)$ and magnetic field vectors $\bb_0 = (B_x, B_y, B_z)$ the eight equations given in \eqref{eq: homo_continuity_algebraic}-\eqref{eq: homo_induction_algebraic} form a complete eigenvalue problem, with the eigenvectors containing the variables $\rho_1, \bv_1, T_1$ and $\ba_1$.
+\subsection{Introduction to spectroscopy}
+The eight equations given in \eqref{eq: homo_continuity_algebraic}-\eqref{eq: homo_induction_algebraic} form a complete eigenvalue problem, with the eigenvectors containing the variables $\rho_1, \bv_1, T_1$ and $\ba_1$. This can be reduced to a standard complex eigenvalue problem of the form $\amat\statevec = \omega\statevec$, with general wave vectors $\bk = (k_x, k_y, k_z)$ and magnetic field vectors $\bb_0 = (B_{0x}, B_{0y}, B_{0z})$. The state vector $\statevec$ containing the unknown variables is given by
+\begin{equation}
+  \statevec = \begin{pmatrix}
+    \rho_1 & v_{1x} & v_{1y} & v_{1z} & T_1 & A_{1x} & A_{1y} & A_{1z}
+  \end{pmatrix}^T.
+\end{equation}
+Due to the homogeneous background that was imposed the elements of the matrix $\amat$ are constants, and the eigenfrequency $\omega$ of each respective mode can be obtained by directly solving for the eigenvalues of the corresponding $\amat$-matrix. Generally speaking the eigenvalues are complex, hence every eigenvalue can be written as
+\begin{equation}
+  \omega \equiv \omega_R + i\omega_I,
+\end{equation}
+where $\omega_R$ and $\omega_I$ denote the real and imaginary parts, respectively. Looking back at our plane-wave solutions in Equation \eqref{eq: plane_wave_homogeneous} this implies that the temporal behaviour of all waves scales as
+\begin{equation}
+  \sim \exp(\omega_I t)\exp(-i\omega_R t).
+\end{equation}
+From this the physical role of both components becomes clear: for purely real eigenvalues ($\omega_I = 0$) wave modes will propagate in the direction of $\bk$ and oscillate with a frequency $\omega_R$, these are stable waves and their amplitude will remain constant over time. The sign of $\omega_R$ represents forwards ($+$) or backwards ($-$) propagating modes with respect to the direction of $\bx$. For non-zero $\omega_I$ however one can distinguish between four scenarios:
+\begin{enumerate}
+  \item $\omega_R = 0$ and $\omega_I > 0$: \emph{unstable modes}. These are imaginary eigenvalues and represent pure instabilities. In this case, if the background is perturbed this will not result in propagating waves but in an exponential increase in amplitude.
+  \item $\omega_R = 0$ and $\omega_I < 0$: \emph{damped modes}. These are also imaginary eigenvalues but the opposite of the previous case: amplitudes will decay exponentially over time.
+  \item $\omega_R \neq 0$ and $\omega_I > 0$: \emph{overstable modes}. These eigenvalues are genuinely complex, with nonzero real and imaginary parts. This represents propagating waves which are unstable due to excessive feedback in the system, resulting in an increase in amplitude over time.
+  \item$\omega_R \neq 0$ and $\omega_I < 0$: \emph{overdamped modes}. The opposite of the previous case, with again eigenvalues that are genuinly complex. These eigenvalues represent propagating waves with decreasing amplitude, eventually dying out such that the system returns to its equilibrium state.
+\end{enumerate}
+
+\begin{figure}[b]
+  \centering
+  \includegraphics[width=0.9\textwidth]{spectral_plane.png}
+  \caption{Graphical representation of various (in)stability regions and their terminology.}
+  \label{fig: spectral_plane}
+\end{figure}
+
+Figure \ref{fig: spectral_plane} shows a graphical representation of all different cases, where all regions have been annotated in a $\omega_R - \omega_I$ 2D-plane. A complex plane like this is called a \emph{spectrum}, and we will use similar representations throughout this thesis to visualise eigenvalues. Additionally, in the remainder of this thesis we will not distinguish between damped and overdamped modes, both will simply be referred to as ``damped''.
+
+
 \subsection{The ideal MHD spectrum}
+When solving the eigenvalue system to obtain all eigenvalues some care must be taken, as will become clear in what follows. Since we are dealing with an $8 \times 8$ matrix one would immediately expect that we have eight eigenvalues, and thus eight ``waves'' in our system. In our earlier representation we have chosen a general wave vector and magnetic field vector, but we can always rotate our reference system to choose $\bb_0 = (0, 0, B_0)$ along the $z$-axis and $\bk = (k_\perp, 0, k_\parallel)$ in the $x-z$ plane without loosing generality. For the moment we focus on the ideal spectrum, omitting all non-adiabatic effects in the energy equation, such that the $\amat$-matrix in the ideal eigenvalue problem becomes
+\begin{equation} \label{eq: ideal_matrix}
+  \resizebox{0.89\hsize}{!}{$
+    \begin{pmatrix}
+      0 & \kperp \rho_0 & 0 & \kpara \rho_0 & 0 & 0 & 0 & 0 \\
+      \dfrac{T_0}{\rho_0}\kperp & 0 & 0 & 0 & \kperp & 0 & \dfrac{i B_0}{\rho_0}k_0^2 & 0 \\
+      0 & 0 & 0 & 0 & 0 & -\dfrac{i B_0}{\rho_0}\kpara^2 & 0 & \dfrac{i B_0}{\rho_0}\kpara \kperp \\
+      \dfrac{T_0}{\rho_0}\kpara & 0 & 0 & 0 & \kpara & 0 & 0 & 0 \\
+      0 & \gmone T_0 \kperp & 0 & \gmone T_0 \kpara & 0 & 0 & 0 & 0 \\
+      0 & 0 & iB_0 & 0 & 0 & 0 & 0 & 0 \\
+      0 & -iB_0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+      0 & 0 & 0 & 0 & 0 & 0 & 0 & 0
+    \end{pmatrix},
+  $}
+\end{equation}
+with $k_0^2 = \kpara^2 + \kperp^2$. This introduces a zero row in the matrix, which essentially originates from the $\nabla \cdot \bb = 0$ constraint which is naturally satisfied in our representation. If we would have kept the magnetic field as-is instead of transforming to a vector potential, this zero row would not have been present. However, in that case we still would have to take the divergence-free constraint into account by eliminating one of the magnetic field variables to obtain a $7 \times 7$ matrix representation. All of this implies that instead of eight solutions to the eigenvalue problem we actually have \emph{seven} solutions and one \emph{spurious} $\omega = 0$ eigenvalue.
+
+In ideal MHD the $\amat$-matrix is Hermitian (\gls{i.e.} its own conjugate transpose; the matrix operator is self-adjoint), which has interesting consequences for the solutions. From a spectral viewpoint this implies that all eigenvalues either lie \emph{on} the real or imaginary axis, and that there is no possibility to have overdamped or overstable wave modes. Note that this will no longer be the case when we include non-ideal effects.
+
+\paragraph{Entropy solution.}
+The first solution is a \emph{genuine} $\omega = 0$ solution (on top of the spurious one), corresponding to a \emph{marginal entropy wave}. It is not of much interest in ideal MHD physically speaking, since it is nothing more than an entropy perturbation. In case of background flow this perturbation will simply be advected along with the velocity field, but will have no effect on the other variables. At this point it is important to stress that this is no longer the case when including non-adiabatic effects: then the entropy solution is shifted from the origin to a purely imaginary solution (corresponding to the thermal instability) which is absolutely physically relevant. The next Chapter will discuss this mode in much more detail.
+
+\paragraph{Alfv\'en waves.}
+2 other solutions are the \emph{Alfv\'en waves}, which have their eigenfrequencies given by
+\begin{equation} \label{eq: alfvenwaves}
+  \omega_A^2 = \kpara^2 \alfvenspeed^2,
+\end{equation}
+where $\alfvenspeed^2 = |\bb_0| / \rho_0$ denotes the Alfv\'en speed. These purely transverse anisotropic waves only propagate along the magnetic field lines and owe their origin to restoring forces from magnetic tension effects.
+
+\paragraph{Slow and fast waves}
+The final four solutions are called the \emph{slow} and \emph{fast magnetosonic waves}, and their eigenfrequencies are solutions to
+\begin{equation} \label{eq: fs_mhd_waves}
+  \omega_{fs}^2 = \frac{1}{2}k_0^2\Bigl(
+    \alfvenspeed^2 + \soundspeed^2 \pm \sqrt{
+      \left(\alfvenspeed^2 + \soundspeed^2\right)^2 - 4 \soundspeed^2 \alfvenspeed^2 \cos^2\theta
+    }
+  \Bigr),
+\end{equation}
+with $\theta$ denoting the angle between the wave vector $\bk$ and $\bb_0$, the sound speed is given by $\soundspeed^2 = \gamma T_0$. The plus ($+$) and minus ($-$) signs denote the fast and slow MHD waves, respectively. Magnetosonic waves are also anisotropic with faster propagation speeds along the magnetic field lines, although the fast waves are (much) less anisotropic than the slow MHD waves. This follows directly from the definition \eqref{eq: fs_mhd_waves}:
+if $\cos^2\theta$ equals zero (propagation parallel to the field lines) then this expression reaches its maximum, while for $\cos^2\theta = 1$ (perpendicular propagation) the eigenfrequency for the slow waves collapses to zero and the one for the fast waves reaches its minimum.
+
+All of these eigenfrequencies follow a strict ordening:
+\begin{equation} \label{eq: omega_ordening}
+  0 \leq \omega_S^2 \leq \omega_A^2 \leq \omega_f^2 < \infty,
+\end{equation}
+which is a general property that will be of the utmost importance in spectroscopy, since it determines \emph{the overall structure of an MHD spectrum}. This property will even hold (in one form or another) when we move on to inhomogeneous backgrounds and/or additional physical effects. Figure \ref{fig: adiabatic_spectrum} shows this strict ordening of the eigenfrequencies in the spectral plane, for a general solution of the ideal MHD eigenvalue problem. Note that all eigenfrequencies lie on the real axis, as it should be, owing to the self-adjointness of the matrix operator.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{spectrum_adiabatic.png}
+  \caption{
+    Visualisation of the ideal MHD spectrum and its seven solutions.
+    Blue, black and red dots denote the fast modes, Alfv\'en modes and slow modes, respectively, adhering to the strict ordening in equation \eqref{eq: omega_ordening}. The $\omega = 0$ entropy mode is shown with a green dot, the real and imaginary axes are denoted with dotted lines.
+  }
+  \label{fig: adiabatic_spectrum}
+\end{figure}
+
 \subsection{The non-adiabatic MHD spectrum}
-\subsection{The effect of additional physics}
+
+\subsection{Spectral symmetry}
 
 \section{Spectroscopy in non-uniform plasmas}
+
+% this sort of belongs here as a general intro
+% One important remark that still has to be made is that the above analysis assumes a medium of infinite extent, i.e. unbounded in all directions.
+
+% \begin{figure}[t]
+%   \centering
+%   \includegraphics[width=\textwidth]{bounded_ideal_spectrum.png}
+%   \caption{TODO}
+%   \label{fig: bounded_spectrum}
+% \end{figure}
 \subsection{Effects on linearisation}
 \subsection{Introduction to MHD continua}
 
