@@ -149,7 +149,7 @@ This set of linearised equations is still a system of partial differential equat
 \begin{equation} \label{eq: plane_wave_homogeneous}
   f_1(\bx, t) = \tilde{f_1}\exp\Bigl(i\bk \cdot \bx - i\omega t\Bigr),
 \end{equation}
-where $\bx = (x, y, z)$ is the (Cartesian) position vector, $\omega$ a complex frequency, $\bk = (k_x, k_y, k_z)$ the wave vector and $\tilde{f_1}$ a (complex) constant denoting the amplitude of the plane wave. The wonderful consequence of doing this is that it transforms the temporal and spatial derivatives of the perturbed variables $f_1(\bx, t)$ into
+where $\bx = (x, y, z)$ is the (Cartesian) position vector, $\omega$ a complex frequency, $\bk = (k_x, k_y, k_z)$ the wave vector and $\tilde{f_1}$ a (complex) constant denoting the amplitude of the plane wave. We are essentially doing a Fourier analysis in three ``ignorable" dimensions. The wonderful consequence of doing this is that it transforms the temporal and spatial derivatives of the perturbed variables $f_1(\bx, t)$ into
 \begin{equation}
   \frac{\partial}{\partial t} \rightarrow -i\omega, \qquad\qquad
   \nabla \rightarrow i\bk,
@@ -166,8 +166,8 @@ which reduces the system of partial differential equations to a system of \emph{
 \end{gather}
 with $\kpara$ and $\kperp$ denoting the wave vector components parallel and perpendicular to the background magnetic field $\bb_0$, respectively. As confusion is not possible the tilde notation used in Equation \eqref{eq: plane_wave_homogeneous} has been omitted.
 
-\subsection{Introduction to spectroscopy}
-The eight equations given in \eqref{eq: homo_continuity_algebraic}-\eqref{eq: homo_induction_algebraic} form a complete eigenvalue problem, with the eigenvectors containing the variables $\rho_1, \bv_1, T_1$ and $\ba_1$. This can be reduced to a standard complex eigenvalue problem of the form $\amat\statevec = \omega\statevec$, with general wave vectors $\bk = (k_x, k_y, k_z)$ and magnetic field vectors $\bb_0 = (B_{0x}, B_{0y}, B_{0z})$. The state vector $\statevec$ containing the unknown variables is given by
+\subsection{Introduction to MHD spectroscopy}
+The eight equations given in \eqref{eq: homo_continuity_algebraic}-\eqref{eq: homo_induction_algebraic} form a complete eigenvalue problem, with the eigenvectors containing the variables $\rho_1, \bv_1, T_1$ and $\ba_1$. This can be reduced to a standard complex eigenvalue problem of the form $\amat\statevec = \omega\statevec$, with general wave vectors $\bk = (k_x, k_y, k_z)$ and magnetic field vectors $\bb_0 = (B_{0x}, B_{0y}, B_{0z})$. The state vector $\statevec$ containing the unknown variables is then given by
 \begin{equation}
   \statevec = \begin{pmatrix}
     \rho_1 & v_{1x} & v_{1y} & v_{1z} & T_1 & A_{1x} & A_{1y} & A_{1z}
@@ -225,9 +225,9 @@ The first solution is a \emph{genuine} $\omega = 0$ solution (on top of the spur
 \paragraph{Alfv\'en waves.}
 2 other solutions are the \emph{Alfv\'en waves}, which have their eigenfrequencies given by
 \begin{equation} \label{eq: alfvenwaves}
-  \omega_A^2 = \kpara^2 \alfvenspeed^2,
+  \omega_a^2 = \kpara^2 \alfvenspeed^2,
 \end{equation}
-where $\alfvenspeed^2 = |\bb_0| / \rho_0$ denotes the Alfv\'en speed. These purely transverse anisotropic waves only propagate along the magnetic field lines and owe their origin to restoring forces from magnetic tension effects.
+where $\alfvenspeed^2 = |\bb_0|^2 / \rho_0$ denotes the Alfv\'en speed. These purely transverse anisotropic waves only propagate along the magnetic field lines and owe their origin to restoring forces from magnetic tension effects.
 
 \paragraph{Slow and fast waves}
 The final four solutions are called the \emph{slow} and \emph{fast magnetosonic waves}, and their eigenfrequencies are solutions to
@@ -238,12 +238,11 @@ The final four solutions are called the \emph{slow} and \emph{fast magnetosonic 
     }
   \Bigr),
 \end{equation}
-with $\theta$ denoting the angle between the wave vector $\bk$ and $\bb_0$, the sound speed is given by $\soundspeed^2 = \gamma T_0$. The plus ($+$) and minus ($-$) signs denote the fast and slow MHD waves, respectively. Magnetosonic waves are also anisotropic with faster propagation speeds along the magnetic field lines, although the fast waves are (much) less anisotropic than the slow MHD waves. This follows directly from the definition \eqref{eq: fs_mhd_waves}:
-if $\cos^2\theta$ equals zero (propagation parallel to the field lines) then this expression reaches its maximum, while for $\cos^2\theta = 1$ (perpendicular propagation) the eigenfrequency for the slow waves collapses to zero and the one for the fast waves reaches its minimum.
+with $\theta$ denoting the angle between the wave vector $\bk$ and $\bb_0$, the sound speed is given by $\soundspeed^2 = \gamma T_0$. The plus ($+$) and minus ($-$) signs denote the fast and slow MHD waves, respectively. Magnetosonic waves are also anisotropic, although the fast waves are (much) less anisotropic than the slow MHD waves. This follows directly from the definition \eqref{eq: fs_mhd_waves}: if $\cos^2\theta = 0$ (propagation perpendicular to the field lines) then this expression reaches its maximum for the fast wave solution and collapses to zero for the slow wave solution, implying that fast waves propagate faster perpendicular to the magnetic field while slow waves do not propagate in that direction. On the other hand, for $\cos^2\theta = 1$ (parallel propagation) the eigenfrequency for the slow waves reaches its maximum while the fast wave solutions become minimal.
 
 All of these eigenfrequencies follow a strict ordening:
 \begin{equation} \label{eq: omega_ordening}
-  0 \leq \omega_S^2 \leq \omega_A^2 \leq \omega_f^2 < \infty,
+  0 \leq \omega_s^2 \leq \omega_a^2 \leq \omega_f^2 < \infty,
 \end{equation}
 which is a general property that will be of the utmost importance in spectroscopy, since it determines \emph{the overall structure of an MHD spectrum}. This property will even hold (in one form or another) when we move on to inhomogeneous backgrounds and/or additional physical effects. Figure \ref{fig: adiabatic_spectrum} shows this strict ordening of the eigenfrequencies in the spectral plane, for a general solution of the ideal MHD eigenvalue problem. Note that all eigenfrequencies lie on the real axis, as it should be, owing to the self-adjointness of the matrix operator.
 
@@ -258,22 +257,122 @@ which is a general property that will be of the utmost importance in spectroscop
 \end{figure}
 
 \subsection{The non-adiabatic MHD spectrum}
+In the previous Subsection we omitted all non-ideal terms in the energy equation \eqref{eq: nonad_energy}, and with the basics in place we can now wonder what will happen to the spectrum when these terms are not omitted. First and foremost, including radiative cooling and/or thermal conduction effects will lift the self-adjointness of the matrix operator, such that genuine complex solutions become possible. The ideal matrix \eqref{eq: ideal_matrix} transforms into its non-adiabatic counterpart
+\begin{equation} \label{eq: nonadiabatic_matrix}
+  \resizebox{\hsize}{!}{$
+    \begin{pmatrix}
+      0 & \kperp \rho_0 & 0 & \kpara \rho_0 & 0 & 0 & 0 & 0 \\
+      \dfrac{T_0}{\rho_0}\kperp & 0 & 0 & 0 & \kperp & 0 & \dfrac{i B_0}{\rho_0}k_0^2 & 0 \\
+      0 & 0 & 0 & 0 & 0 & -\dfrac{i B_0}{\rho_0}\kpara^2 & 0 & \dfrac{i B_0}{\rho_0}\kpara \kperp \\
+      \dfrac{T_0}{\rho_0}\kpara & 0 & 0 & 0 & \kpara & 0 & 0 & 0 \\
+      -i\gmone \dHLFrho &
+        \gmone T_0 \kperp &
+        0 &
+        \gmone T_0 \kpara &
+        -\dfrac{i\gmone}{\rho_0}\Bigl(K + \rho_0 \dHLFT\Bigr) &
+        0 &
+        0 &
+        0 \\
+      0 & 0 & iB_0 & 0 & 0 & 0 & 0 & 0 \\
+      0 & -iB_0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+      0 & 0 & 0 & 0 & 0 & 0 & 0 & 0
+    \end{pmatrix},
+  $}
+\end{equation}
+where we defined $K = \kappapara \kpara^2 + \kappaperp \kperp^2$. Before diving into the modifications this brings to the actual spectrum we first take a look at the $v_{1y}$ component. The third row in this matrix can be written as
+\begin{equation}
+  \omega v_{1y} = -\frac{iB_0}{\rho_0}\kpara^2 A_{1x} + \frac{iB_0}{\rho_0}\kpara\kperp A_{1z}.
+\end{equation}
+If we combine this with the expressions for the $\omega A_{1x} = iB_0 v_{1y}$ and $\omega A_{1z} = 0$ components, i.e. the sixth and eight rows of the above matrix, the $v_{1y}$ component can be written as
+\begin{equation}
+  \omega^2 v_{1y} = \frac{B_0^2}{\rho_0}\kpara^2 v_{1y},
+\end{equation}
+where we assumed that $\omega \neq 0$ since we are interested in non-zero solutions. This expression is, in fact, equal to the one for the Alfv\'en waves in Equation \eqref{eq: alfvenwaves}, completely decoupled from the other equations. This leads us to an interesting conclusion: \emph{Alfv\'en waves in a homogeneous medium remain unaffected by the inclusion of non-adiabatic effects}; their eigenfrequency will remain exactly the same as for the ideal case.
+
+Figure \ref{fig: nonadiabatic_spectrum} shows a typical spectrum for the non-adiabatic case. Open circles denote the adiabatic solutions, solid dots the non-adiabatic modifications. The arrows indicate the direction of ``movement'' in the spectrum. The thermal mode (green) moves away from the origin and becomes unstable, the slow and fast modes become damped in this case, transforming from purely real to genuinly complex solutions.
+
+Generally speaking the non-adiabatic effects included here have opposite trends with respect to stability, that is, thermal conduction will always try to smoothen out temperature gradients and hence (always) has a stabilising effect, while radiative cooling mostly destabilises. The deciding factor here is the dependence of the heat-loss function on temperature $\dHLFT$. There is a direct link between variations in the cooling curve and thermal mode stability: generally speaking strong variations (larger derivatives) lead to a more unstable thermal mode. Where this behaviour comes from, and which role thermal conduction plays in all this, will be extensively discussed in Chapter \ref{ch: thermal instability}.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{spectrum_nonadiabatic.png}
+  \caption{
+    Visualisation of a typical non-adiabatic MHD spectrum; blue, black, red and green dots denote the fast, Alfv\'en, slow and thermal modes, respectively. The empty dots denote the adiabatic solutions, the arrow indicates how these solutions are modified by the additional effects.
+  }
+  \label{fig: nonadiabatic_spectrum}
+\end{figure}
 
 \subsection{Spectral symmetry}
+Up to now we have neglected to mention a very important property of MHD spectroscopy: that of \emph{spectral symmetry}. This is directly linked to the overall structure of the MHD spectrum, and by extension to the self-adjointness of the matrix operator. These symmetry considerations will remain valid when we later move on to spectroscopy in inhomogeneous plasmas, and have also been partially discussed in \citet{legolas_paper}.
+
+We already mentioned a couple of times that the adiabatic linear MHD equations result in a Hermitian eigenvalue problem, hence all eigenfrequencies will be either fully real (stable modes) or fully complex (pure damped or unstable waves) and lie on the real or imaginary axis in the spectral plane. This implies that the full ideal MHD spectrum is \emph{up-down and left-right symmetric}: every mode will have a counterpart mirrored around the corresponding axis, as already seen in Figure \ref{fig: adiabatic_spectrum}. This is directly related to the forward and backwards propagating mode symmetry mentioned earlier, or, equivalently, parity-time symmetry: all these cases are time-reversible.
+
+Including non-ideal effects like radiative cooling and thermal conduction (or e.g. resistivity) lifts the self-adjointness of the eigenvalue problem, allowing the eigenmodes to move away from the axes into the complex plane which will have influence on the symmetry. As long as we are considering static plasmas, that is, no background flow, \emph{left-right symmetry will be preserved}. The inclusion of non-adiabatic effects will however break up-down symmetry as can be seen in Figure \ref{fig: nonadiabatic_spectrum}, but we still have a complementary mode that lies mirrored around the imaginary axis. These spectra correspond to time-irreversible cases.
+
+Finally, including flowing plasmas will introduce a Doppler shift into the spectrum, which in turn is responsible for breaking of left-right symmetry. Ideal, flowing plasmas are in fact governed by a pair of self-adjoint matrix operators \citep{book_MHD}, and every overstable mode has a damped counterpart at the same frequency mirrored around the real axis.
+
+Generally speaking, combining the above statements on spectral symmetry we can summarise as follows:
+\begin{itemize}
+  \item Static, adiabatic plasmas: \emph{up-down and left-right symmetric}. The eigenvalue problem is Hermitian and all solutions will lie on the real or imaginary axis.
+  \item Static, non-ideal plasmas: \emph{left-right symmetric}. The inclusion of non-ideal effects breaks up-down symmetry.
+  \item Flowing, adiabatic plasmas: \emph{up-down symmetric}. The Doppler shift introduced by the background flow profile breaks left-right symmetry.
+  \item Flowing, non-ideal plasmas: \emph{no symmetry in general}. The combination of flow and non-ideal effects like radiative cooling or resistivity will break left-right and up-down symmetry.
+\end{itemize}
+
+From this the wide range in complexity for an MHD spectrum becomes clear: depending on the physical effects taken into account a single spectrum can become extremely complicated. In reality very few astrophysical plasmas can be considered ideal or static, such that in general there will be no spectral symmetry present. In some select cases symmetry can be restored however, even for non-ideal flowing plasmas, by considering a symmetric flow profile in a symmetric domain. This in turn makes the forward and backward modes behave symmetrically, reducing the complexity a bit. This is not always possible however, and generally speaking one will always have to deal with non-symmetric spectra when looking at realistic configurations. In those cases inhomogeneity will also play a major role, which in turn increases the complexity even further due to the presence of the various continua. We will give a general introduction to the MHD continua in the next Section.
+
 
 \section{Spectroscopy in non-uniform plasmas}
+In all of the above we linearised around a homogeneous background, which allowed us to consider plane-wave perturbations as given in Equation \eqref{eq: plane_wave_homogeneous}. One important remark to be made as well is that the above analysis assumes a medium of infinite extent, i.e. a plasma that is unbounded in all directions.
+Nature on the other hand is quite different, since in reality virtually no astrophysical or laboratory plasma configuration is spatially homogeneous, or infinite for that matter. Our initial assumption of uncoupled plane-wave solutions breaks down as soon as we include plasma inhomogeneity, which in turn implies that our operator transformation $\nabla \rightarrow i\bk$ no longer holds. If we take the direction of inhomogeneity along $x$ then we would have to replace $k_x$ by $i\partial / \partial x$, and things would get quite complicated real fast. Linearising around a homogeneous background transformed our initial set of partial differential equations to a set of algebraic equations, which could simply be solved by plugging the resulting eigenvalue problem in any modern solver and calculating the eigenvalues. For an inhomogeneous background that depends on $x$ however, the eigenvectors themselves will also depend on $x$, hence all $\nabla$-operators will introduce first (or even second) order derivatives with respect to $x$. This implies that our initial, standard eigenvalue problem $\amat \statevec = \omega \statevec$ will be transformed to a general, complex eigenvalue problem of the form $\amat \statevec = \omega \bmat \statevec$, where the $\amat$ and $\bmat$ matrices \emph{themselves} will contain derivatives of the background quantities, and on top of that the state vector $\statevec$ will contain derivatives of the perturbed quantities as well. At this point most analytical attempts to solve this system will prove impossible and a numerical approach becomes essential.
+Before diving into this however, which we will extensively do in Chapter \ref{ch: Legolas} and further, we can already familiarise ourselves quite a bit by looking at a relatively simple extension to our homogeneous treatment. This Section builds upon the discussion given in \citet{book_MHD} regarding inhomogeneous plasmas.
 
-% this sort of belongs here as a general intro
-% One important remark that still has to be made is that the above analysis assumes a medium of infinite extent, i.e. unbounded in all directions.
 
-% \begin{figure}[t]
-%   \centering
-%   \includegraphics[width=\textwidth]{bounded_ideal_spectrum.png}
-%   \caption{TODO}
-%   \label{fig: bounded_spectrum}
-% \end{figure}
-\subsection{Effects on linearisation}
-\subsection{Introduction to MHD continua}
+\subsection{A first approximation}
+Consider an inhomogeneous medium along $x$ that is bounded between $x = 0$ and $x = L$ but infinite in the $y$ and $z$ directions. As explained in the introductory paragraph we can no longer Fourier analyse along $x$ and a much more intricate treatment is needed. However, we can roughly approximate this medium by a collection of bounded slabs as shown in Figure \ref{fig: bounded_slab} in an effort to understand the general implications that inhomogeneity brings. We can approximately treat the first slab as being bounded between $x = 0$ and $x = a$ and having homogeneous density, temperature and pressure. Due to the bounded nature of this smaller slab the wave number along $x$ will be quantised: $k_x = n\pi / a$ where $n$ is an integer. This in turn introduces a quantisation of the spectrum itself: for every value of $k_x$ we will have a solution to the ideal, homogeneous eigenvalue problem, leading to a discrete spectrum.
+
+\begin{figure}[b]
+  \centering
+  \includegraphics[width=0.7\textwidth]{confined_slab.png}
+  \caption{
+    An inhomogeneous slab approximated by a collection of homogeneous slabs along $x$, infinite along $y$ and $z$.
+  }
+  \label{fig: bounded_slab}
+\end{figure}
+
+We can understand what this would look like, physically speaking, by turning to the eigenfrequency solutions given in Equations \eqref{eq: alfvenwaves}-\eqref{eq: fs_mhd_waves} while taking the limit of $k_x \rightarrow \infty$. Using the same assumptions as earlier for $\bk$ and $\bb_0$, that is, $\bb_0 = (0, 0, B_0)$ and $\bk = (\kperp, 0, \kpara)$, we get for the Alfv\'en waves
+\begin{equation} \label{eq: alfven_accumulation_point}
+  \omega_A^2 = \lim_{\kperp \rightarrow \infty}\omega_a^2 = \kpara^2\alfvenspeed^2,
+\end{equation}
+meaning that the Alfv\'en modes are \emph{infinitely degenerate} since they do not depend on $\kperp$. There is hence no difference between $\omega_a^2$ and $\omega_A^2$ in this case.
+
+For the slow modes on the other hand we find that
+\begin{equation} \label{eq: slow_accumulation_point}
+  \omega_S^2 =
+    \lim_{\kperp \rightarrow \infty}\omega_s^2 =
+    \kpara^2 \frac{\alfvenspeed^2 \soundspeed^2}{\alfvenspeed^2 + \soundspeed^2} =
+    \frac{\gamma \rho_0 T_0}{\gamma \rho_0 T_0 + B_0^2}\omega_A^2,
+\end{equation}
+which, for constant sound- and Alfv\'en speeds (which is the case here as the background is homogeneous), leads to an \emph{accumulation} point in the slow wave sequence. The fast waves have this accumulation point at infinity, since
+\begin{equation} \label{eq: fast_accumulation_point}
+  \omega_F^2 = \lim_{\kperp \rightarrow \infty}\omega_f^2 = \infty.
+\end{equation}
+Note that we annotated these peculiar frequencies with a capital subscript, as they play a very special role in the eigenspectrum of inhomogeneous plasmas: there the slow accumulation point and degenerate Alfv\'en frequency will get replaced by a continuous range of modes, the slow and Alfv\'en continua, which will be introduced in Subsection \ref{ss: mhd_continua}.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{bounded_ideal_spectrum.png}
+  \caption{
+    Visualisation of the ideal MHD spectrum for a bounded homogeneous medium. Panel \textbf{a}: overall view of the spectrum, the arrow indicates that the fast modes accumulate at infinity.
+    Panel \textbf{b}: zoom of panel \textbf{a}, clearly showing the degenerate and accumulating behaviour of the Alfv\'en and slow modes, respectively. The slow accumulation point $\omega_S$ is denoted with a red dotted line, the arrow indicates the direction of increasing $n$.
+  }
+  \label{fig: bounded_spectrum}
+\end{figure}
+
+Figure \ref{fig: bounded_spectrum} shows solutions to the ideal eigenvalue problem, similar to Figure \ref{fig: adiabatic_spectrum}, but for a quantised $\kperp$. Panel a shows an overall view, where the arrow above the fast modes indicates their accumulation point at infinity. Panel b zooms in on Panel a, showing the degenerate behaviour of the Alfv\'en waves and the accumulation sequence of the slow modes. The red dotted line denotes the slow accumulation point $\omega_S$ given by Equation \eqref{eq: slow_accumulation_point}, the arrow indicates the direction of increasing $n$ in the quantisation of the wave number $\kperp$.
+
+\subsection{Introduction to MHD continua} \label{ss: mhd_continua}
+
 
 
 
