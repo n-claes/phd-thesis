@@ -16,6 +16,7 @@ Magnetohydrodynamics (\gls{MHD}) is the cornerstone of plasma physics, and in an
 We will not go in-depth as to which theory is better suited for one particular problem or under which conditions they are valid approximations. Generally speaking if one is investigating very small spatial or temporal scales, or is interested in the motions of individual particles or particle species then kinetic theory is the best option. On the other hand, for ``larger'' applications in which one assumes that the collisions between individual particles happen so frequently that the plasma can be treated as a single continuous fluid then \gls{MHD} is the way to go. Throughout this thesis we will assume that the latter is always the case, and we stick with the \gls{MHD} representation.
 
 One beautiful feature of the \gls{MHD} equations is that they are \emph{scale-independent}. The equations themselves are made dimensionless by choosing (generally speaking) reference values for the typical length scale, magnetic field strength and plasma density. Depending on the problem at hand different reference values can be chosen to describe the situation, which in turn implies that \gls{MHD} can describe plasmas in astrophysical settings (accretion disks, jets around black holes, stellar atmospheres, etc.) as well as laboratory settings, all using the same set of equations!
+\emph{Throughout this thesis we will always work with normalised quantities, unless explicitly specified otherwise.}
 
 
 \section{Magnetohydrodynamics}
@@ -70,8 +71,8 @@ Both the cooling and conduction terms are then added to the appropriate \gls{MHD
 Generally speaking, when numerically solving the system of \gls{MHD} equations one relies on a similar set of steps no matter the approach taken. First a geometry is chosen depending on the problem at hand: a Cartesian (rectangular) box is convenient when describing for example parts of the solar atmosphere, while cylindrical geometries are more useful to describe problems like expanding flux tubes or jets. Next an initial state is chosen at time $t = 0$ fitting the problem, which essentially boils down to choosing initial prescriptions for $(\rho, \bv, T, \bb)$:
 \begin{equation}
   \begin{gathered}
-    \rho_i(\bx) \equiv \rho(\bx, t=0), \qquad T_i(\bx) \equiv T(\bx, t=0), \\
-    \bv_i(\bx) \equiv \bv(\bx, t=0), \qquad \bb_i(\bx) \equiv \bb(\bx, t=0),
+    \rho_\text{i}(\bx) \equiv \rho(\bx, t=0), \qquad T_\text{i}(\bx) \equiv T(\bx, t=0), \\
+    \bv_\text{i}(\bx) \equiv \bv(\bx, t=0), \qquad \bb_\text{i}(\bx) \equiv \bb(\bx, t=0),
   \end{gathered}
 \end{equation}
 all depending on the position vector $\bx$. Since we are dealing with partial differential equations, appropriate boundary conditions must be chosen on all sides of the domain under consideration. Once the initial setup is chosen, the set of equations \eqref{eq: ideal_continuity}-\eqref{eq: ideal_induction} is written in conservative form and the domain is discretised using one particular resolution (or more in cases of mesh refinement). Then the iterative process can start: once one's favourite numerical scheme is chosen all fluxes through every cell in the domain are calculated and the system is advanced in time. These two steps are repeated until the simulation ends and/or the system reaches a stationary state.
@@ -80,7 +81,7 @@ Naturally, it is clear that higher resolutions result in much finer cells, which
 
 
 
-\section{Spectroscopy in plasmas}
+\section{Introduction to MHD spectroscopy}
 The main question that spectroscopy tries to answer is ``\emph{How do you know, without explicitly solving the entire set of equations, whether a given dynamical system is stable or not}''? Figure \ref{fig: stability} gives an illustration of the theoretical approach to linear stability analysis. Consider a solid ball at rest at an initial time $t = 0$ on some sort of hill in a gravitational field. If no forces are acting on this ball, then it will remain in this initial position indefinitely. When a small perturbation is applied, i.e. moving the ball slightly away from its equilibrium position, a number of things may happen depending on the shape of the surface the ball is resting on.
 
 \begin{figure}[b]
@@ -131,7 +132,7 @@ The \emph{linearised MHD equations} then read
   \rho_0\frac{\partial T_1}{\partial t} =
     -\rho_0\bv_1 \cdot \nabla T_0
     -\gmone \rho_0 T_0 \nabla \cdot \bv_1
-    -\gmone \rho_0 \left(\HLF_T T_1 + \HLF_\rho \rho_1\right) \nonumber \\
+    -\gmone \rho_0 \left(\dHLFT T_1 + \dHLFrho \rho_1\right) \nonumber \\
     +\gmone \nabla \cdot \left(\bkappa_0 \cdot \nabla T_1\right)
     +\gmone \nabla \cdot \left(\bkappa_1 \cdot \nabla T_0\right), \\
   \frac{\partial \ba_1}{\partial t} = \bv_1 \times \bb_0,
@@ -139,34 +140,35 @@ The \emph{linearised MHD equations} then read
 where the background dimensionless pressure is rewritten as $\rho_0 T_0$ and the perturbed pressure contribution $p_1$ has been replaced by $\rho_0 T_1 + \rho_1 T_0$ following the linearised ideal gas law. The quantities $\dHLFT$ and $\dHLFrho$ denote the temperature and density derivatives of the heat-loss function, respectively, which can be written as
 \begin{equation}
   \begin{gathered}
-    \dHLFrho = \left.\frac{\partial \HLF}{\partial \rho}\right|_T = \Lambda(T_0), \\
-    \dHLFT = \left.\frac{\partial \HLF}{\partial T}\right|_\rho = \rho_0 \left.\frac{d\Lambda(T)}{dT}\right|_{T_0},
+    \dHLFrho = \left.\frac{\partial \HLF}{\partial \rho}\right|_\text{T} = \Lambda(T_0), \\
+    \dHLFT = \left.\frac{\partial \HLF}{\partial T}\right|_\rho =
+      \rho_0 \left.\frac{d\Lambda(T)}{dT}\right|_{\text{T}_0},
   \end{gathered}
 \end{equation}
 which both have to be evaluated in the equilibrium quantities $\rho_0$ and $T_0$.
 
 This set of linearised equations is still a system of partial differential equations. However, since the homogeneous equilibrium quantities $(\rho_0, \bv_0, T_0, \bb_0)$ do not depend on time we can consider plane-wave perturbations of the form
 \begin{equation} \label{eq: plane_wave_homogeneous}
-  f_1(\bx, t) = \tilde{f_1}\exp\Bigl(i\bk \cdot \bx - i\omega t\Bigr),
+  f_1(\bx, t) = \tilde{f_1}\exp\Bigl(i\bk \cdot \bx - \icomplex\omega t\Bigr),
 \end{equation}
 where $\bx = (x, y, z)$ is the (Cartesian) position vector, $\omega$ a complex frequency, $\bk = (k_x, k_y, k_z)$ the wave vector and $\tilde{f_1}$ a (complex) constant denoting the amplitude of the plane wave. We are essentially doing a Fourier analysis in three ``ignorable" dimensions. The wonderful consequence of doing this is that it transforms the temporal and spatial derivatives of the perturbed variables $f_1(\bx, t)$ into
 \begin{equation}
-  \frac{\partial}{\partial t} \rightarrow -i\omega, \qquad\qquad
+  \frac{\partial}{\partial t} \rightarrow -\icomplex\omega, \qquad\qquad
   \nabla \rightarrow i\bk,
 \end{equation}
 which reduces the system of partial differential equations to a system of \emph{algebraic} equations given by
 \begin{gather}
   \omega \rho_1 = \rho_0 \bk \cdot \bv_1, \label{eq: homo_continuity_algebraic}\\
-  \rho_0\omega \bv_1 = T_0 \bk \rho_1 + \rho_0\bk T_1 - i[\bk \times (\bk \times \ba_1)]\times\bb_0, \\
+  \rho_0\omega \bv_1 = T_0 \bk \rho_1 + \rho_0\bk T_1 - \icomplex[\bk \times (\bk \times \ba_1)]\times\bb_0, \\
   \rho_0\omega T_1 =
     \gmone \rho_0T_0 \bk \cdot \bv_1
-    - i\gmone\rho_0\left(\HLF_T T_1 + \HLF_\rho \rho_1\right) \nonumber \\
-    - i\gmone \left(\kappapara \kpara^2 + \kappaperp\kperp^2\right)T_1, \\
-  \omega \ba_1 = i\bv_1 \times \bb_0, \label{eq: homo_induction_algebraic}
+    - \icomplex\gmone\rho_0\left(\dHLFT T_1 + \dHLFrho \rho_1\right) \nonumber \\
+    - \icomplex\gmone \left(\kappapara \kpara^2 + \kappaperp\kperp^2\right)T_1, \\
+  \omega \ba_1 = \icomplex\bv_1 \times \bb_0, \label{eq: homo_induction_algebraic}
 \end{gather}
 with $\kpara$ and $\kperp$ denoting the wave vector components parallel and perpendicular to the background magnetic field $\bb_0$, respectively. As confusion is not possible the tilde notation used in Equation \eqref{eq: plane_wave_homogeneous} has been omitted.
 
-\subsection{Introduction to MHD spectroscopy}
+\subsection{Eigenvalues and stability}
 The eight equations given in \eqref{eq: homo_continuity_algebraic}-\eqref{eq: homo_induction_algebraic} form a complete eigenvalue problem, with the eigenvectors containing the variables $\rho_1, \bv_1, T_1$ and $\ba_1$. This can be reduced to a standard complex eigenvalue problem of the form $\amat\statevec = \omega\statevec$, with general wave vectors $\bk = (k_x, k_y, k_z)$ and magnetic field vectors $\bb_0 = (B_{0x}, B_{0y}, B_{0z})$. The state vector $\statevec$ containing the unknown variables is then given by
 \begin{equation}
   \statevec = \begin{pmatrix}
@@ -175,18 +177,18 @@ The eight equations given in \eqref{eq: homo_continuity_algebraic}-\eqref{eq: ho
 \end{equation}
 Due to the homogeneous background that was imposed the elements of the matrix $\amat$ are constants, and the eigenfrequency $\omega$ of each respective mode can be obtained by directly solving for the eigenvalues of the corresponding $\amat$-matrix. Generally speaking the eigenvalues are complex, hence every eigenvalue can be written as
 \begin{equation}
-  \omega \equiv \omega_R + i\omega_I,
+  \omega \equiv \omega_\text{R} + \icomplex\omega_\text{I},
 \end{equation}
-where $\omega_R$ and $\omega_I$ denote the real and imaginary parts, respectively. Looking back at our plane-wave solutions in Equation \eqref{eq: plane_wave_homogeneous} this implies that the temporal behaviour of all waves scales as
+where $\omega_\text{R}$ and $\omega_\text{I}$ denote the real and imaginary parts, respectively. Looking back at our plane-wave solutions in Equation \eqref{eq: plane_wave_homogeneous} this implies that the temporal behaviour of all waves scales as
 \begin{equation}
-  \sim \exp(\omega_I t)\exp(-i\omega_R t).
+  \sim \exp(\omega_\text{I} t)\exp(-\icomplex\omega_\text{R} t).
 \end{equation}
-From this the physical role of both components becomes clear: for purely real eigenvalues ($\omega_I = 0$) wave modes will propagate in the direction of $\bk$ and oscillate with a frequency $\omega_R$, these are stable waves and their amplitude will remain constant over time. The sign of $\omega_R$ represents forwards ($+$) or backwards ($-$) propagating modes with respect to the direction of $\bx$. For non-zero $\omega_I$ however one can distinguish between four scenarios:
+From this the physical role of both components becomes clear: for purely real eigenvalues ($\omega_\text{I} = 0$) wave modes will propagate in the direction of $\bk$ and oscillate with a frequency $\omega_\text{R}$, these are stable waves and their amplitude will remain constant over time. The sign of $\omega_\text{R}$ represents forwards ($+$) or backwards ($-$) propagating modes with respect to the direction of $\bx$. For non-zero $\omega_\text{I}$ however one can distinguish between four scenarios:
 \begin{enumerate}
-  \item $\omega_R = 0$ and $\omega_I > 0$: \emph{unstable modes}. These are imaginary eigenvalues and represent pure instabilities. In this case, if the background is perturbed this will not result in propagating waves but in an exponential increase in amplitude.
-  \item $\omega_R = 0$ and $\omega_I < 0$: \emph{damped modes}. These are also imaginary eigenvalues but the opposite of the previous case: amplitudes will decay exponentially over time.
-  \item $\omega_R \neq 0$ and $\omega_I > 0$: \emph{overstable modes}. These eigenvalues are genuinely complex, with nonzero real and imaginary parts. This represents propagating waves which are unstable due to excessive feedback in the system, resulting in an increase in amplitude over time.
-  \item$\omega_R \neq 0$ and $\omega_I < 0$: \emph{overdamped modes}. The opposite of the previous case, with again eigenvalues that are genuinly complex. These eigenvalues represent propagating waves with decreasing amplitude, eventually dying out such that the system returns to its equilibrium state.
+  \item $\omega_\text{R} = 0$ and $\omega_\text{I} > 0$: \emph{unstable modes}. These are imaginary eigenvalues and represent pure instabilities. In this case, if the background is perturbed this will not result in propagating waves but in an exponential increase in amplitude.
+  \item $\omega_\text{R} = 0$ and $\omega_\text{I} < 0$: \emph{damped modes}. These are also imaginary eigenvalues but the opposite of the previous case: amplitudes will decay exponentially over time.
+  \item $\omega_\text{R} \neq 0$ and $\omega_\text{I} > 0$: \emph{overstable modes}. These eigenvalues are genuinely complex, with nonzero real and imaginary parts. This represents propagating waves which are unstable due to excessive feedback in the system, resulting in an increase in amplitude over time.
+  \item$\omega_\text{R} \neq 0$ and $\omega_\text{I} < 0$: \emph{overdamped modes}. The opposite of the previous case, with again eigenvalues that are genuinly complex. These eigenvalues represent propagating waves with decreasing amplitude, eventually dying out such that the system returns to its equilibrium state.
 \end{enumerate}
 
 \begin{figure}[b]
@@ -196,7 +198,7 @@ From this the physical role of both components becomes clear: for purely real ei
   \label{fig: spectral_plane}
 \end{figure}
 
-Figure \ref{fig: spectral_plane} shows a graphical representation of all different cases, where all regions have been annotated in a $\omega_R - \omega_I$ 2D-plane. A complex plane like this is called a \emph{spectrum}, and we will use similar representations throughout this thesis to visualise eigenvalues. Additionally, in the remainder of this thesis we will not distinguish between damped and overdamped modes, both will simply be referred to as ``damped''.
+Figure \ref{fig: spectral_plane} shows a graphical representation of all different cases, where all regions have been annotated in a $\omega_\text{R} - \omega_\text{I}$ 2D-plane. A complex plane like this is called a \emph{spectrum}, and we will use similar representations throughout this thesis to visualise eigenvalues. Additionally, in the remainder of this thesis we will not distinguish between damped and overdamped modes, both will simply be referred to as ``damped''.
 
 
 \subsection{The ideal MHD spectrum}
@@ -205,12 +207,12 @@ When solving the eigenvalue system to obtain all eigenvalues some care must be t
   \resizebox{0.89\hsize}{!}{$
     \begin{pmatrix}
       0 & \kperp \rho_0 & 0 & \kpara \rho_0 & 0 & 0 & 0 & 0 \\
-      \dfrac{T_0}{\rho_0}\kperp & 0 & 0 & 0 & \kperp & 0 & \dfrac{i B_0}{\rho_0}k_0^2 & 0 \\
-      0 & 0 & 0 & 0 & 0 & -\dfrac{i B_0}{\rho_0}\kpara^2 & 0 & \dfrac{i B_0}{\rho_0}\kpara \kperp \\
+      \dfrac{T_0}{\rho_0}\kperp & 0 & 0 & 0 & \kperp & 0 & \dfrac{\icomplex B_0}{\rho_0}k_0^2 & 0 \\
+      0 & 0 & 0 & 0 & 0 & -\dfrac{\icomplex B_0}{\rho_0}\kpara^2 & 0 & \dfrac{\icomplex B_0}{\rho_0}\kpara \kperp \\
       \dfrac{T_0}{\rho_0}\kpara & 0 & 0 & 0 & \kpara & 0 & 0 & 0 \\
       0 & \gmone T_0 \kperp & 0 & \gmone T_0 \kpara & 0 & 0 & 0 & 0 \\
-      0 & 0 & iB_0 & 0 & 0 & 0 & 0 & 0 \\
-      0 & -iB_0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+      0 & 0 & \icomplex B_0 & 0 & 0 & 0 & 0 & 0 \\
+      0 & -\icomplex B_0 & 0 & 0 & 0 & 0 & 0 & 0 \\
       0 & 0 & 0 & 0 & 0 & 0 & 0 & 0
     \end{pmatrix},
   $}
@@ -225,14 +227,14 @@ The first solution is a \emph{genuine} $\omega = 0$ solution (on top of the spur
 \paragraph{Alfv\'en waves.}
 2 other solutions are the \emph{Alfv\'en waves}, which have their eigenfrequencies given by
 \begin{equation} \label{eq: alfvenwaves}
-  \omega_a^2 = \kpara^2 \alfvenspeed^2,
+  \omega_\text{a}^2 = \kpara^2 \alfvenspeed^2,
 \end{equation}
 where $\alfvenspeed^2 = |\bb_0|^2 / \rho_0$ denotes the Alfv\'en speed. These purely transverse anisotropic waves only propagate along the magnetic field lines and owe their origin to restoring forces from magnetic tension effects.
 
 \paragraph{Slow and fast waves}
 The final four solutions are called the \emph{slow} and \emph{fast magnetosonic waves}, and their eigenfrequencies are solutions to
 \begin{equation} \label{eq: fs_mhd_waves}
-  \omega_{fs}^2 = \frac{1}{2}k_0^2\Bigl(
+  \omega_\text{fs}^2 = \frac{1}{2}k_0^2\Bigl(
     \alfvenspeed^2 + \soundspeed^2 \pm \sqrt{
       \left(\alfvenspeed^2 + \soundspeed^2\right)^2 - 4 \soundspeed^2 \alfvenspeed^2 \cos^2\theta
     }
@@ -242,7 +244,7 @@ with $\theta$ denoting the angle between the wave vector $\bk$ and $\bb_0$, the 
 
 All of these eigenfrequencies follow a strict ordening:
 \begin{equation} \label{eq: omega_ordening}
-  0 \leq \omega_s^2 \leq \omega_a^2 \leq \omega_f^2 < \infty,
+  0 \leq \omega_\text{s}^2 \leq \omega_\text{a}^2 \leq \omega_\text{f}^2 < \infty,
 \end{equation}
 which is a general property that will be of the utmost importance in spectroscopy, since it determines \emph{the overall structure of an MHD spectrum}. This property will even hold (in one form or another) when we move on to inhomogeneous backgrounds and/or additional physical effects. Figure \ref{fig: adiabatic_spectrum} shows this strict ordening of the eigenfrequencies in the spectral plane, for a general solution of the ideal MHD eigenvalue problem. Note that all eigenfrequencies lie on the real axis, as it should be, owing to the self-adjointness of the matrix operator.
 
@@ -263,27 +265,27 @@ In the previous Subsection we omitted all non-ideal terms in the energy equation
     \begin{pmatrix}
       0 & \kperp \rho_0 & 0 & \kpara \rho_0 & 0 & 0 & 0 & 0 \\
       \dfrac{T_0}{\rho_0}\kperp & 0 & 0 & 0 & \kperp & 0 & \dfrac{i B_0}{\rho_0}k_0^2 & 0 \\
-      0 & 0 & 0 & 0 & 0 & -\dfrac{i B_0}{\rho_0}\kpara^2 & 0 & \dfrac{i B_0}{\rho_0}\kpara \kperp \\
+      0 & 0 & 0 & 0 & 0 & -\dfrac{\icomplex B_0}{\rho_0}\kpara^2 & 0 & \dfrac{\icomplex B_0}{\rho_0}\kpara \kperp \\
       \dfrac{T_0}{\rho_0}\kpara & 0 & 0 & 0 & \kpara & 0 & 0 & 0 \\
-      -i\gmone \dHLFrho &
+      -\icomplex\gmone \dHLFrho &
         \gmone T_0 \kperp &
         0 &
         \gmone T_0 \kpara &
-        -\dfrac{i\gmone}{\rho_0}\Bigl(K + \rho_0 \dHLFT\Bigr) &
+        -\dfrac{\icomplex\gmone}{\rho_0}\Bigl(K + \rho_0 \dHLFT\Bigr) &
         0 &
         0 &
         0 \\
-      0 & 0 & iB_0 & 0 & 0 & 0 & 0 & 0 \\
-      0 & -iB_0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+      0 & 0 & \icomplex B_0 & 0 & 0 & 0 & 0 & 0 \\
+      0 & -\icomplex B_0 & 0 & 0 & 0 & 0 & 0 & 0 \\
       0 & 0 & 0 & 0 & 0 & 0 & 0 & 0
     \end{pmatrix},
   $}
 \end{equation}
 where we defined $K = \kappapara \kpara^2 + \kappaperp \kperp^2$. Before diving into the modifications this brings to the actual spectrum we first take a look at the $v_{1y}$ component. The third row in this matrix can be written as
 \begin{equation}
-  \omega v_{1y} = -\frac{iB_0}{\rho_0}\kpara^2 A_{1x} + \frac{iB_0}{\rho_0}\kpara\kperp A_{1z}.
+  \omega v_{1y} = -\frac{\icomplex B_0}{\rho_0}\kpara^2 A_{1x} + \frac{\icomplex B_0}{\rho_0}\kpara\kperp A_{1z}.
 \end{equation}
-If we combine this with the expressions for the $\omega A_{1x} = iB_0 v_{1y}$ and $\omega A_{1z} = 0$ components, i.e. the sixth and eight rows of the above matrix, the $v_{1y}$ component can be written as
+If we combine this with the expressions for the $\omega A_{1x} = \icomplex B_0 v_{1y}$ and $\omega A_{1z} = 0$ components, i.e. the sixth and eight rows of the above matrix, the $v_{1y}$ component can be written as
 \begin{equation}
   \omega^2 v_{1y} = \frac{B_0^2}{\rho_0}\kpara^2 v_{1y},
 \end{equation}
@@ -302,6 +304,12 @@ Generally speaking the non-adiabatic effects included here have opposite trends 
   \label{fig: nonadiabatic_spectrum}
 \end{figure}
 
+
+\section{MHD spectroscopy in non-uniform plasmas}
+In all of the above we linearised around a homogeneous background, which allowed us to consider plane-wave perturbations as given in Equation \eqref{eq: plane_wave_homogeneous}. One important remark to be made as well is that the above analysis assumes a medium of infinite extent, i.e. a plasma that is unbounded in all directions.
+Nature on the other hand is quite different, since in reality virtually no astrophysical or laboratory plasma configuration is spatially homogeneous, or infinite for that matter. Our initial assumption of uncoupled plane-wave solutions breaks down as soon as we include plasma inhomogeneity, which in turn implies that our operator transformation $\nabla \rightarrow \icomplex\bk$ no longer holds. If we take the direction of inhomogeneity along $x$ then we would have to replace $k_x$ by $\icomplex\partial / \partial x$, and things would get quite complicated real fast. Linearising around a homogeneous background transformed our initial set of partial differential equations to a set of algebraic equations, which could simply be solved by plugging the resulting eigenvalue problem in any modern solver and calculating the eigenvalues. For an inhomogeneous background that depends on $x$ however, the eigenvectors themselves will also depend on $x$, hence all $\nabla$-operators will introduce first (or even second) order derivatives with respect to $x$. This implies that our initial, standard eigenvalue problem $\amat \statevec = \omega \statevec$ will be transformed to a general, complex eigenvalue problem of the form $\amat \statevec = \omega \bmat \statevec$, where the $\amat$ and $\bmat$ matrices \emph{themselves} will contain derivatives of the background quantities, and on top of that the state vector $\statevec$ will contain derivatives of the perturbed quantities as well. At this point most analytical attempts to solve this system will prove impossible and a numerical approach becomes essential.
+Before diving into this however, which we will extensively do in Chapter \ref{ch: Legolas} and further, we can already familiarise ourselves quite a bit by looking at a relatively simple extension to our homogeneous treatment. This Section builds upon the discussion given in \citet{book_MHD} regarding inhomogeneous plasmas.
+
 \subsection{Spectral symmetry}
 Up to now we have neglected to mention a very important property of MHD spectroscopy: that of \emph{spectral symmetry}. This is directly linked to the overall structure of the MHD spectrum, and by extension to the self-adjointness of the matrix operator. These symmetry considerations will remain valid when we later move on to spectroscopy in inhomogeneous plasmas, and have also been partially discussed in \citet{legolas_paper}.
 
@@ -319,13 +327,7 @@ Generally speaking, combining the above statements on spectral symmetry we can s
   \item Flowing, non-ideal plasmas: \emph{no symmetry in general}. The combination of flow and non-ideal effects like radiative cooling or resistivity will break left-right and up-down symmetry.
 \end{itemize}
 
-From this the wide range in complexity for an MHD spectrum becomes clear: depending on the physical effects taken into account a single spectrum can become extremely complicated. In reality very few astrophysical plasmas can be considered ideal or static, such that in general there will be no spectral symmetry present. In some select cases symmetry can be restored however, even for non-ideal flowing plasmas, by considering a symmetric flow profile in a symmetric domain. This in turn makes the forward and backward modes behave symmetrically, reducing the complexity a bit. This is not always possible however, and generally speaking one will always have to deal with non-symmetric spectra when looking at realistic configurations. In those cases inhomogeneity will also play a major role, which in turn increases the complexity even further due to the presence of the various continua. We will give a general introduction to the MHD continua in the next Section.
-
-
-\section{Spectroscopy in non-uniform plasmas}
-In all of the above we linearised around a homogeneous background, which allowed us to consider plane-wave perturbations as given in Equation \eqref{eq: plane_wave_homogeneous}. One important remark to be made as well is that the above analysis assumes a medium of infinite extent, i.e. a plasma that is unbounded in all directions.
-Nature on the other hand is quite different, since in reality virtually no astrophysical or laboratory plasma configuration is spatially homogeneous, or infinite for that matter. Our initial assumption of uncoupled plane-wave solutions breaks down as soon as we include plasma inhomogeneity, which in turn implies that our operator transformation $\nabla \rightarrow i\bk$ no longer holds. If we take the direction of inhomogeneity along $x$ then we would have to replace $k_x$ by $i\partial / \partial x$, and things would get quite complicated real fast. Linearising around a homogeneous background transformed our initial set of partial differential equations to a set of algebraic equations, which could simply be solved by plugging the resulting eigenvalue problem in any modern solver and calculating the eigenvalues. For an inhomogeneous background that depends on $x$ however, the eigenvectors themselves will also depend on $x$, hence all $\nabla$-operators will introduce first (or even second) order derivatives with respect to $x$. This implies that our initial, standard eigenvalue problem $\amat \statevec = \omega \statevec$ will be transformed to a general, complex eigenvalue problem of the form $\amat \statevec = \omega \bmat \statevec$, where the $\amat$ and $\bmat$ matrices \emph{themselves} will contain derivatives of the background quantities, and on top of that the state vector $\statevec$ will contain derivatives of the perturbed quantities as well. At this point most analytical attempts to solve this system will prove impossible and a numerical approach becomes essential.
-Before diving into this however, which we will extensively do in Chapter \ref{ch: Legolas} and further, we can already familiarise ourselves quite a bit by looking at a relatively simple extension to our homogeneous treatment. This Section builds upon the discussion given in \citet{book_MHD} regarding inhomogeneous plasmas.
+From this the wide range in complexity for an MHD spectrum becomes clear: depending on the physical effects taken into account a single spectrum can become extremely complicated. In reality very few astrophysical plasmas can be considered ideal or static, such that in general there will be no spectral symmetry present. In some select cases symmetry can be restored however, even for non-ideal flowing plasmas, by considering a symmetric flow profile in a symmetric domain. This in turn makes the forward and backward modes behave symmetrically, reducing the complexity a bit. This is not always possible however, and generally speaking one will always have to deal with non-symmetric spectra when looking at realistic configurations. In those cases inhomogeneity will also play a major role, which in turn increases the complexity even further due to the presence of the various continua. We will give a general introduction to the MHD continua in Subsection \ref{ss: mhd_continua}.
 
 
 \subsection{A first approximation}
@@ -342,20 +344,20 @@ Consider an inhomogeneous medium along $x$ that is bounded between $x = 0$ and $
 
 We can understand what this would look like, physically speaking, by turning to the eigenfrequency solutions given in Equations \eqref{eq: alfvenwaves}-\eqref{eq: fs_mhd_waves} while taking the limit of $k_x \rightarrow \infty$. Using the same assumptions as earlier for $\bk$ and $\bb_0$, that is, $\bb_0 = (0, 0, B_0)$ and $\bk = (\kperp, 0, \kpara)$, we get for the Alfv\'en waves
 \begin{equation} \label{eq: alfven_accumulation_point}
-  \omega_A^2 = \lim_{\kperp \rightarrow \infty}\omega_a^2 = \kpara^2\alfvenspeed^2,
+  \omega_\text{A}^2 = \lim_{\kperp \rightarrow \infty}\omega_\text{a}^2 = \kpara^2\alfvenspeed^2,
 \end{equation}
-meaning that the Alfv\'en modes are \emph{infinitely degenerate} since they do not depend on $\kperp$. There is hence no difference between $\omega_a^2$ and $\omega_A^2$ in this case.
+meaning that the Alfv\'en modes are \emph{infinitely degenerate} since they do not depend on $\kperp$. There is hence no difference between $\omega_\text{a}^2$ and $\omega_\text{A}^2$ in this case.
 
 For the slow modes on the other hand we find that
 \begin{equation} \label{eq: slow_accumulation_point}
-  \omega_S^2 =
-    \lim_{\kperp \rightarrow \infty}\omega_s^2 =
+  \omega_\text{S}^2 =
+    \lim_{\kperp \rightarrow \infty}\omega_\text{s}^2 =
     \kpara^2 \frac{\alfvenspeed^2 \soundspeed^2}{\alfvenspeed^2 + \soundspeed^2} =
-    \frac{\gamma \rho_0 T_0}{\gamma \rho_0 T_0 + B_0^2}\omega_A^2,
+    \frac{\gamma \rho_0 T_0}{\gamma \rho_0 T_0 + B_0^2}\omega_\text{A}^2,
 \end{equation}
 which, for constant sound- and Alfv\'en speeds (which is the case here as the background is homogeneous), leads to an \emph{accumulation} point in the slow wave sequence. The fast waves have this accumulation point at infinity, since
 \begin{equation} \label{eq: fast_accumulation_point}
-  \omega_F^2 = \lim_{\kperp \rightarrow \infty}\omega_f^2 = \infty.
+  \omega_\text{F}^2 = \lim_{\kperp \rightarrow \infty}\omega_\text{f}^2 = \infty.
 \end{equation}
 Note that we annotated these peculiar frequencies with a capital subscript, as they play a very special role in the eigenspectrum of inhomogeneous plasmas: there the slow accumulation point and degenerate Alfv\'en frequency will get replaced by a continuous range of modes, the slow and Alfv\'en continua, which will be introduced in Subsection \ref{ss: mhd_continua}.
 
@@ -364,7 +366,7 @@ Note that we annotated these peculiar frequencies with a capital subscript, as t
   \includegraphics[width=\textwidth]{bounded_ideal_spectrum.png}
   \caption{
     Visualisation of the ideal MHD spectrum for a bounded homogeneous medium. Panel \textbf{a}: overall view of the spectrum, the arrow indicates that the fast modes accumulate at infinity.
-    Panel \textbf{b}: zoom of panel \textbf{a}, clearly showing the degenerate and accumulating behaviour of the Alfv\'en and slow modes, respectively. The slow accumulation point $\omega_S$ is denoted with a red dotted line, the arrow indicates the direction of increasing $n$.
+    Panel \textbf{b}: zoom of panel \textbf{a}, clearly showing the degenerate and accumulating behaviour of the Alfv\'en and slow modes, respectively. The slow accumulation point $\omega_\text{S}$ is denoted with a red dotted line, the arrow indicates the direction of increasing $n$.
   }
   \label{fig: bounded_spectrum}
 \end{figure}
@@ -372,8 +374,54 @@ Note that we annotated these peculiar frequencies with a capital subscript, as t
 Figure \ref{fig: bounded_spectrum} shows solutions to the ideal eigenvalue problem, similar to Figure \ref{fig: adiabatic_spectrum}, but for a quantised $\kperp$. Panel a shows an overall view, where the arrow above the fast modes indicates their accumulation point at infinity. Panel b zooms in on Panel a, showing the degenerate behaviour of the Alfv\'en waves and the accumulation sequence of the slow modes. The red dotted line denotes the slow accumulation point $\omega_S$ given by Equation \eqref{eq: slow_accumulation_point}, the arrow indicates the direction of increasing $n$ in the quantisation of the wave number $\kperp$.
 
 \subsection{Introduction to MHD continua} \label{ss: mhd_continua}
+\makebox[\textwidth][r]{
+  \begin{minipage}{.7\textwidth}
+    \flushright
+    \emph{
+      Parts of this discussion, in particular the last two paragraphs, are based on \citet{claes2021}.
+    }
+  \end{minipage}
+}
 
+\subsubsection{Continua in ideal MHD}
+To close this Chapter we will briefly touch upon the MHD continua and their (very) important role in the spectral theory of inhomogeneous plasmas. For an inhomogeneous background it is well known that one can reformulate the ideal MHD equations \eqref{eq: ideal_continuity}-\eqref{eq: ideal_induction} into an ordinary differential equation in terms of the $x$-component of the Lagrangian displacement field. It would be rather extensive to do this here, instead we refer to the detailed discussion given in \citet{book_MHD}.
 
+The existence of the slow and Alfv\'en continua correspond to singular points in this ordinary differential equation (\gls{ODE}), and these continua essentially represent finite ranges of eigenfrequencies with singular, ultra-localized eigenfunctions. They play a key role in processes like phase mixing, resonant absorption or uniturbulence processes. In ideal MHD, the forward and backward slow and Alfv\'en continua are always real (pure waves), and the eigenfrequency ranges are $x$-dependent when the direction of inhomogeneity in the background is taken along $x$.
 
+The slow, Alfv\'en and fast accumulation points discussed in Equations \eqref{eq: alfven_accumulation_point}-\eqref{eq: alfven_accumulation_point} are actually special situations originating from these continua, in which the continua collapse to degenerate single points in homogeneous media. An intuitive way to look at this is to consider the expression for the Alfv\'en accumulation point $\omega_\text{A}^2 = \kpara^2\alfvenspeed^2$, which depends on the Alfv\'en speed and by extension on the density and magnetic field profiles. For an inhomogeneous background these profiles will depend on $x$, hence the Alfv\'en speed will vary over the domain, and thus the continua as well giving rise to a finite range in eigenfrequency. The same reasoning holds for the slow continuum, and since the fast modes have their accumulation point at infinity (such that they don't give rise to singular points in the ODE) we do not have a ``fast continuum''. Additionally, when viewed as a function of $x$, local minima or maxima in the continua may lead to the presence of additional, discrete sequences of modes that cluster towards these accumulation ranges.
+
+\subsubsection{Continua in non-adiabatic MHD}
+The inclusion of non-adiabatic effects introduces the thermal continuum, which in static, non-adiabatic settings is just the entropy (thermal) mode. It was shown by \citet{vanderlinden1991} that these continuum modes are introduced by $\kappaperp = 0$, and hence only exist if there is no thermal conduction perpendicular to the magnetic field lines. For nonzero $\kappaperp$ the thermal continuum gets replaced by a quasi-continuum, represented by a dense band of discrete thermal modes. The Alfv\'en continuum remains unmodified when only non-adiabatic effects are included and hence all its continuum solutions will be real, corresponding to locally resonant waves. The slow continuum on the other hand is modified and couples to the thermal continuum, with solutions given by a third-order polynomial in $\omega$ as derived in \citet{vanderlinden1991} and adapted to our current formalism,
+\begin{equation}	\label{eq: slow_thermal_continuum}
+  \frac{\rho_0 \left(\soundspeed^2 + \alfvenspeed^2\right)}{\gamma - 1}\icomplex\omega^3
+  + \Qai\omega^2
+  - \frac{\rho_0 \soundspeed^2\alfvenspeed^2 \kpara^2}{\gamma - 1}\icomplex\omega
+  - \Qi\alfvenspeed^2 \kpara^2 = 0,
+\end{equation}
+with $\isosoundspeed^2 = p_0 / \rho_0$ the isothermal sound speed. The quantities
+\begin{equation}
+  \begin{gathered}
+	  \Qi = \Qifull, \\
+    \Qai = \Qaifull,
+  \end{gathered}
+\end{equation}
+are introduced for brevity. Generally speaking, Equation \eqref{eq: slow_thermal_continuum} usually has one purely imaginary solution, corresponding to the thermal continuum $\omega_\text{th}$, and two complex conjugate solutions representing the slow continua $\omega_\text{S}^\pm$. In the ideal case the constant term and the $\omega^2$ term collapse to zero, such that $\omega_\text{th}$ vanishes (reducing to the marginal entropy solution $\omega_\text{th} = 0$). The slow continua reduce to their ideal counterparts $\omega_\text{S}^2 = \kpara^2\soundspeed^2\alfvenspeed^2/(\soundspeed^2 + \alfvenspeed^2)$, which may in turn collapse into points if $\soundspeed$ and $\alfvenspeed$ are both not spatially varying. If the slow continuum vanishes, which is the case if $\bk \cdot \bb_0 = 0$ or if a pressureless background is considered (that is, adopting a zero plasma-$\beta$), the thermal continuum has an analytical solution given by
+\begin{equation}
+	\omega_\text{th} =
+    \frac{\gmone\icomplex}{\soundspeed^2 + \alfvenspeed^2}
+    \left[\rho_0\dHLFrho - \dHLFT\left(\isosoundspeed^2 + \alfvenspeed^2\right)\right],
+\end{equation}
+and hence becomes independent of thermal conduction effects.
+
+\subsubsection{Stability implications of the continua}
+It is really important to stress that continuum modes are in fact \emph{actual solutions} to the eigenvalue problem, and hence represent physical modes. Consequently, one can draw the following general conclusions for the stability of a given equilibrium, solely based on the behaviour of its slow and/or thermal continuum regions:
+
+\begin{itemize}
+	\item[i)] The continuum regions are partially or fully unstable, that is at least some continuum modes have a positive imaginary part. Since these modes are physical solutions, this means that the medium will be susceptible to instability, either through an unstable slow or thermal mode (or a coalescence of both) depending on which continuum region is unstable. How fast these instabilities form will (usually) depend on the growth rates of the most unstable mode(s), although mode interactions and nonlinear effects can develop quickly.
+	\item[ii)] The continuum regions have no internal extrema and are completely stable, that is all modes have a negative or vanishing imaginary part. This corresponds to a stable case, where there is no possibility to trigger instability.
+	\item[iii)] The continuum regions have internal extrema. This represents the more general case, in which discrete modes in the vicinity of the continua \textit{may} exist. Here it is possible to have a stable continuum with an unstable discrete mode such that the medium is still unstable.
+\end{itemize}
+
+The role of these continua will become clear when we start discussing spectra of inhomogeneous configurations in Chapters \ref{ch: Legolas} and \ref{ch: legolas_applications}.
 
 \cleardoublepage

@@ -1,6 +1,6 @@
 % All shortcuts and symbols are to be defined here
 
-\newcommand{\unit}[1]{\hat{\mathbf{e}}_{#1}}
+\newcommand{\unit}[1]{\hat{\mathbf{e}}_{\text{#1}}}
 \nomenclature{$\unit{B}$}{a unit vector along the magnetic field}
 
 % radiative cooling
@@ -10,7 +10,7 @@
 \nomenclature{$\HLFcool$}{the cooling curve}
 \newcommand{\HLFheat}{\mathcal{H}}
 \nomenclature{$\HLFheat$}{the heating function}
-\newcommand{\dHLFT}{\HLF_T}
+\newcommand{\dHLFT}{\HLF_\text{T}}
 \nomenclature{$\dHLFT$}{temperature derivative of the heat-loss function}
 \newcommand{\dHLFrho}{\HLF_\rho}
 \nomenclature{$\dHLFrho$}{density derivative of the heat-loss function}
@@ -50,14 +50,26 @@
 \nomenclature{$\bmat$}{the B-matrix in a general eigenvalue problem $\amat\statevec = \omega\bmat\statevec$}
 
 % shortcuts
+\newcommand{\icomplex}{\text{i}}
+\nomenclature{$\icomplex$}{the complex number $\icomplex$ such that $\icomplex^2 = -1$}
 \newcommand{\gmone}{(\gamma - 1)}
 \nomenclature{$\gamma$}{ratio of specific heats}
-\newcommand{\alfvenspeed}{c_A}
+\newcommand{\alfvenspeed}{c_\text{A}}
 \nomenclature{$\alfvenspeed$}{Alfv\'en speed}
-\newcommand{\soundspeed}{c_s}
+\newcommand{\soundspeed}{c_\text{s}}
 \nomenclature{$\soundspeed$}{sound speed}
+\newcommand{\isosoundspeed}{c_\text{i}}
+\nomenclature{$\isosoundspeed$}{isothermal sound speed}
 
 
 % constants
 \newcommand{\massp}{m_p}
 \nomenclature{$\massp$}{the proton mass}
+
+% definitions
+\newcommand{\Qi}{\mathcal{Q}_\text{i}}
+\newcommand{\Qifull}{\rho_0^2\dHLFrho - \left(\kappapara \kpara^2 + \rho_0 \dHLFT\right)\isosoundspeed^2}
+\newcommand{\Qai}{\mathcal{Q}_\text{ai}}
+\newcommand{\Qaifull}{
+  \rho_0^2\dHLFrho - \left(\kappapara \kpara^2 + \rho_0 \dHLFT\right)\left(\alfvenspeed^2 + \isosoundspeed^2\right)
+}
