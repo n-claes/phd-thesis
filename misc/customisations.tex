@@ -92,3 +92,17 @@
   \end{list}
 }
 \makeatother
+
+% dedicated command for cited work
+\newcommand{\usespublishedwork}[1]{
+  \hbadness=100000
+  \makebox[\textwidth][r]{
+    \begin{minipage}{.75\textwidth}
+      \vspace{2em}
+      \hfill\rule{\textwidth}{0.5pt}
+      \footnotesize
+      \textit{\textsf{#1}}
+      \hfill\rule{\textwidth}{0.5pt}
+    \end{minipage}
+  }
+}
