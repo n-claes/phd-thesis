@@ -1,0 +1,35 @@
+&gridlist
+  gridpoints = 100
+/
+
+&solvelist
+  solver = "QR-invert"
+/
+
+&physicslist
+  radiative_cooling = .true.
+  cooling_curve = "spex_dalgarno"
+  ncool = 50000
+  thermal_conduction = .true.
+/
+
+&equilibriumlist
+  equilibrium_type = "adiabatic_homo"
+/
+
+&savelist
+  dry_run = .true.
+  logging_level = 3
+  show_results = .true.
+  write_eigenfunctions = .false.
+  basename_datfile = "coolingprofiles"
+/
+
+&unitslist
+  unit_temperature = 1.0d6
+  unit_magneticfield = 10.0d0
+  unit_length = 1.0d8
+/
+
+&paramlist
+/
