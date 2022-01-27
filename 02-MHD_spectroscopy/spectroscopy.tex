@@ -124,7 +124,7 @@ such that the constant heating contribution $\HLFheat_0$ equals the radiative lo
 
 The \emph{linearised MHD equations} then read
 \begin{gather}
-  \frac{\partial \rho_1}{\partial t} = -\rho_0 \nabla \cdot \bv_1, \\
+  \frac{\partial \rho_1}{\partial t} = -\rho_0 \nabla \cdot \bv_1, \label{eq: linearised_rho1_homo}\\
   \rho_0 \frac{\partial \bv_1}{\partial t} =
     -\nabla\left(\rho_1 T_0 + \rho_0 T_1\right)
     +\left(\nabla \times \bb_0\right) \times \left(\nabla \times \ba_1\right) \nonumber \\
@@ -135,7 +135,7 @@ The \emph{linearised MHD equations} then read
     -\gmone \rho_0 \left(\dHLFT T_1 + \dHLFrho \rho_1\right) \nonumber \\
     +\gmone \nabla \cdot \left(\bkappa_0 \cdot \nabla T_1\right)
     +\gmone \nabla \cdot \left(\bkappa_1 \cdot \nabla T_0\right), \\
-  \frac{\partial \ba_1}{\partial t} = \bv_1 \times \bb_0,
+  \frac{\partial \ba_1}{\partial t} = \bv_1 \times \bb_0, \label{eq: linearised_A1_homo}
 \end{gather}
 where the background dimensionless pressure is rewritten as $\rho_0 T_0$ and the perturbed pressure contribution $p_1$ has been replaced by $\rho_0 T_1 + \rho_1 T_0$ following the linearised ideal gas law. The quantities $\dHLFT$ and $\dHLFrho$ denote the temperature and density derivatives of the heat-loss function, respectively, which can be written as
 \begin{equation}
@@ -151,7 +151,7 @@ This set of linearised equations is still a system of partial differential equat
 \begin{equation} \label{eq: plane_wave_homogeneous}
   f_1(\bx, t) = \tilde{f_1}\exp\Bigl(i\bk \cdot \bx - \icomplex\omega t\Bigr),
 \end{equation}
-where $\bx = (x, y, z)$ is the (Cartesian) position vector, $\omega$ a complex frequency, $\bk = (k_x, k_y, k_z)$ the wave vector and $\tilde{f_1}$ a (complex) constant denoting the amplitude of the plane wave. We are essentially doing a Fourier analysis in three ``ignorable" dimensions. The wonderful consequence of doing this is that it transforms the temporal and spatial derivatives of the perturbed variables $f_1(\bx, t)$ into
+where $\bx = (x, y, z)$ is the (Cartesian) position vector, $\omega$ a complex frequency, $\bk = (k_x, k_y, k_z)$ the wave vector and $\tilde{f_1}$ a (complex) constant denoting the amplitude of the plane wave. We are essentially doing a Fourier analysis in three ``ignorable'' dimensions. The wonderful consequence of doing this is that it transforms the temporal and spatial derivatives of the perturbed variables $f_1(\bx, t)$ into
 \begin{equation}
   \frac{\partial}{\partial t} \rightarrow -\icomplex\omega, \qquad\qquad
   \nabla \rightarrow i\bk,
@@ -311,7 +311,7 @@ Nature on the other hand is quite different, since in reality virtually no astro
 Before diving into this however, which we will extensively do in Chapter \ref{ch: Legolas} and further, we can already familiarise ourselves quite a bit by looking at a relatively simple extension to our homogeneous treatment. This Section builds upon the discussion given in \citet{book_MHD} regarding inhomogeneous plasmas.
 
 \subsection{Spectral symmetry}
-Up to now we have neglected to mention a very important property of MHD spectroscopy: that of \emph{spectral symmetry}. This is directly linked to the overall structure of the MHD spectrum, and by extension to the self-adjointness of the matrix operator. These symmetry considerations will remain valid when we later move on to spectroscopy in inhomogeneous plasmas, and have also been partially discussed in \citet{legolas_paper}.
+Up to now we have neglected to mention a very important property of MHD spectroscopy: that of \emph{spectral symmetry}. This is directly linked to the overall structure of the MHD spectrum, and by extension to the self-adjointness of the matrix operator. These symmetry considerations will remain valid when we later move on to spectroscopy in inhomogeneous plasmas, and have also been partially discussed in \citet{claes2020_legolas}.
 
 We already mentioned a couple of times that the adiabatic linear MHD equations result in a Hermitian eigenvalue problem, hence all eigenfrequencies will be either fully real (stable modes) or fully complex (pure damped or unstable waves) and lie on the real or imaginary axis in the spectral plane. This implies that the full ideal MHD spectrum is \emph{up-down and left-right symmetric}: every mode will have a counterpart mirrored around the corresponding axis, as already seen in Figure \ref{fig: adiabatic_spectrum}. This is directly related to the forward and backwards propagating mode symmetry mentioned earlier, or, equivalently, parity-time symmetry: all these cases are time-reversible.
 
