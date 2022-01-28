@@ -128,15 +128,62 @@ Figure \ref{fig: w_vs_kx} shows the growth rate of all three relevant modes unde
 Figure \ref{fig: w_vs_theta} on the other hand indicates that solely considering the critical wave number is not sufficient for instability of the thermal mode. The wave number was taken to be $k_x = \pi$, which according to Figure \ref{fig: w_vs_kx} should indicate instability. However, when the angle $\theta$ is varied and becomes too small (for a fixed $\delta = \pi/4$) the magnetic field becomes too aligned with the wave vector such that the contribution of parallel thermal conduction is particularly effective in smoothing out emerging temperature variations. Only for values of $\theta > \pi/4$ thermal conduction parallel to the field lines becomes inefficient enough, and consequently enables the thermal mode to become unstable under these conditions. Armed with this knowledge, all simulations we perform further on achieve conditions where the slow modes are damped, but the thermal mode is inherently unstable.
 
 
-
-
-
-
-
-
-
-\subsection{Synthetic views}
 \subsection{Thermal instability onset in 2D}
+To start we consider a purely 2D setup where we superimpose two slow MHD modes, one along each axis. This is done by calculating the eigenvalues and eigenfunctions for each $\bk$, i.e. one along the $x$-axis and one along the $y$-axis, and exciting them in a similar way as described before. These waves interact with each other, but are both damped owing to the slow-mode stability in Figures \ref{fig: w_vs_kx} and \ref{fig: w_vs_theta} (the growth rates $\omega_\text{I}$ are negative). Because we excited the eigenfunctions in a regime that is unstable to the thermal mode, this regime eventually becomes excited and takes over as soon as the waves are sufficiently damped out. The thermal mode starts to grow, locally increasing the density, leading to an increased cooling contribution and a lower temperature. This eventually results in high-density, low-temperature filaments, and it is important to stress that the term ``filament'' in this context does not specifically refer to the solar feature, but rather to a simple high-density, low-temperature region.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.9\textwidth]{2d_instability_onsets.png}
+  \caption{
+    Density view at the onset of thermal instability for a background temperature of 0.5 MK (\emph{left column}) and
+    1 MK (\emph{right column}), with conduction (\emph{top rows}) and without conduction (\emph{bottom rows}). The formation of the high-density filament happens approximately perpendicular to the magnetic field lines, annotated with dotted lines, in all cases. The density is normalised to $\rho_n$
+  }
+  \label{fig: 2d_instability_onsets}
+\end{figure}
+
+Figure \ref{fig: 2d_instability_onsets} shows the onset of TI, just after the high-density filament is formed but before the breaking-up phase. Two equilibrium temperatures are considered, 0.5 MK in the left column and 1 MK in the right column, thermal conduction is included for the top row and omitted for the bottom row. Because of the stabilising effect of thermal conduction, the onset of TI occurs at a later time than without conduction (due to smaller growth rates); the actual physical times are denoted on the figure panels. The magnetic field lines are superimposed using dotted lines on each panel and make an angle $\theta = 0.3\pi$ and $\theta = 0.25\pi$ with the $x$-axis for the left and right columns, respectively. It should be noted that the right two panels of Figure \ref{fig: 2d_instability_onsets} have a larger domain size because the thermal mode is less unstable at one million Kelvin. We thus needed to adjust the box size to ensure that the wavelength of the system becomes larger and $|\bk|$ smaller, satisfying the critical wave number criterion for instability.
+
+\subsubsection{Ram pressure and filament fragmentation}
+The onset of filament formation depicted in Figure \ref{fig: 2d_instability_onsets} indicates that in all cases the high-density filament seems to form nearly perpendicular to the magnetic field, such that material is literally flowing towards the high-density region along the field lines. This effect in turn creates a velocity difference on opposite sides of the filament, consisting of two counter-streaming flows of matter and a high-density region inbetween.
+
+\begin{figure}[b]
+  \centering
+  \includegraphics[width=0.8\textwidth]{2d_velocity_plots.png}
+  \caption{
+    Velocity magnitude for the simulation corresponding to the top left panel of Figure \ref{fig: 2d_instability_onsets} but with more AMR levels. The first collision of low-pressure induced flows along the field lines produces a rebound slow shock on either side of the filament, travelling outwards.
+  }
+  \label{fig: 2d_velocity_plots}
+\end{figure}
+
+In order to investigate this effect in greater detail we chose one of the simulations shown above, namely the 0.5 MK case with thermal conduction, increased the number of AMR levels to seven and let it run far into the non-linear regime, long after the filament has formed. This increase in refinement achieves a maximum effective resolution of $6400 \times 6400$, corresponding to a smallest cell size of 3.125 km. Since the typical length scale of coronal rain is on the order of a few 100 kms, any occurence of small high-density blobs in the far-nonlinear regime are resolved. All figures mentioned in this subsection correspond to this particular simulation.
+
+
+
+Figure \ref{fig: 2d_velocity_plots} shows a detailed view of the formation process of the high-density region, at four different snapshots. The magnitude of the velocity field is shown, starting at the onset of filament formation. There is clearly a large velocity difference on either side of the high-density region owing to the infalling matter on a trajectory aligned with the magnetic field. The filament itself appears mostly stationary, representing an in-situ formation process. It is enclosed by an outwards moving shock front on both sides. The slow and Alfv\'en wave velocities can be roughly estimated near to the shocked region, yielding $\approx 60-70$ km s$^{-1}$ and $\approx 400$ km s$^{-1}$, respectively, such that we are dealing with slow MHD shocks enclosing the filament. These findings are in line with previous results obtained in \citet{xia2012} and \citet{fang2015}, where this rebound shock phenomenon was also encountered in their simulations on prominence formation and coronal rain, respectively.
+
+\begin{figure}[b]
+  \centering
+  \includegraphics[width=\textwidth]{2d_lineplots.png}
+  \caption{
+    Pressure view (\emph{top left panel}) along with various physical quantities along the indicated line, crossing the high-density blob. Density is normalised to $\rho_n$.
+  }
+  \label{fig: 2d_lineplots}
+\end{figure}
+
+Figure \ref{fig: 2d_lineplots} shows a plot of the different physical quantities over a line spanning the high-density blob and the shock fronts. The top left panel shows a zoomed-in view of the pressure, with the selected line indicated in black. Density and radiative cooling jump about two orders of magnitude when crossing the blob. Both gas pressure and temperature show a considerable increase over the shock fronts due to the compression and shock heating of the plasma, the blob itself is at a temperature of approximately 10 000 K. The bottom right panel shows the velocity components over the selected line, dropping almost to zero inside the blob, indicating a near stationay state. Sharp increases again denote the shock front itself, impacting the higher-velocity inflowing plasma.
+
+The fourth panel of Figure \ref{fig: 2d_velocity_plots} shows a later stage, in which the shocks have propagated even further and start to fan out. These rebound shocks are generated at the same time as the formation of the high-density region and are caused by the first collision of low-pressure induced inflows of matter. After the filament has formed the inflows fall into the transition region between the condensation and shock fronts, without generating new shocks. This effect in turn feeds matter to the filament, causing it to extend further. The shock fronts sweep up and shock-heat matter when travelling outwards; their propagation speed is mostly determined by the gradually matter-evacuated environment of the filament. This implies faster shock propagation perpendicular to the filament (parallel to the magnetic field), and slower propagation perpendicular to the field lines (parallel to the filament). This in turn causes a pinching effect related to the ram pressure, as the ends of the filaments are pinched between the outer edges of the rebound shocks. This is an inherently unstable configuration in which any small velocity difference on either side causes the filament to stretch out and undergo a torque. This effect is also clearly visible on the fourth panel of Figure \ref{fig: 2d_velocity_plots}.
+
+The pinching phenomenon becomes very clear when looking at the ram pressure surrounding the system. Since we are dealing with two opposite velocity vectors, but parallel to the magnetic field, we can assume that the original inflow is approximately perpendicular to the filament surface, and later to the shock fronts. In this case the expression for the ram pressure can be roughly simplified to the density multiplied by the square of the velocity magnitude.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{2d_ram_pressure.png}
+\end{figure}
+
+
+
+
 \subsection{Thermal instability onset in 3D}
 
 \section{Implications and the road ahead}
