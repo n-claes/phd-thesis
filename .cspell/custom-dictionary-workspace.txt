@@ -1,0 +1,23 @@
+'en
+# Custom Dictionary Words
+adjointness
+Alfv
+AMRVAC
+BHAC
+Claes
+datapoints
+eigenmodes
+eigenspectrum
+Keppens
+magnetohydrodynamic
+magnetohydrodynamics
+magnetosonic
+nonlinear
+nonlinearly
+nonzero
+overdamped
+overstable
+pressureless
+quadrupolar
+timestep
+uniturbulence
