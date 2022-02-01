@@ -174,17 +174,140 @@ Figure \ref{fig: 2d_lineplots} shows a plot of the different physical quantities
 
 The fourth panel of Figure \ref{fig: 2d_velocity_plots} shows a later stage, in which the shocks have propagated even further and start to fan out. These rebound shocks are generated at the same time as the formation of the high-density region and are caused by the first collision of low-pressure induced inflows of matter. After the filament has formed the inflows fall into the transition region between the condensation and shock fronts, without generating new shocks. This effect in turn feeds matter to the filament, causing it to extend further. The shock fronts sweep up and shock-heat matter when travelling outwards; their propagation speed is mostly determined by the gradually matter-evacuated environment of the filament. This implies faster shock propagation perpendicular to the filament (parallel to the magnetic field), and slower propagation perpendicular to the field lines (parallel to the filament). This in turn causes a pinching effect related to the ram pressure, as the ends of the filaments are pinched between the outer edges of the rebound shocks. This is an inherently unstable configuration in which any small velocity difference on either side causes the filament to stretch out and undergo a torque. This effect is also clearly visible on the fourth panel of Figure \ref{fig: 2d_velocity_plots}.
 
-The pinching phenomenon becomes very clear when looking at the ram pressure surrounding the system. Since we are dealing with two opposite velocity vectors, but parallel to the magnetic field, we can assume that the original inflow is approximately perpendicular to the filament surface, and later to the shock fronts. In this case the expression for the ram pressure can be roughly simplified to the density multiplied by the square of the velocity magnitude.
+The pinching phenomenon becomes very clear when looking at the ram pressure surrounding the system. Since we are dealing with two opposite velocity vectors, but parallel to the magnetic field, we can assume that the original inflow is approximately perpendicular to the filament surface, and later to the shock fronts. In this case the expression for the ram pressure can be roughly simplified to the density multiplied by the square of the velocity magnitude. Figure \ref{fig: 2d_ram_pressure} shows the ram pressure at four different snapshots, with the first one at the same time as the fourth panel on Figure \ref{fig: 2d_velocity_plots}. Here the pinching effect is clearly visible, but, more importantly, there is an asymmetry present between ram pressures on either side of the filament ends. This becomes even more clear on the second panel in which the ram pressure on the bottom side of the right end is much higher than on the opposite side, and the same (but in reverse) holds for the left side of the filament. This effect stretches out the filament and redistributes it across the domain. However, at this point the original filament is thinned out by all the stretching, such that certain regions are particularly susceptible to small imbalances in the velocity or pressure. This is exactly what is happening on the fourth panel of Figure \ref{fig: 2d_ram_pressure}, which shows a zoomed-in view of a part of the filament, indicated by the enclosing box. Small blobs start to form, driven by small imbalances in ram pressure, which cause fragmentation of the filament. This kind of phenomenon is typical for a thin-shell instability, first described in \citet{vishniac1983}.
 
 \begin{figure}[t]
   \centering
   \includegraphics[width=\textwidth]{2d_ram_pressure.png}
+  \caption{
+    Ram pressure at four different snapshots after filament formation. The first panel corresponds to the fourth panel in Figure \ref{fig: 2d_velocity_plots}. The sequence clearly shows how ram pressure is responsible for the stretching (top right and bottom panels) of the filament. The inset on the fourth panel is a zoom-in on part of the filament, where small ram pressure imbalances cause instabilities and fragmentation through the thin-shell instability.
+  }
+  \label{fig: 2d_ram_pressure}
+\end{figure}
+
+Figure \ref{fig: 2d_density_fragmentation} shows the density evolution right after filament formation, all the way up to the fragmentation process. The rebound shocks are visible on the first panel, the second panel shows how the filament is stretched out owing to ram pressure differences. Fragmentation starts to occur on the third panel near to the outer ends of the filament through the thin-shell instability. In the fourth panel there is even more fragmentation, where now even the central filament region is breaking up. The inset zooms in on one of the fragmenting regions, the smallest blobs have a width of the order of a few tens of grid cells (at the highest resolution), corresponding to a physical length scale of a few 100 km, consistent with typical coronal rain sizes.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{2d_density_fragmentation.png}
+  \caption{
+    Density plots right after filament formation (first panel) and far into the nonlinear regime (other panels). The filament starts to fragment on the third panel through the thin-shell instability. Fragmentation has progressed even further in the last panel, where the inset zooms in on one of the regions that are breaking up into smaller blobs. Density is normalised to $\rho_n$.
+  }
+  \label{fig: 2d_density_fragmentation}
 \end{figure}
 
 
-
-
 \subsection{Thermal instability onset in 3D}
+Next we look at how the above translates to a 3D setup in which three slow waves are superimposed, again taken along the coordinate axes. All slow modes are damped but unstable to the thermal mode, hence the entire process towards TI is similar as in 2D: the waves interact with each other and damped out, but due to thermal instability a runaway cooling reaction is triggered and a high-density region forms.
 
-\section{Implications and the road ahead}
+\begin{figure}[t]
+  \begin{minipage}{0.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{3d_instability_onset.png}
+  \end{minipage}
+  \begin{minipage}{0.54\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{3d_pressure_velocity.png}
+  \end{minipage}
+  \caption{
+    \textbf{Left}: Density isocontours at the onset of filament formation in three dimensions. Magnetic field lines are shown in red. Density is normalised to $\rho_n$, the snapshot is taken at approximately 2920 seconds. This is the onset of thermal instability; no fine structure is yet present. \textbf{Right}: slices showing ram pressure (\textbf{top}) and velocity magnitude (\textbf{bottom}) at $t \approx 0.85$ h. Two outwards travelling rebound shocks are present which fan out over time. Kinks in the filament and ram pressure differences on opposite sides denote the onset of thin-shell instability, fragmenting the high-density region.}
+  \label{fig: 3d_onset_pressure_velocity}
+\end{figure}
+
+The left side of Figure \ref{fig: 3d_onset_pressure_velocity} shows the onset of the high-density region in three dimensions for the same equilibrium parameters as the 0.5 MK simulation in 2D (Figures \ref{fig: 2d_velocity_plots} -- \ref{fig: 2d_density_fragmentation}). The only exception is that in this case the magnetic field has a different alignment due to the 3D setup, making an angle $\theta = 0.3\pi$ and $\delta=\pi/4$. Density isocontours are shown, and similar to the 2D case the formation of the high-density region appears to occur almost perpendicular to the magnetic field lines, which are drawn in red on the figure. The right side of this figure depicts slices diagonally taken across the 3D domain, parallel to the $z$-axis, showing the ram pressure distribution and velocity magnitude. Various regions of higher ram pressure surround the filament, alternated by lower ram pressure voids. Similar to the 2D case, outwards travelling rebound shocks can be seen that sweep up and shock heat the plasma. The actual pressure and velocity values in these regions are comparable to the 2D results and are again slow wave shocks. The pinching effect caused by the expanding shock fronts is again present, albeit less pronounced than for the 2D case discussed before.
+
+\begin{figure}[b!]
+  \centering
+  \includegraphics[width=0.62\textwidth]{3d_density_evolution.png}
+  \caption{
+    Density isocontours at four different snapshots in the 3D simulations, the physical time is denoted on each panel. The filament has fragmented and appears to coalesce into multiple dense blobs, interconnected by various higher-density strands, forming a morphologically complex web of fine structure.
+  }
+  \label{fig: 3d_density_evolution}
+\end{figure}
+
+Figure \ref{fig: 3d_density_evolution} shows density isocontours of different snapshots, where the top right panel corresponds to the same time as the diagonal slices in Figure \ref{fig: 3d_onset_pressure_velocity}. Two major differences between the 2D and 3D cases should be noted. First, because of periodic boundary conditions the bottom part of the filament re-enters the domain at the top as shown in the first two panels of Figure \ref{fig: 3d_density_evolution}. However, this has no major influence on the substructure itself, as fragmentation and the formation of elongated strands occurs before this happens. The first panel of Figure \ref{fig: 3d_density_evolution} already shows slightly higher density regions and some weak filamentary substructure which become even more distinct on the second panel, and by the time the third panel is reached the process results in one large high-density region spanning the entire $z$-axis of the domain, showing a very complex morphology. On the last panel, the higher density regions have coalesced into blobs, interconnected by a web of slightly less dense, elongated strands.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.8\textwidth]{3d_density_final.png}
+  \caption{
+    Density isocontours at approximately 3365 seconds. The left and right panels represent different viewing angles, the magnetic field lines rare denoted in red.
+  }
+  \label{fig: 3d_density_final}
+\end{figure}
+
+The second difference to discuss is the alignment between the high density threads and the background magnetic field. Figure \ref{fig: 3d_density_final} shows the final snapshot of the 3D simulation for two different viewing angles, with the right panel rotated about 90 degrees counterclockwise around the $z$-axis with respect to the left panel; the magnetic field lines are drawn in red. On the left the overall picture is not so different from the last panel in Figure \ref{fig: 3d_density_evolution}, except that some long strands have broken op into multiple, smaller "blob"-like pieces with high density. What should be noted however is that these strands are not at all aligned with the magnetic field lines. We see that some blobs appear to move outwards, away from the main high density region, guided by the magnetic field. This implies that the actual condensation is \emph{aware} of the magnetic field orientation, but is not necessarily completely \emph{aligned} with it.
+
+\begin{figure}[t]
+  \begin{minipage}{0.5\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{3d_volume_rendering.png}
+  \end{minipage}
+  \begin{minipage}{0.49\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{3d_transfer_function.png}
+  \end{minipage}
+  \caption{
+    \textbf{Left}: volume rendering of the filamentary fine structure at approximately 3564 seconds (last snapshot).
+    \textbf{Right}: a custom transfer function, tweaked to highlight high density regions. The solid white lines denote the domain boundaries. This rendering was made by \textsf{yt} \citep{turk2011} using the MPI-AMRVAC frontend.
+  }
+  \label{fig: 3d_volume_rendering}
+\end{figure}
+
+This last conclusion becomes very clear when looking at a volume rendering of the high density filaments in figure \ref{fig: 3d_volume_rendering}. The transfer function was customised and tweaked for high densities such that dense regions appear orange-red, while less dense regions have a more green-blue colour. The transfer function itself is shown on the right panel, where the alpha value is shown as a function of density. The red and yellow Gaussians are centred at $1.1 \times 10^{-13}$ and $6.7 \times 10^{-14}$ g cm$^{-3}$, respectively, with high alpha values to make these regions stand out. The Gaussians denoting the light green and white colours are centred at $2 \times 10^{-14}$ and $3.6 \times 10^{-14}$ g cm$^{-3}$, respectively, with an approximately similar alpha value. The darker green and blueish parts of the transfer function have their centres at $1.2 \times 10^{-14}$ and $5 \times 10^{-15}$ g cm$^{-3}$, respectively, where the alpha values were significantly lowered as to reduce the contribution of the ambient medium, which would otherwise completely blur the image. In this rendering the multi-stranded nature of the main high-density regions becomes very clear, where the elongated threads are shown in a yellowish colour embedded in slightly less dense strands, with the denser, cool blobs appearing in red. The final snapshot of the simulation is shown, where we see some blobs moving away from the high density region in a direction that appears to be guided by the magnetic field lines.
+
+\subsubsection{Synthetic views}
+To stress the emerging fine structure and field misalignment even further, we created synthetic $\halpha$ views of the 3D simulation discussed above using a method described by \citet{heinzel2015}. First, the ionisation degree $\alpha_\text{i} = n_\text{e}/n_\text{H}$ and the parameter $f(T, p)$ -- which gives a relation between the electron density and hydrogen second-level population -- are interpolated at each grid point from pre-computed tables using the local thermal pressure and temperature. The $\halpha$ line absorption coefficient $\kappa_\nu$ is then given by
+\begin{equation}
+  \kappa_\nu = \frac{\pi e^2}{\masse c}f_{23}n_2 \phi_\nu(\nu),
+\end{equation}
+where $\masse$, $c$ and $n_2$ denote the electron mass, speed of light and hydrogen second-level population, respectively. The latter can be found through
+\begin{equation}
+  n_2 = \frac{n_\text{e}^2}{f(T, p)}
+  \qquad \text{where} \qquad
+  n_\text{e} = \frac{p}{\left(1 + \frac{1.1}{\alpha_\text{i}}\right)\boltzmanncte T}.
+\end{equation}
+The $\halpha$ line oscillator strength is given by $f_{23}$ and is approximately equal to 0.6407 \citep{goldwire1968}, $\boltzmanncte$ denotes the Boltzmann constant. For the absorption line profile we adopted a Gaussian function
+$\phi_\nu(\nu)$ with a microturbulent velocity of 5 km s$^{-1}$. The optical thickness $\tau_\nu$ is then obtained by integrating along the line of sight (los), that is,
+\begin{equation}
+  \tau_\nu = \int_{\text{los}}\kappa_\nu(\nu, l)dl.
+\end{equation}
+This is then plugged into the radiative transfer equation $I(\nu) = S(1 - \exp(-\tau_\nu))$ assuming a uniform source function $S$, which is taken to be equal to the diluted $\halpha$ line-centre intensity at the solar disc centre, eventually yielding the $\halpha$ line intensity along a given line of sight.
+
+Figure \ref{fig: 3d_synthetic_views} shows synthetic $\halpha$ views obtained by integration along the three coordinate axes for three different snapshots. Especially on the third column of panels, corresponding to the last snapshot in the simulation and Figure \ref{fig: 3d_volume_rendering}, the complex morphology of the filament threads and high-density blobs is clearly visible. The line-of-sight integration along the $z$-axis clearly shows the magnetic field awareness, aligned diagonally from the bottom left to the top right corner when projected onto the $xy$-plane ($\delta = \pi/4$).
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.8\textwidth]{3d_synthetic_views.png}
+  \caption{
+    Synthetic $\halpha$ views from the 3D simulation in Figure \ref{fig: 3d_density_evolution} for line-of-sight integrations along the three coordinate axes (\textbf{rows}) for two different snapshots (\textbf{columns}). The resulting projection further stresses the complex morphology of emerging fine structure; the bottom row of panels clearly shows the awareness of $\bb_0$, aligned diagonally when projected onto the $xy$-plane.
+  }
+  \label{fig: 3d_synthetic_views}
+\end{figure}
+
+The actual implications of these last findings are hence twofold. Firstly, the fact that fine structure can be aligned quite differently with respect to the magnetic field orientation directly extends to solar prominences and prominence substructure, implying that direct observation of fine structure alignment does not necessarily constrain the direction of the magnetic field. Secondly, these simulations were done using a uniform equilibrium state, but can resemble local solar coronal conditions. This is especially relevant for the multi-stranded shape of solar prominences, since in the simulations discussed in this Chapter these features seem to occur in a natural way through a combination of thermal instability, thermal conduction effects, rebound shocks, and ram pressure differences. These latter two give rise to thin-shell instability; a pinching effect is caused by the outwards propagating shock fronts which elongates, turns and fragments the filament (2D), or through an early occurrence of ram pressure imbalances, immediately fragmenting the high density region before it can undergo a torque (3D). In both cases slow rebound shocks fan outwards, after which we eventually see fragmentation of the filament with high-density blobs guided by the magnetic field lines and fine structure not at all aligned with the background magnetic field.
+
+
+\section{Discussion and implications}
+It has been widely assumed that the orientation of filament fine structure can give some indirect information on the magnetic field topology in solar prominences. To that end this Chapter was dedicated to numerical 2D and 3D simulations of interacting slow waves with the inclusion of radiative cooling effects and anisotropical thermal conduction; the main findings can be summarised in a few key points:
+\begin{enumerate}
+  \item[i)] In order for thermal instability to trigger, the local plasma conditions must correspond to a regime unstable to the thermal mode. Both slow and fast waves are damped for solar conditions and in order for the thermal mode to be unstable in the presence of anisotropic thermal conduction the critical wavelength has to be satisfied. In any situation in which that is not the case, all modes dampen out.
+  \item[ii)] When TI occurs the high density region appears to form orthogonal to the magnetic field lines, both in 2D and 3D. Material flows towards the filament following the magnetic field lines, guided by the strong pressure gradient. The first collision of low-pressure induced inflows creates rebound shocks that travel outwards and can be classified as slow MHD shocks.
+  \item[iii)] After formation of the condensation and shock fronts, matter passes through the transition region between the high density filament and the shock fronts. This does not generate new shocks, but feeds the filament causing it to extend further.
+  \item[iv)] The shock fronts start to fan out, propagating faster in a direction perpendicular to the filament owing to a gradually matter-evacuated filament environment. As seen in the 2D simulations this creates a pinching effect, eventually stretching out the filament and exerting a torque. However, this stretching leads to thin sheets, which are susceptible to the thin-shell instability through the process of ram pressure imbalances. This effect eventually fragments the filament, creating multiple high density blobs with a physical length scale of a few 100 km.
+  \item[v)] These rebound shocks occur again in 3D, however, this time the thin shell instability kicks in almost immediately, fragmenting the filament shortly after formation. The initial 3D pancake shape orthogonal to the magnetic field lines breaks up and starts to coalesce into multiple high density blobs interconnected by lower density strands.
+  \item[vi)] The blobs start moving in the direction of the background magnetic field, while the thread-like structures are in various directions, not at all aligned with the field lines. This is confirmed by volume renderings and synthetic $\halpha$ views.
+\end{enumerate}
+The last three points suggest that the actual shape of the condensation after the process of thermal instability plays a fundamental role. If the resulting filament is too thick it first undergoes stretching and possibly a torque, all driven by ram pressure imbalances. If the filament is thin enough on the other hand, the thin-shell instability can efficiently cause fragmentation early on, resulting in a completely different spatial structure. If this is also the case in arcade-like or flux rope structures relevant for solar prominences, this effect could explain the multi-stranded shape of coronal rain, or the different alignment of threads observed in prominences.
+
+We can also speculate concerning the relation between the wavelength of the initial slow wave perturbations and the spatial extent of the filament. As is clear from Figure \ref{fig: 2d_instability_onsets} the actual ``length'' of the filament varies between the different panels. First of all the filaments for the cases without conduction appear slightly more extended perpendicular to the magnetic field lines with respect to the cases with conduction. Additionally, since the size of the numerical domain was increased for the simulations with an equilibrium temperature of one million Kelvin, this implies that the filament is larger as well this this case. A rough estimate can be made, yielding a length of $\approx$ 4 Mm for the left panels and $\approx$ 36 Mm for the right panels. Since the size of the domain is representative for the wavelength of the perturbation, this might imply a spatially larger filament when the wavelength of the perturbation increases, but is open to speculation.
+
+We can also wonder what causes the halted transverse extension of the condensed regions. It is not entirely clear what exactly is the determining factor to constrain the spatial extent of the filaments, however, this may be related to the gradually matter-depleted region surrounding the high density filament. After formation of both the high density region and rebound shocks, matter is still inflowing through the transition region and feeding the filament, causing it to extend further. This inflow of matter naturally diminishes in intensity the further the surrounding regions are depleted of plasma, while the shock fronts keep moving outwards. At some point this matter inflow may be inefficient compared to the earlier mentioned pinching effect, such that the latter becomes dominant and start to guide the dynamical evolution of the filament itself. At this point spatial extension of the filament could come to a stop, while ram pressure imbalances and thin-shell instabilities take over.
+
+Also, we did not include an arc-like magnetic field in our simulations, nor gravitational effects. However, if this natural emergence of blobs and fine structure also persists in arcade-like configurations such as solar prominences, these high-density blobs should fall down along the magnetic field lines under the influence of gravity, towards the loop footpoints, or collect in dips that are pre-existing or formed by accumulation of mass. In our simulations, the blobs move away from the initial high density region guided by the magnetic field. This is in accordance with results obtained by \citet{xia2017} in their simulations of coronal rain, where this type of phenomenon was found in realistic stratified environments.
+
+The study of thermal instability and its implications is not only relevant in a solar context, but extends to almost every domain in astrophysics. It can for example be responsible for the formation and coalescence of gaseous clouds in parsec-scale environments, as shown in \citet{waters2019}, and recent work even holds TI responsible for clumpiness in active galactic nucleous outflows \citep{dannen2020}. The presence of thermal instability on galactic scales has also been hypothesised, where simulations done by \citet{peng2017} indicate the formation of dense molecular fragments through TI over a few hundred parsecs, confirming the wide applicability of TI to various astrophysical domains.
+
+This entire Chapter was dedicated to studying the intricacies and dynamics of thermal instability, starting from a homogeneous, Cartesian box with periodic boundary conditions. While this configuration may be a good enough approximation for a local coronal volume, it comes way short on actual ``realistic'' configurations. If we actually want to investigate the stability of stratified media in a gravitational field, combined with additional physical effects, we have to go beyond homogeneous MHD. However, as will become clear in the next Chapter, this poses some rather large mathematical and numerical challenges which have to be overcome first. This is where the new finite element code \legolas~comes in, which we specifically developed to tackle these obstacles. The next Chapter is completely dedicated to the mathematical formalism behind \legolas, along with its implementation details, general framework and applications.
+
 \cleardoublepage
