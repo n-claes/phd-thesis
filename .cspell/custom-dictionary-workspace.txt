@@ -13,15 +13,19 @@ eigenmodes
 eigenspectrum
 exempli
 footpoints
+Frobenius
 Gaussians
 gratia
 isocontours
+Jonghe
 Keppens
 Legolas
 magnetohydrodynamic
 magnetohydrodynamics
 magnetosonic
+magnetostatic
 microturbulent
+nonideal
 nonlinear
 nonlinearly
 nonzero
@@ -30,6 +34,7 @@ overdamped
 overstable
 pressureless
 quadrupolar
+Selfgravity
 Spex
 timestep
 uniturbulence

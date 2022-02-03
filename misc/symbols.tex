@@ -1,8 +1,5 @@
 % All shortcuts and symbols are to be defined here
 
-\newcommand{\unit}[1]{\hat{\mathbf{e}}_{\text{#1}}}
-\nomenclature{$\unit{B}$}{a unit vector along the magnetic field}
-
 % radiative cooling
 \newcommand{\HLF}{\mathscr{L}}
 \nomenclature{$\HLF$}{the heat-loss function, defined as energy losses minus energy gains}
@@ -24,8 +21,17 @@
 \nomenclature{$\kappapara$}{the thermal conduction coefficient parallel to the magnetic field lines}
 \newcommand{\kappaperp}{\kappa_\perp}
 \nomenclature{$\kappaperp$}{the thermal conduction coefficient perpendicular to the magnetic field lines}
+\newcommand{\skappapara}[1]{\kappa_{\parallel #1}}
+\newcommand{\skappaperp}[1]{\kappa_{\perp #1}}
+\newcommand{\kappazeropf}{\frac{\skappapara{0} - \skappaperp{0}}{B_0^2}}
+\newcommand{\kappaonepf}{\frac{\skappapara{1} - \skappaperp{1}}{B_0^2}}
+\newcommand{\kappapfK}[1]{\text{K}_{#1}}
 
 % vector quantities
+\newcommand{\unit}[1]{\hat{\boldsymbol{e}}_{\text{#1}}}
+\newcommand{\munit}[1]{\hat{\boldsymbol{e}}_{#1}}
+\newcommand{\uunit}[1]{\hat{\boldsymbol{u}}_{#1}}
+\nomenclature{$\unit{B}$}{a unit vector along the magnetic field}
 \newcommand{\bv}{\boldsymbol{v}}
 \nomenclature{$\bv$}{velocity vector}
 \newcommand{\bb}{\boldsymbol{B}}
@@ -40,6 +46,9 @@
 \nomenclature{$\kpara$}{component of the wave vector $\bk$ parallel to $\bb$}
 \newcommand{\kperp}{k_\perp}
 \nomenclature{$\kperp$}{component of the wave vector $\bk$ perpendicular to $\bb$}
+\newcommand{\bg}{\boldsymbol{g}}
+\nomenclature{$\bg$}{gravitational field vector}
+\newcommand{\bu}{\boldsymbol{u}}
 
 % matrices
 \newcommand{\statevec}{\boldsymbol{X}}
@@ -64,6 +73,11 @@
 \nomenclature{$\kcrit$}{the critical wave number above which thermal conduction stabilises TI}
 \newcommand{\halpha}{\text{H}\alpha}
 \nomenclature{$\halpha$}{hydrogen-alpha}
+\newcommand{\eps}{\varepsilon}
+\nomenclature{$\eps$}{the scale factor used to switch between Cartesian and cylindrical geometries}
+\newcommand{\epsinv}{\varepsilon^{-1}}
+\newcommand{\magneticreynolds}{R_\text{m}}
+\nomenclature{$\magneticreynolds$}{the magnetic Reynolds number}
 
 
 % constants
@@ -74,6 +88,8 @@
 \nomenclature{$c$}{the speed of light}
 \newcommand{\boltzmanncte}{k_\text{B}}
 \nomenclature{$\boltzmanncte$}{the Boltzmann constant}
+\newcommand{\electroncharge}{e}
+\nomenclature{$\electroncharge$}{the electron charge}
 
 % definitions
 \newcommand{\Qi}{\mathcal{Q}_\text{i}}
@@ -85,6 +101,6 @@
 
 
 % text shortcuts
-\newcommand*{\jccorona}{\textsf{JC corona}}
-\newcommand*{\spexdm}{\textsf{Spex DM}}
-\newcommand*{\legolas}{\textsf{Legolas}}
+\newcommand{\jccorona}{\textsf{JC corona}}
+\newcommand{\spexdm}{\textsf{Spex DM}}
+\newcommand{\legolas}{\textsf{Legolas}}
