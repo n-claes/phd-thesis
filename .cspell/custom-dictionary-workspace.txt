@@ -10,6 +10,7 @@ clumpiness
 counterclockwise
 datapoints
 eigenmodes
+eigenoscillations
 eigenspectrum
 exempli
 footpoints
@@ -34,6 +35,7 @@ overdamped
 overstable
 pressureless
 quadrupolar
+selfgravity
 Selfgravity
 Spex
 timestep

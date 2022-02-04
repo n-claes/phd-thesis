@@ -17,8 +17,7 @@ We start from the same set of MHD equations as in Chapter \ref{ch: spectroscopy}
 \begin{flalign}
   \frac{\partial \rho}{\partial t} &= -\nabla \cdot (\rho \bv), \label{eq: continuity} \\
   \rho\frac{\partial \bv}{\partial t} &=
-    -\nabla p - \rho \bv \cdot \nabla \bv + (\nabla \times \bb) \times \bb + \rho\bg
-    + \mu\left[\nabla^2\bv + \frac{1}{3}\nabla(\nabla \cdot \bv)\right],	\label{eq: momentum} \\
+    -\nabla p - \rho \bv \cdot \nabla \bv + (\nabla \times \bb) \times \bb + \rho\bg,	\label{eq: momentum} \\
   \rho\frac{\partial T}{\partial t} &=
     -\rho \bv\cdot\nabla T - \gmone p\nabla \cdot \bv - \gmone\rho\HLF
     + \gmone\nabla \cdot (\bkappa \cdot \nabla T) \label{eq: energy} \\
@@ -26,14 +25,14 @@ We start from the same set of MHD equations as in Chapter \ref{ch: spectroscopy}
   \frac{\partial \bb}{\partial t} &=
     \nabla \times (\bv \times \bb) - \nabla \times (\eta\nabla \times \bb) \label{eq: induction}
 \end{flalign}
-Here $\eta$ denotes the resistivity, $\bg$ the gravitational acceleration, and $\mu$ the dynamic viscosity assumed to be constant. It is worth noting that {\legolas} also includes a full Hall MHD treatment consisting of the regular Hall term, electron pressure term and electron inertia term, although this will not be discussed in the scope of this thesis.
+Here $\eta$ denotes the resistivity and $\bg$ the gravitational acceleration.
 
 \subsection{Linearisation of the physical terms}
 \subsubsection{Equilibrium background}
-Just as in Chapter \ref{ch: spectroscopy} we need a background around which to linearise. Since we want our mathematical formalism to be quite general, we consider a coordinate system denoted by $(u_1, u_2, u_3)$, corresponding to three orthogonal basis vectors. The main advantage of this approach is that it allows us to include two different geometries with only one basic formalism (and implementation). First we consider a standard plane slab geometry in Cartesian coordinates, that is, a plasma which is confined in height and considered to be bounded by two horizontal, perfectly conducting walls at a fixed distance apart, extending outwards to infinity in the other two ignorable coordinates. This also approximates the limit of a fully infinite free space when the walls are moved off to infinity. In Cartesian geometry the coordinate system can be written as $(x, y, z)$ and the vectors $\{\uunit{1}, \uunit{2}, \uunit{3}\}$ are then the standard Cartesian triad $\{\unit{x}, \unit{y}, \unit{z}\}$ along the axes. This makes it quite convenient to include for example gravitational effects which will induce an equilibrium stratification in the $u_1$ coordinate. The second geometry under consideration is that of an infinitely long plasma cylinder encased by a solid wall at a certain radius away from the cylinder axis, for which the coordinate system can be defined as $(r, \theta, z)$. At each point the vectors $\{\uunit{1}, \uunit{2}, \uunit{3}\}$ are defined as the triad of tangent vectors, $\{\unit{r}, \munit{\theta}, \unit{z}\}$, with $\unit{r}$ along the radial direction, $\unit{z}$ in the direction of the cylinder axis and $\munit{\theta} = \unit{z} \times \unit{r}$ tangent to the cylinder.
+Just as in Chapter \ref{ch: spectroscopy} we linearise the above set of MHD equations, meaning we first have to specify a background which in this case will no longer be homogeneous. Since we want our mathematical formalism to be quite general, we consider a coordinate system denoted by $(u_1, u_2, u_3)$, corresponding to three orthogonal basis vectors. The main advantage of this approach is that it allows us to include two different geometries with only one basic formalism (and implementation). First we consider a standard plane slab geometry in Cartesian coordinates, that is, a plasma which is confined in height and considered to be bounded by two horizontal, perfectly conducting walls at a fixed distance apart, extending outwards to infinity in the other two ignorable coordinates. This also approximates the limit of a fully infinite free space when the walls are moved off to infinity. In Cartesian geometry the coordinate system can be written as $(x, y, z)$ and the vectors $\{\uunit{1}, \uunit{2}, \uunit{3}\}$ are then the standard Cartesian triad $\{\unit{x}, \unit{y}, \unit{z}\}$ along the axes. This makes it quite convenient to include for example gravitational effects which will induce an equilibrium stratification in the $u_1$ coordinate. The second geometry under consideration is that of an infinitely long plasma cylinder encased by a solid wall at a certain radius away from the cylinder axis, for which the coordinate system can be defined as $(r, \theta, z)$. At each point the vectors $\{\uunit{1}, \uunit{2}, \uunit{3}\}$ are defined as the triad of tangent vectors, $\{\unit{r}, \munit{\theta}, \unit{z}\}$, with $\unit{r}$ along the radial direction, $\unit{z}$ in the direction of the cylinder axis and $\munit{\theta} = \unit{z} \times \unit{r}$ tangent to the cylinder.
 The basic operators present in Equations \eqref{eq: continuity}--\eqref{eq: induction}, that is, the divergence, gradient and curl, introduce a factor $r$ when going from Cartesian to cylindrical coordinate systems. To make life easy we can introduce the \emph{scale factor} $\eps = r$ for cylindrical geometries, which is reduced to $\eps = 1$ for a Cartesian coordinate system. Hence exploiting this scale factor in the mathematical formalism allows for one single implementation, where one can conveniently switch between both cases. We note that the cylindrical setup is also applicable to the so-called cylindrical accretion disk limit, as for example exploited to study MHD instabilities in disks by \citet{blokland2007}.
 
-We again linearise the above set of MHD equations and similar to before this involves splitting variables into two parts: a time-independent part denoted with subscript 0, and a perturbed part denoted by a subscript 1. \legolas~ handles one-dimensional equilibria which depend only on $u_1$, or, more specifically, time-independent equilibria of the form
+{\legolas} handles one-dimensional equilibria which depend only on $u_1$, or, more specifically, time-independent equilibria of the form
 \begin{equation}	\label{eq: legolas_equilibrium}
 	\begin{aligned}
 		\rho_0 &= \rho_0(u_1),		\\
@@ -83,22 +82,23 @@ where $Z_\text{ion}$ denotes the ionisation taken to be unity, $\electroncharge$
   \eta_1 = \left.\frac{d\eta}{dT}\right|_{T_0}T_1.
 \end{equation}
 
+In addition to this {\legolas} allows for an anomalous resistivity prescription in which we typically have $\eta(\uunit{1}, \boldsymbol{j}(\uunit{1}, t))$, that is, a resistivity profile that is spatio-temporal in general, but for a fixed time, depends on position and current profile. This in turn implies that a total derivative should be used for the resistivity, given by
+\begin{equation}
+  \eta' = \frac{\partial \eta}{\partial u_1} + T_0'\frac{\partial \eta}{\partial T},
+\end{equation}
+when calculating the derivative with respect to $u_1$. In most use cases a resistivity profile $\eta(T(\uunit{1}))$ is sufficient however, which is only temperature dependent -- and hence indirectly spatially varying as well for inhomogeneous temperature profiles.
+
 \subsubsection{Optically thin radiative losses}
 Just as before the optically thin radiative losses are governed by the heat-loss function $\HLF$, and the radiative cooling term $\gmone \rho \HLF$ in the energy equation can be linearised as
 \begin{equation}
   \gmone \rho_1 \HLF_0 + \gmone \rho_0 \HLF_1.
 \end{equation}
 This time however we generalise the formalism to include a density and temperature-dependent heating function
-$\HLFheat(\rho, T)$, such that the perturbed heat-loss function can be written as
-\begin{equation} \label{eq: perturbed_HLF}
-  \HLF_1 = \left(
-    \Lambda(T_0) - \left.\frac{\partial \HLFheat(\rho, T)}{\partial \rho}\right|_{\rho_0, T_0}
-  \right)\rho_1 + \left(
-    \rho_0 \left.\frac{\partial \HLFcool}{\partial T}\right|_{T_0}
-    - \left.\frac{\partial \HLFheat(\rho, T)}{\partial T}\right|_{\rho_0, T_0}
-  \right) T_1,
+$\HLFheat(\rho, T)$, that is,
+\begin{equation}
+  \rho\HLFcool - \HLFheat(\rho, T).
 \end{equation}
-which can be set equivalent to $\HLF_1 = \dHLFrho\rho_1 + \dHLFT T_1$. {\legolas} has multiple cooling curves implemented, most notably {\jccorona} and {\spexdm} as shown on Figure \ref{fig: coolingcurves}. In addition a piecewise power law as described by \citet{rosner1978} is also implemented, which is an explicit (piecewise) function over the entire temperature domain.
+{\legolas} has multiple cooling curves implemented, most notably {\jccorona} and {\spexdm} as shown on Figure \ref{fig: coolingcurves}. In addition a piecewise power law as described by \citet{rosner1978} is also implemented, which is an explicit (piecewise) function over the entire temperature domain.
 
 \subsubsection{Anisotropic thermal conduction}
 The thermal conduction term $\nabla \cdot (\bkappa \cdot \nabla T)$ in the energy equation is quite straightforward to linearise:
@@ -180,7 +180,9 @@ and
 \end{equation}
 where we used $\dfrac{\partial \kappaperp}{\partial (B^2)} = \dfrac{\partial \kappaperp}{\partial B}\dfrac{1}{2B}$.
 
-\subsubsection{Viscosity}
+\subsubsection{Additional physics}
+It is worth noting that {\legolas} also includes a full Hall MHD treatment along with viscosity and viscous heating. We explicitly omit these additional physics in our current formalism, since adding the extra terms would lead to even longer equations; viscosity and Hall are also not used in any of the applications in this thesis. We give a (very) brief description of these additional terms here, but will not discuss them further.
+
 The viscous force addition to the momentum equation is given in tensorial form by
 $\mathbf{F}_{\mathrm{visc}} = -\nabla\cdot\left(\mu\mathbf{\Pi}\right)$, which for constant dynamic viscosity $\mu$ can be simplified to good approximation to
 \begin{equation}
@@ -190,7 +192,7 @@ This relies on splitting the tensor in a symmetric and antisymmetric part, as ex
 \begin{equation}
   \mu\left[\nabla^2\bv_1 + \frac{1}{3}\nabla(\nabla \cdot \bv_1)\right].
 \end{equation}
-In the energy equation we have a viscous heating term $\mu \left|\nabla \bv\right|^2$, where we assume that the norm here (which is essentially the norm of a matrix) represents the Frobenius norm such that
+In the energy equation we have a viscous heating term $\mu \left|\nabla \bv\right|^2$ on the right hand side, where we assume that the norm here (which is essentially the norm of a matrix) represents the Frobenius norm such that
 \begin{equation}
   \mu\left|\nabla \bv\right|^2 = \mu\sum_{i=1}^{3}\sum_{j=1}^{3}\left(\nabla \bv\right)_{ij}^2,
 \end{equation}
@@ -199,11 +201,19 @@ which can be linearised as
   2\mu\sum_{i=1}^{3}\sum_{j=1}^{3}\left(\nabla \bv_0\right)_{ij}\left(\nabla \bv_1\right)_{ij}
 \end{equation}
 
+The Hall contributions are added to the right-hand side of the induction equation, consisting of the regular Hall term, electron pressure term and electron inertia term
+\begin{equation}
+  -\frac{\eta_\text{H}}{\rho}(\nabla \times \bb) \times \bb
+  + \frac{\eta_\text{H}}{\rho}\nabla p
+  - \frac{\eta_\text{e}}{\rho}\frac{\partial (\nabla \times \bb)}{\partial t},
+\end{equation}
+respectively. The latter term introduces a temporal derivative and is brought to the left-hand side of the induction equation. The quantities $\eta_\text{H}$ and $\eta_\text{e}$ represent the Hall factor and electron inertia factor, respectively.
+
 
 
 
 \subsection{Equilibrium conditions} \label{ss: equilibrium conditions}
-To ensure the background is in magnetostatic equilibrium, we set the time-dependent parts of Equations \eqref{eq: continuity}--\eqref{eq: induction} to zero and fill in the expressions for the background. We do not consider resistive or viscous terms in the equilibrium prescription, which can be justified by considering that the time scale of these effects is considerably longer than the dynamical time scale of the system itself. For resistivity, for example, the time scales on which the magnetic fields decay due to resistivity is much, much larger than the time scales of the resistive modes themselves. This is essentially a consequence of large magnetic Reynolds numbers $\magneticreynolds$ in typical astrophysical cases, yielding magnetic decay time scales of $\tau \sim \magneticreynolds \tau_\text{A}$ (with $\tau_\text{A}$ the typical Alfv\'en time in ideal MHD) compared to much faster resistive mode time scales of $\tau \sim \magneticreynolds^\alpha$ (where typically $0 < \alpha < 1$). We can hence consider the equilibrium itself to be independent of resistivity (with an analogous reasoning for viscosity), which removes some stringent extra conditions on the energy and induction equations. From Equation \eqref{eq: legolas_equilibrium} it then follows that the equilibrium background conditions are given by
+To ensure the background is in magnetostatic equilibrium, we set the time-dependent parts of Equations \eqref{eq: continuity}--\eqref{eq: induction} to zero and fill in the expressions for the background. We do not consider resistive terms in the equilibrium prescription, which can be justified by considering that the time scale of these effects is considerably longer than the dynamical time scale of the system itself. The time scales on which the magnetic fields decay due to resistivity is much, much larger than the time scales of the resistive modes themselves. This is essentially a consequence of large magnetic Reynolds numbers $\magneticreynolds$ in typical astrophysical cases, yielding magnetic decay time scales of $\tau \sim \magneticreynolds \tau_\text{A}$ (with $\tau_\text{A}$ the typical Alfv\'en time in ideal MHD) compared to much faster resistive mode time scales of $\tau \sim \magneticreynolds^\alpha$ (where typically $0 < \alpha < 1$). We can hence consider the equilibrium itself to be independent of resistivity, which removes some stringent extra conditions on the energy and induction equations. From Equation \eqref{eq: legolas_equilibrium} it then follows that the equilibrium background conditions are given by
 \begin{gather}
   \left(\eps v_{01}\right)'\rho_0 + \eps v_{01}\rho_0' = 0 \\
   \left(\rho_0 T_0 + \frac{1}{2}B_{02}^2 + \frac{1}{2}B_{03}^2\right)'
@@ -232,7 +242,7 @@ The first equation originates from the momentum equation \eqref{eq: momentum} an
 \subsubsection{Implications on the radiative cooling terms}
 It is worth discussing that we explicitly kept $\HLF_0$ in the equilibrium expressions. This term is actually needed to ensure a thermally stable state, and is \emph{not necessarily zero} but depends on the physical effects under consideration, in particular perpendicular thermal conduction and the choice of heating function. Generally speaking, the heating function $\HLFheat$ can be anything -- for example heating through dissipative Alfv\'en waves \citep{vanderholst2014} -- but since there is still no well-defined parametrisation for coronal heating to date this term can be assumed to be as convenient as possible, that is, constant in time but possibly varying in space to ensure thermodynamic balance. Note that $\HLFheat$ should always be consistent with a given equilibrium profile as to exactly balance out the radiative losses (and possibly the thermal conduction effects and/or ohmic heating terms), in order to reach a thermal equilibrium state. This indirectly implies that a constant heating term is not necessarily independent of location, but dependent on the connection between the radiative losses and equilibrium temperature profile, which, in general, are both spatially dependent. It is worth noting that the inclusion of time-dependent background heating (or flows for that matter) can influence the spectrum in itself, as shown in for example \citet{barbulescu2019, hillier2019}, but due to the time-dependence of those effects the assumption of a stationary background state is no longer applicable.
 
-Depending on the heating function and presence of thermal conduction, we can distinguish between the following cases.
+Depending on the heating function and presence of thermal conduction, we can distinguish between two main cases: a constant heating function or a heating function that varies with temperature and density.
 
 \paragraph{Heating is constant}
 Here we consider a constant heating term $\HLFheat$, such that
@@ -249,13 +259,9 @@ so here we consider a (spatially varying) heating term, simply assumed to be loc
   \item[\textbf{a)}] If $B_{01} = v_{01} = \skappaperp{0} = 0$, then we have $\HLFheat_0 = \rho_0\Lambda(T_0)$ such that $\HLF_0 = 0$. This is consistent with the requirement given in Equation \eqref{eq: thermal_equilibrium}.
   \item[\textbf{b)}] If any of $\{B_{01}, v_{01}, \skappaperp{0}\}$ is non-zero then $\HLFheat_0$ will have additional terms from Equation \eqref{eq: general_thermal_equilibrium} besides $\rho_0\Lambda(T_0)$, which implies that $\HLF_0 \neq 0$ and thus has to be taken into account.
 \end{enumerate}
-In both these cases it holds that
-\begin{equation}
-  \HLF_1 = \Lambda(T_0)\rho_1 + \rho_0\frac{\partial \Lambda(T)}{\partial T}\Biggr|_{T_0} T_1.
-\end{equation}
 
 \paragraph{Heating is not constant}
-Here we consider the general case where $\HLFheat$ depends on density and temperature, that is,
+Here we consider the general case where $\HLFheat(\rho, T)$ depends on density and temperature, that is,
 \begin{equation}
   \HLF_0 = \rho_0\Lambda(T_0) - \left. \HLFheat(\rho, T)\right|_{\rho_0, T_0} + \mathcal{C}_\HLFheat
   \qquad
@@ -263,35 +269,205 @@ Here we consider the general case where $\HLFheat$ depends on density and temper
   \qquad
   \frac{\partial \HLFheat}{\partial T} \neq 0,
   \quad
-  \frac{\partial \HLFheat}{\partial \rho} \neq 0,
+  \frac{\partial \HLFheat}{\partial \rho} \neq 0.
+\end{equation}
+For a general heating function $\HLFheat(\rho, T)$ the thermal balance equation \eqref{eq: general_thermal_equilibrium} is not necessarily satisfied when $\HLFheat$ is evaluated in the equilibrium profiles; hence we added the constant $\mathcal{C}_\HLFheat$ with as sole purpose to provide additional terms to make sure everything is balanced, and we can write this constant as
+\begin{equation}
+  \mathcal{C}_\HLFheat = \left.\HLFheat(\rho, T)\right|_{\rho_0, T_0} - \HLFheat_0.
+\end{equation}
+This can be thought of as splitting the heating term in a $(\rho ,T)$ dependent and independent part, and since $\mathcal{C}_\HLFheat$ is locally constant (but again, possibly spatially varying) it does not influence the temperature and density derivatives of $\HLFheat$. We can again distinguish between
+
+\begin{enumerate}
+  \item[\textbf{a)}] $B_{01} = v_{01} = \skappaperp{0} = 0$. From the thermal balance equation it follows that $\HLF = 0$ must hold. This therefore implies that $\HLFheat_0 = \rho_0 \Lambda(T_0)$ following Equation \ref{eq: thermal_equilibrium}.
+  \item[\textbf{b)}] Any of $\{B_{01}, v_{01}, \skappaperp{0}\} \neq 0$. Similar to the constant heating case $\HLF_0 \neq 0$, and $\HLFheat$ has additional terms governed by Equation \eqref{eq: general_thermal_equilibrium}.
+\end{enumerate}
+
+For both constant and non-constant heating it holds that
+\begin{equation} \label{eq: perturbed_HLF}
+  \begin{aligned}
+    \HLF_1 &= \left(
+      \Lambda(T_0) - \left.\frac{\partial \HLFheat(\rho, T)}{\partial \rho}\right|_{\rho_0, T_0}
+    \right)\rho_1 + \left(
+      \rho_0 \left.\frac{\partial \HLFcool}{\partial T}\right|_{T_0}
+      - \left.\frac{\partial \HLFheat(\rho, T)}{\partial T}\right|_{\rho_0, T_0}
+    \right) T_1, \\
+          &= \dHLFrho \rho_1 + \dHLFT T_1,
+  \end{aligned}
+\end{equation}
+which for constant heating reduces to the previous expression \eqref{eq: dHLF_homogeneous}. For the remainder of this thesis we will only consider a constant term here: as convenient as possible so that thermal balance is satisfied, but possibly locally varying over the domain.
+
+\subsection{The linearised equations}
+With all the necessary terms calculated in the previous Section we are now in a position to linearise Equations \eqref{eq: continuity}--\eqref{eq: induction} around the background specified by Equation \eqref{eq: legolas_equilibrium}. We again denote the unperturbed time-independent parts with a subscript 0 and the perturbed time-dependent parts with a subscript 1. It follows from the adopted equilibrium configuration that $\nabla \cdot \bb_0 = 0$, such that the divergence-free condition on the magnetic field is fulfilled and that the equilibrium flow field is compressible if
+$v_{01} \neq 0$ and incompressible if $v_{01} = 0$. It should be noted that also in the latter case the perturbed quantities can represent both compressible and incompressible eigenoscillations. Furthermore the no-monopole condition should also be taken into account for the perturbed magnetic field, we therefore adopt a vector potential to write $\bb_1 = \nabla \times \ba_1$ such that $\nabla \cdot \bb_0 = 0$ is automatically satisfied. The system of linearised equations is then given by
+
+\begin{flalign}
+  \frac{\partial \rho_1}{\partial t} &=
+    -\nabla \cdot (\rho_0 \bv)
+    - \nabla \cdot (\rho_1 \bv), \label{eq: linearised_continuity} \\
+  %
+  \rho_0\frac{\bv_1}{\partial t} &=
+    -\nabla(T_0\rho_1 + \rho_0 T_1)
+    - \rho_0 \bv_0 \cdot \nabla\bv_1
+    - \rho_0\bv_1 \cdot \nabla \bv_0
+    - \rho_1 \bv_0 \cdot \nabla \bv_0 \nonumber \\
+    &\quad
+    + \rho_1 \bg
+    + (\nabla \times \bb_0) \times (\nabla \times \ba_1)
+    + [\nabla \times (\nabla \times \ba_1)] \times \bb_0,  \label{eq: linearised_momentum} \\
+  %
+  \rho_0\frac{\partial T_1}{\partial t} &=
+    - \rho_0\bv_1 \cdot \nabla T_0
+    - \rho_0 \bv_0 \cdot \nabla T_1
+    - \gmone\rho_0 T_0 \nabla \cdot \bv_1 \nonumber \\
+    &\quad
+    - \gmone(T_0 \rho_1 + \rho_0 T_1)\nabla \cdot \bv_0
+    - \gmone\rho_1 \HLF_0 \nonumber \\
+    &\quad
+    - (\gamma - 1)\rho_0(\dHLFrho \rho_1 + \dHLFT T_1)
+    + \gmone \bb_0 \cdot \nabla\left(\kappapfK{0}\bb_0 \cdot \nabla T_1 \right) \nonumber \\
+    &\quad
+    + \gmone \nabla \cdot \left(\skappaperp{0}\nabla T_1\right)
+    + \gmone \bb_0 \cdot \nabla \left(\kappapfK{1} \bb_0 \cdot \nabla T_0\right) \nonumber \\
+    &\quad
+    + \gmone \nabla \cdot \left(\skappaperp{1} \nabla T_0\right)
+    + \gmone \left(\nabla \times \ba_1\right) \cdot \nabla \left(\kappapfK{0}\bb_0 \cdot \nabla T_0\right) \nonumber \\
+    &\quad
+    + \gmone \bb_0 \cdot \nabla \left[\kappapfK{0}\left(\nabla \times \ba_1\right) \cdot \nabla T_0\right] \nonumber \\
+    &\quad
+    - \gmone \bb_0 \cdot \nabla \left[
+      2\kappapfK{0}\frac{1}{B_0^2}\bb_0\bigl(\bb_0 \cdot \left(\nabla \times \ba_1\right)\bigr) \cdot \nabla T_0
+    \right] \nonumber \\
+    &\quad
+    + 2 \gmone \eta_0 \left(\nabla \times \bb_0\right)\cdot \left[\nabla \times \left(\nabla \times \ba_1\right)\right]
+    + \gmone \frac{d\eta}{dT}T_1\left(\nabla \times \bb_0\right)^2, \label{eq: linearised_energy} \\
+  %
+  \frac{\partial \ba_1}{\partial t} &=
+    \bv_1 \times \bb_0
+    + \bv_0 \times \left(\nabla \times \ba_1\right)
+    - \eta_0 \nabla \times \left(\nabla \times \ba_1\right)
+    - \frac{d\eta}{dT}T_1 \nabla \times \bb_0. \label{eq: linearised_induction}
+\end{flalign}
+
+
+\subsubsection{Selfgravity extension}
+Note that the above set of linearised equations \eqref{eq: linearised_continuity}--\eqref{eq: linearised_induction} assumed an external gravitational field, so we did not need to linearise the gravity term $\bg$ -- this is the so-called \emph{Cowling approximation}. However, in some cases instabilities may be driven by the self-gravity of the system, an example of which is the well-known Jeans instability which dates back to seminal work done by \citet{book_jeans}. {\legolas} can actually investigate these sort of instabilities through a modification of the original set of MHD equations. This is done through a linearisation of the gravitational term $\bg$ to $\bg_0 + \bg_1$, which essentially adds an additional variable to the system. The system is closed again by adding the Poisson equation $\nabla \cdot \bg = -4\pi \gravG \rho$ as a ninth equation to the existing set, with $\gravG$ the gravitational constant. If now a gravitational potential $\Phi$ is introduced as $\bg = -\nabla \Phi$, this implies that the ninth equation added to the system is given by
+\begin{equation}
+  \nabla^2\Phi_1 = 4\pi\rho_1,
+\end{equation}
+in normalised units. In order to connect this new equation with the others we take the time derivative of both sides, which introduces a temporal derivative of $\rho_1$. The continuity equation is substituted in, such that the final linearised form of the Poisson equation is given by
+\begin{equation}
+  \frac{\partial \nabla^2 \Phi}{\partial t} =
+    -4\pi \Bigl[\nabla \cdot \left(\rho_0 \bv_1\right) + \nabla \cdot \left(\rho_1 \bv_0\right)\Bigr],
+\end{equation}
+and an additional term $-\rho_0 \nabla \Phi_1$ is added on the right hand side of the momentum equation \eqref{eq: linearised_momentum}.
+
+The above formalism is included for completeness, however we will not use selfgravity in any of the applications in this thesis. The gravitational potential and Poisson equation will be omitted from the equations that follow and we will stick to the Cowling approximation; however, the corresponding matrix elements will be given in the Appendices.
+
+\section{Emergence of the matrix eigenvalue problem}
+In this Section we will go in-depth on how the eigenvalue problem arises from the above set of linearised equations. At first glance this might look straightforward; however, as will become clear in part \ref{ss: fourier} the first obstacle appears when the linearised equations have been fully worked out and the eigenvalue problem becomes apparent.
+
+\subsection{Fourier analysis} \label{ss: fourier}
+Now that we have a detailed description of the linear equations the next step is to perform a Fourier analysis with an exponential time dependence, imposing standard Fourier modes on the $u_2$ and $u_3$ coordinates of a perturbed quantity $f_1$, given by
+\begin{equation} \label{eq: fourier_analysis}
+  f_1 = \hat{f_1}(u_1)\exp\Bigl[i(k_2 u_2 + k_3 u_3 - \omega t)\Bigr].
+\end{equation}
+In this form the wave numbers $k_2$ and $k_3$ correspond to $k_y$ and $k_z$ in Cartesian geometry, and to $m$ and $k$ in a cylindrical geometry. Note that $m$ is quantified to integer values, since the $\theta$-direction is periodic. For reasons that will become clear in a moment, we apply the following transformation to the perturbed quantities
+\begin{equation}
+  \begin{alignedat}{4} \label{eq: transformation}
+    \eps \rho_1 &= \widetilde{\rho_1},
+    \qquad&
+    i\eps v_1 &= \widetilde{v_1},
+    \qquad&
+    v_2 &= \widetilde{v_2},
+    \qquad&
+    \eps v_3 &= \widetilde{v_3}, \\
+    \eps T_1 &= \widetilde{T_1},
+    &
+    i a_1 &= \widetilde{a_1},
+    &
+    \eps a_2 &= \widetilde{a_2},
+    &
+    a_3 &= \widetilde{a_3}. \\
+  \end{alignedat}
+\end{equation}
+This particular transformation simplifies the resulting set of equations and has as additional effect that all adiabatic and incompressible flow terms are real, such that we are only dealing with imaginary terms if resistivity or non-adiabatic effects are included. This is in analogy to the fact that the purely adiabatic case is governed by self-adjoint operators: one for the case without flow and two for the case with flow included \citep{goedbloed2018_web1,goedbloed2018_web2}. The final set of Fourier-analysed linearised equations is given below, where the tilde notation in Equation \eqref{eq: transformation} is dropped for the sake of simplicity. From now on, tildes will no longer be written explicitly since there is no confusion possible.
+
+\paragraph{Continuity equation}
+\begin{equation} \label{eq: full_continuity}
+  \omega\rho_1 =
+    -\rho_0' v_1 + \rho_0\left(k_2 v_2 + k_3 v_3 - v_1'\right)
+    -i v_{01}\rho_1' + \rho_1 \left(\frac{k_2 v_{02}}{\varepsilon} + k_3 v_{03} - i v_{01}'\right)
+\end{equation}
+
+\paragraph{Momentum-1 equation}
+\begin{equation}
+  \begin{aligned}
+  \omega\rho_0 v_1  &=
+    \eps\left(\frac{T_0 \rho_1}{\eps} + \frac{T_1 \rho_0}{\eps}\right)'
+    + g \rho_1 \\
+    &\quad
+		+ B_{02} \left\{
+      - \frac{k_2 k_3}{\eps}a_2 + \frac{k_2^2}{\eps}a_3 + \Bigl[\eps\left(k_3a_1 - a_3'\right)\Bigr]'
+    \right\}
+    + \left(\eps B_{02}\right)'\left(k_3a_1 - a_3'\right)  \\
+    &\quad
+    + B_{03} \left\{
+      -k_3^2 a_2 + k_2 k_3a_3 + \eps\left[\frac{1}{\eps}\left(a_2' - k_2 a_1 \right)\right]'
+    \right\}
+    + B_{03}' \left(a_2' - k_2a_1\right) \\
+    &\quad
+    + \left(v_{01} v_{01}' - \frac{\eps' v_{02}^2}{\eps}\right)\rho_1
+		+ \rho_0 \left(\frac{k_2 v_{02}}{\eps} + k_3 v_{03} - i v_{01}'\right)v_1 \\
+    &\quad
+		- 2 \eps' \rho_0 v_{02} v_2
+    - i\eps\rho_0 v_{01} \left(\frac{v_1}{\eps}\right)'
+  \end{aligned}
+\end{equation}
+
+\paragraph{Momentum-2 equation}
+\begin{equation}
+  \begin{aligned}
+  \omega\rho_0 \eps v_2 &=
+    \frac{1}{\eps} k_2 T_0 \rho_1
+    + \frac{1}{\eps}k_2 \rho_0 T_1
+    + i B_{01} \left\{
+      -\frac{k_2 k_3}{\eps}a_2  + \frac{k_2^2}{\eps}a_3 + \Bigl[\eps\left(k_3 a_1  - a_3'\right)\Bigr]'
+    \right\} \\
+    &\quad
+    + B_{03} \left[- \left(\frac{k_2^2}{\eps} + \eps k_3^2\right)a_1  + \frac{ k_2}{\eps}a_2' +  \eps k_3a_3'\right]
+    + \frac{(\eps B_{02})'}{\eps}\left(a_2 k_3 - a_3 k_2\right) \\
+    &\quad
+    - \frac{\left(\eps v_{02}\right)'}{\eps} i v_{01} \rho_1
+    - \frac{\left(\eps v_{02}\right)'}{\eps}\rho_0 v_1
+    + \rho_0 \Bigl(- i \eps' v_{01} + k_2 v_{02} + \eps k_3 v_{03}\Bigr)v_2 \\
+    &\quad
+    - i \eps \rho_0 v_{01} v_2'
+  \end{aligned}
+\end{equation}
+
+\paragraph{Momentum-3 equation}
+\begin{equation}
+  \begin{aligned}
+    \omega \rho_0 v_3 &=
+      k_3 T_0 \rho_1
+      + k_3 \rho_0 T_1
+		  + B_{03}' \left(k_3 a_2  - k_2 a_3\right)
+      - iv_{01} v_{03}' \rho_1
+      - \rho_0 v_{03}'v_1 \\
+      &\quad
+		  + B_{02} \left[
+        \left(\frac{k_2^2}{\eps} + \eps k_3^2\right)a_1  - \frac{k_2}{\eps}a_2'  - \eps k_3 a_3'
+      \right]
+      + \rho_0 v_3 \left(\frac{k_2 v_{02}}{\eps} + k_3 v_{03}\right) \\
+		&\quad
+    + i B_{01} \left[-k_3^2 a_2  + k_2 k_3 a_3  + \eps\left(- \frac{k_2}{\eps}a_1 + \frac{a_2'}{\eps}\right)'\right]
+    - i \eps \rho_0 v_{01} \left(\frac{v_3}{\eps}\right)'
+  \end{aligned}
 \end{equation}
 
 
-
-
-% Generally speaking, for a heating function that depends on density and temperature, the equilibrium heat-loss function can be written as
-% \begin{equation}
-%   \HLF_0 = \rho_0\Lambda(T_0) - \HLFheat_0,
-% \end{equation}
-% in which $\HLFheat_0 = \HLFheat(\rho_0, T_0)$. Combining this expression with the general condition for thermal equilibrium in Equation \eqref{eq: general_thermal_equilibrium}, we see that $\HLFheat_0$ can be expressed as
-% \begin{equation} \label{eq: heating_condition}
-%   \HLFheat_0 =
-%     T_0 \frac{\left(\eps v_{01}\right)'}{\eps}
-%     + \frac{1}{\gmone}T_0' v_{01}
-%     - \frac{B_{01}^2}{\rho_0}\left(\kappapfK{0} T_0'\right)'
-%     - \frac{1}{\eps \rho_0}\left(\eps \kappa_{\perp, 0} T_0'\right)'
-%     + \rho_0 \Lambda(T_0).
-% \end{equation}
-
-
-
-
-\subsection{The linearised equations}
-\subsection{Selfgravity extension}
-
-\section{Creating the eigenvalue problem}
-\subsection{Finite element analysis}
-\subsection{Solving the integrals}
+\subsection{Finite element analysis} \label{ss: finite_elements}
+\subsection{Solving the integrals} \label{ss: solving_integrals}
 \subsection{Matrix assembly}
 \subsection{Boundary conditions}
 \subsection{Eigenfunction assembly}
