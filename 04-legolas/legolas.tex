@@ -633,15 +633,123 @@ The final set of Fourier-analysed linearised equations is given below, where the
 
 In the energy equation the terms $\skappapara{1}$ and $\skappaperp{1}$ are given by Equations \eqref{eq: short kappapara1} and \eqref{eq: short kappaperp1}, respectively. We now have a system of eight differential equations in $u_1$ for the perturbed quantities $\rho_1$, $v_1$, $v_2$, $v_3$, $T_1$, $a_1$, $a_2$ and $a_3$. If selfgravity is taken into account, the Fourier-analysed Poisson equation forms the ninth expression and adds the gravitational potential $\Phi_1$ as a ninth perturbed quantity.
 
-At this point the actual scope of the problem should become clear, and a first major obstacle emerges: Equations \eqref{eq: full_continuity}--\eqref{eq: full_induction3} may look like an eigenvalue problem in $\omega$ of the form $\omega \bmat \statevec = \amat \statevec$, with the quantities on the left-hand side of the equations composing the $\bmat$-matrix, those on the right-hand side of the equal sign the $\amat$-matrix, and the state vector given by $\statevec = (\rho_1, v_1, v_2, v_3, T_1, a_1, a_2, a_3)$. However, we actually have first and second order $u_1$-derivatives of the equilibrium quantities \emph{and} the state vector variables \emph{inside} the matrices.
+At this point the actual scope of the problem should become clear, and a first major obstacle emerges: Equations \eqref{eq: full_continuity}--\eqref{eq: full_induction3} may look like an eigenvalue problem in $\omega$, with the quantities on the left-hand side of the equations composing the $\bmat$-matrix, those on the right-hand side of the equal sign the $\amat$-matrix, and the state vector given by $\statevec = (\rho_1, v_1, v_2, v_3, T_1, a_1, a_2, a_3)$. However, we actually have first and second order $u_1$-derivatives of the equilibrium quantities \emph{and} the state vector variables \emph{inside} the matrices.
 Before we can solve for the eigenfrequencies $\omega$, we first have to rewrite the above set of equations in a proper generalised matrix eigenvalue problem; this is done using a finite element discretisation.
 
 
 \subsection{Finite element analysis} \label{ss: finite_elements}
-The system of Equations \eqref{eq: full_continuity}--\eqref{eq: full_induction3}
-\subsection{Solving the integrals} \label{ss: solving_integrals}
-\subsection{Matrix assembly}
-\subsection{Eigenfunction assembly}
+The system of Equations \eqref{eq: full_continuity}--\eqref{eq: full_induction3} actually define a generalised complex eigenvalue problem in $\omega$ of the form $\amat \statevec = \omega \bmat \statevec$ in which the state vector $\statevec$ is given by
+\begin{equation} \label{eq: statevector}
+  \statevec = \left(\rho_1, v_1, v_2, v_3, T_1, a_1, a_2, a_3\right)
+   = \left(x^1, x^2, x^3, x^4, x^5, x^6, x^7, x^8\right),
+\end{equation}
+where we used a specific notation such that the superscript on the right-hand side denotes the index of the unknown variable in the state vector (where we start counting from one). The matrices $\amat$ and $\bmat$ contain the various equilibrium quantities and differential operators with respect to $u_1$. The eigenvalue problem is rewritten using the finite element method (\gls{FEM}). The basic idea is to discretise the domain in (not necessarily equally spaced) subdomains that are separated by nodes, that is, prechosen fixed points $x_j$ with $j$ the node number ($0$ to $N$) on the interval $x$ (in the Cartesian case), after which a linear combination of basis functions is used to approximate the unknown variable $x^i$. These basis functions are represented by local piecewise polynomials on every subdomain and vanish outside this subdomain (hence the name ``finite'' elements). As shown in, for example, \citet{rappaz1977}, using the same basis functions for all variables leads to spectral pollution; this essentially implies that converged solutions $\omega_p$ are found which are not actually eigenvalues of the matrix. To avoid this one can use a combination of linear and constant finite elements, but as shown in \citet{kerner1985} this can yield inaccurate eigenvalues.
+{\legolas} uses a combination of higher-order finite elements, namely quadratic basis functions for the variables $\rho_1, v_2, v_3, T_1, a_1$, and cubic Hermite basis functions for the variables $v_1, a_2, a_3$. The reasoning behind which variables are quadratic and which are cubic will become clear when we discuss the boundary conditions later on. The mixture of high-order finite elements ensures that the basis functions can represent certain physical properties of specific eigenfunctions exactly, and can, for example, allow for truly incompressible modes that have $\nabla \cdot \bv_1 = 0$ everywhere on the domain. The trade-off in using higher-order basis functions is that this not only increases the accuracy of the spectrum, but also increases the size of the final matrices by a factor of two compared to linear finite elements. One should therefore keep in mind that using even higher-order basis functions -- such as quartic or quintic splines -- may increase accuracy at lower resolutions, but the increased size of the matrices could mean that the solver may take an even longer time to reach a converged solution compared to lower-order basis functions at higher resolutions.
+
+To summarise, the main idea behind a finite element approach is threefold:
+\begin{enumerate}
+  \item[i)] A specific domain is chosen, which is then discretised into subdomains of not necessarily equal spacing.
+  \item[ii)] The (ordinary or partial) differential equations have their exact solutions approximated by a linear combination of basis functions, which consist of a certain choice of local piecewise polynomials that are zero outside of the subdomain under consideration.
+  \item[iii)] When solving the system one obtains coefficients of the chosen linear combination, calculated such that the difference between the exact solution and the approximation ($\equiv$ \emph{the residual}) becomes minimal .
+\end{enumerate}
+
+Therefore, once the domain is chosen, the approximation of a state variable $x^i$ (with $i$ the state vector index) for a domain divided into $N$ subdomains (nodes) is given by
+\begin{equation} \label{eq: linear_combo}
+  x^i(u_1) \approx \sum_{j=0}^N \Bigl(H_j^1(u_1)x_{j1}^i + H_j^2(u_1)x_{j2}^i\Bigr),
+\end{equation}
+where $H_j^1(u_1)$ and $H_j^2(u_1)$ denote the quadratic or cubic elements at node $j$.
+\begin{figure}[b]
+  \centering
+  \includegraphics[width=\textwidth]{basisfunctions.png}
+  \caption{
+    The quadratic (\textbf{a}) and cubic (\textbf{b}) basis functions for the interval $[x_{j-1}, x_{j+1}]$ along with their derivatives (\textbf{c}) and (\textbf{d}), respectively. The solid lines denote $\{Q^1, C^1\}$, the dashed lines denote $\{Q^2, C^2\}$.
+  }
+  \label{fig: basisfunctions}
+\end{figure}
+The Hermite and quadratic basis functions themselves, hereafter denoted by $C_j$ and $Q_j$, respectively, are given by
+
+\begingroup
+\allowdisplaybreaks
+\begin{align}
+  Q^1_j(x) &=
+  \begin{cases}
+    \dfrac{4\left(x - x_{j-1}\right)\left(x_j - x\right)}{\left(x_j - x_{j-1}\right)^2},	\\
+    0, 	\\
+    0,
+  \end{cases} \label{eq: basisfunction_Q1} \\
+  C^1_j(x) &=
+  \begin{cases}
+    \left(\dfrac{x - x_{j-1}}{x_j - x_{j-1}}\right)^2\left(3 - 2\dfrac{x - x_{j-1}}{x_j - x_{j-1}}\right) 	\qquad &\text{for}~ x_{j-1} \leq x \leq x_j,	\\
+    \left(\dfrac{x_{j+1} - x}{x_{j+1} - x_j}\right)^2\left(3 - 2\dfrac{x_{j+1} - x}{x_{j+1} - x_j}\right) 	\qquad &\text{for}~ x_j \leq x \leq x_{j+1},	\\
+    0	\qquad &\text{elsewhere},
+  \end{cases}	\label{eq: basisfunction_C1} \\
+  Q^2_j(x) &=
+  \begin{cases}
+    \dfrac{\left(2x - x_j - x_{j-1}\right)\left(x - x_{j-1}\right)}{\left(x_j - x_{j-1}\right)^2},	\\
+    \dfrac{\left(2x - x_{j+1} - x_j\right)\left(x - x_{j+1}\right)}{\left(x_{j+1} - x_j\right)^2}, 	\\
+    0,
+  \end{cases} \label{eq: basisfunction_Q2} \\
+  C^2_j(x) &=
+  \begin{cases}
+    \left(x - x_j\right)\left(\dfrac{x - x_{j-1}}{x_j - x_{j-1}}\right)^2	\qquad &\text{for}~ x_{j-1} \leq x \leq x_j,	\\
+    \left(x - x_j\right)\left(\dfrac{x_{j+1} - x}{x_{j+1} - x_j}\right)^2	\qquad &\text{for}~ x_j \leq x \leq x_{j+1},	\\
+    0	\qquad &\text{elsewhere},
+  \end{cases} \label{eq: basisfunction_C2}
+\end{align}
+\endgroup
+as in, for example, \citet{kerner1998} and \citet{book_MHD}, and are shown graphically along with their derivatives in Figure \ref{fig: basisfunctions}. Because we have two basis functions per subdomain, this allows for the approximation of both the original variable and its derivative by differentiation of Equation \eqref{eq: linear_combo}.
+
+\subsubsection{Variational analysis and Galerkin form}
+Before proceeding with our analysis we hold a small mathematical interlude on variational analysis, and how writing the problem in weak Galerkin form is quite convenient in our current formalism.
+A thorough discussion is given in \citet[Chapter 15]{book_MHD}; here we follow a similar reasoning and highlight the key ideas behind the weak formalism. Consider a given inhomogeneous differential equation of the form
+\begin{equation}
+  -\bigl[p(u_1)R(u_1)'\bigr]' + q(u_1)R(u_1) = f(u_1),
+\end{equation}
+on an interval $u_1 \in [0, 1]$ for given (known) functions $p(u_1), q(u_1)$ and $f(u_1)$, where the prime denotes the derivative with respect to $u_1$ and we assume the first and second order derivatives of $R(u_1)$ exist on $[0, 1]$.
+If we were to solve the above equation on a domain discretised in $N$ subdomains, we would obtain an approximate solution $\hat{R}(u_1)$. The quality of this solution can be estimated by calculating the \emph{residual} $\hat{r}_s^N(u_1)$, that is, the difference between the analytical and approximate solution, which can be quantified without actually knowing the actual solution by straightforwardly filling in $\hat{R}$ into the original differential equation:
+\begin{equation} \label{eq: residual}
+  \hat{r}_s^N(u_1) \equiv -\bigl[p(u_1)\hat{R}(u_1)'\bigr]' + q(u_1)\hat{R}(u_1) - f(u_1).
+\end{equation}
+This residual should be as small as possible, and the solution $\hat{R}(u_1)$ is said to converge if the residual vanishes in the limit $N \rightarrow \infty$ everywhere on the domain; or, in other words, when the approximate solution is equal to the exact solution.
+
+In a finite element analysis this solution $\hat{R}(u_1)$ is given by a linear combination of basis functions as given by Equation \eqref{eq: linear_combo}, but to keep things simple here we will stick with a single (linear) basis function $h_i$ such that
+\begin{equation} \label{eq: linear_combo_R}
+  R(u_1) \approx \hat{R}(u_1) = \sum_{i = 0}^N r_i h_i(u_1),
+\end{equation}
+where now $r_i$ are the coefficients in the linear combination. Writing the original differential equation in its integral form
+\begin{equation}
+  \int_0^1\Bigl(-\bigl[p(u_1)R(u_1)'\bigr]' + q(u_1)R(u_1) - f(u_1)\Bigr)du_1 = 0,
+\end{equation}
+then we can obtain a linear system of algebraic equations for the coefficients $\{r_i\}$ by requiring that the weighted integrals of the residual \eqref{eq: residual} vanish for the approximate solution, that is,
+\begin{equation} \label{eq: galerkin_form}
+  \int_0^1h_l\Biggl(-\bigl[p(u_1)\hat{R}(u_1)'\bigr]' + q(u_1)\hat{R}(u_1) - f(u_1)\Biggr) = 0,
+\end{equation}
+where the weight functions $w_l$ are taken equal to the basis functions; the function $\hat{R}$ is given by Equation \eqref{eq: linear_combo_R}. The above expression is called the \emph{Galerkin method}, where the original differential equation is now rewritten as a linear system of $N + 1$ algebraic equations for $N + 1$ unknowns $\{R_i\}_{i = 0, 1, \ldots N}$.
+
+\subsubsection{The MHD equations in weak Galerkin form}
+Using the Galerkin form we just discussed we can turn our original set of equations \eqref{eq: full_continuity}--\eqref{eq: full_induction3} algebraic in nature, by writing the eigenvalue problem as a set of integral equations. Each of the eight equations is multiplied by an appropriate element of the chosen basis, denoted by $h_j$, and integrated over the relevant domain. Mathematically this can be written as
+\begin{equation}
+  \int_\Omega\Bigl(\amat \statevec - \omega \bmat \statevec\Bigr)h_j du_1 = 0,
+\end{equation}
+which will yield an equation similar to \eqref{eq: galerkin_form}. However, the matrix $\amat$ contains second-order derivatives with respect to $u_1$. With the problem written in the above form we can reduce these to derivatives of first order, thereby simplifying the integrals. This is achieved by performing integration by parts, which introduces additional surface terms that have to be evaluated at the boundaries. This integration by parts allows for solutions that are continuously differentiable to a lower degree (and hence less ``smooth''), and this is called the \emph{weak Galerkin formulation} of the problem. The surface terms that are introduced by integration by parts can in turn be exploited to enforce boundary conditions. Because there are eight unknowns in our eigenvalue system, together with two basis functions and $N$ subdomains, this implies that the final matrix eigenvalue problem will have $16 N$ equations, resulting in a $16N \times 16N$ matrix. By extension, it becomes clear that using basis functions of even higher order will increase the size of this eigensystem considerably.
+
+
+
+
+
+
+\subsubsection{Integrals through Gaussian quadrature}
+
+% \subsection{System assembly}
+
+
+
+
+
+
+% \subsection{Matrix assembly}
+% \subsubsection{Assembly of the eigenfunctions}
+% \subsubsection{Derived eigenfunction quantities}
 
 
 \cleardoublepage

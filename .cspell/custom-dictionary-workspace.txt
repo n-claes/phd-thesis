@@ -19,9 +19,11 @@ Eigensystem
 exempli
 footpoints
 Frobenius
+Galerkin
 Gaussians
 gratia
 helio
+Hermite
 isocontours
 Jonghe
 Keppens
@@ -42,6 +44,7 @@ nonzero
 nucleous
 overdamped
 overstable
+prechosen
 pressureless
 quadrupolar
 selfgravity
