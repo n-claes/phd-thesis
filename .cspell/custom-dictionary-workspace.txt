@@ -47,6 +47,7 @@ quadrupolar
 selfgravity
 Selfgravity
 Shafranov
+skyblue
 Spex
 timestep
 tokamak
