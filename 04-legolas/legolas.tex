@@ -2,14 +2,39 @@
 
 \graphicspath{{04-legolas/figures/}}
 
+\begin{chapterquote}[Stephen Hawking][A Brief History of Time][]
+  Any physical theory is always provisional, in the sense that it is only a hypothesis; you can never prove it. No matter how many times the results of experiments agree with some theory, you can never be sure that the next time the result will not contradict the theory.
+\end{chapterquote}
+
 \usespublishedwork{
   Most of this Chapter was published in ``Legolas: a novel tool for magnetohydrodynamic spectroscopy'', 2020, \apjs,
-  251, 25 \citep{claes2020_legolas}. N. Claes developed Legolas in close collaboration with J. De Jonghe, generated the data and figures and wrote a first draft of the manuscript; J. De Jonghe revised and extended the manuscript. R. Keppens contributed to the revision of the paper.
+  251, 25 \citep{claes2020_legolas}. N. Claes developed {\legolas} in close collaboration with J. De Jonghe, generated the data and figures and wrote a first draft of the manuscript; J. De Jonghe revised and extended the manuscript. R. Keppens contributed to the revision of the paper.
 }
 
-\section{Introduction}
+In the previous Chapter we looked at wave modes and growth rates in simple planar, uniform configurations. Naturally, the next step would be adding a continuous, spatial variation in the background equilibrium prescription, allowing us to investigate wave modes in inhomogeneous media. An approach like this is essential if we ever hope to discuss more realistic configurations, which indirectly implies that we ought to look at curved geometries as well, that is, cylinders instead of slabs. Mathematically speaking, this ``small'' step is actually a major undertaking: while this allows for a relatively accurate description of various realistic equilibrium configurations, it also means that the mathematical analysis increases (a few orders of magnitude) in complexity. It will not take long before we have to forego any hopes of a general analytic treatment and are forced to turn to numerical tools.
 
-\section{Problem description and equations}
+With this in mind we embarked on an ambitious project: develop a new, large-scale numerical code to solve the linearised system of non-ideal MHD equations. In the past few decades various codes have been developed for exactly this purpose, but these were limited: some versions applied severe constraints on the physical effects that could be added -- for example \emph{only} resistivity, or \emph{only} non-adiabatic effects -- while others looked only at specific configurations and built their code for that specific purpose. {\legolas} on the other hand has one main vision: provide a framework that is as general as possible; while at the same time easy to extend with additional physics or modern algorithmic developments. The result is that we now have a single, modern, and modular code, capable of doing spectroscopy on configurations that have never been investigated before, whilst combining physics that have never been combined before in MHD spectroscopy.
+
+This Chapter provides the mathematical foundations on which the {\legolas} code is built. We look at the linearisation process and how it affects the physical terms taken into account, followed by a thorough discussion on the actual eigenvalue problem and how the mathematical and numerical challenges have been overcome.
+Section \ref{sec: problem description} introduces the system of equations, along with the linearisation procedure and Fourier mode representation. In Section \ref{sec: eigenvalue problem} we explain the mathematical formalism behind the \gls{FEM}, with a complete treatment of the finite element matrix assembly process, boundary conditions and assembly of the eigenfunctions from the calculated eigenvectors.
+
+\section{Introduction}
+The study of stability for plasmas and fluids alike has been a major topic of research over the last century. Understanding how and why a given medium reacts to a linear perturbation is of central importance to many astrophysical phenomena. In incompressible or compressible fluids, governed by the hydrodynamic equations, notable instabilities are the Kelvin-Helmholtz instability (\gls{KHI}), which arises due to a velocity shear at the interface of two fluids, and the Rayleigh-Taylor instability (\gls{RTI}) where gravitational stratification can lead to an unstable configuration of layered fluids of different density \citep{book_chandrasekhar,book_choudhuri}. In plasmas, governed by the magnetohydrodynamic equations, the study of waves and instabilities becomes much richer due to the inclusion of magnetic fields, with a modern overview provided in \citet{book_MHD}. Magnetic fields modify the two aforementioned instabilities in various ways, and the combination of flow, magnetic fields and pressure gradients introduces many new modes, e.g. the magnetorotational instability \citep{balbus1991} relevant for (weakly magnetised) accretion disks or the trans-slow-Alfv\'en continuum modes in disks of arbitrary magnetisation \citep{goedbloed2004}. In the highly magnetised solar corona, observed coronal loop oscillations (periods and damping times) are routinely used to infer loop parameters like their field strength \citep{nakariakov2001}. Embedded in the hot solar corona, we find stable and long-lived quiescent prominences, with internal dynamics due to KHI \citep{hillier2018_KHI} and RTI \citep{hillier2018_RTI}. The formation of prominences is due to the thermal instability, as demonstrated in direct observations by e.g. \citet{berger2012} or in simulations by \citet{xia2016} and \citet{claes2020}. Together with categorising all instabilities, knowing the stable eigenoscillations, such as $p$ or $g$ modes in stratified atmospheres or stellar interiors, is of prime importance to link theoretical understanding with observed periodic phenomena. In all of these cases, we need to compute the eigenoscillations and corresponding eigenfunctions from the linearised set of governing equations. Linear MHD spectroscopy, which encompasses the entirety of helio- and asteroseismology but incorporates laboratory fusion plasma MHD spectroscopy \citep{goedbloed1993}, MHD spectroscopy of accretion disks \citep{keppens2002} and jets, as well as solar coronal seismology \citep{book_roberts}, is thus a powerful tool for studying many astrophysical processes.
+
+Since the advent of more powerful computational resources, the main focus of computational astrophysical research has gradually shifted toward solving the fully nonlinear MHD equations, where many nonadiabatic/nonideal effects are incorporated, depending on the application at hand. While this approach successfully reproduces many physical phenomena, especially for realistic solar setups (e.g. sunspots, \citet{rempel2012}; flares, \citet{ruan2019}; or prominences, \citet{xia2016}), it usually fails to answer which specific perturbation produces the complex evolution as witnessed. At the same time, theoretical insight showed that MHD spectral theory actually governs the stability of flowing, (self-)gravitating single-fluid evolutions of nonlinear, time-dependent plasmas, and this at any time during their nonlinear evolution \citep{demaerel2016}. Hence, in order to predict the reaction of a certain physical state to perturbations, we should really quantify all its waves and instabilities using linear theory. This has been recognised fully in laboratory fusion plasmas, where MHD spectroscopy is very successful in identifying waves and stability aspects of a given toroidal Grad-Shafranov equilibrium. That this can be meaningfully be done for states that include important nonadiabatic effects, like optically thin radiative losses, is important for investigations into prominences and their intriguing fine structure, as revealed by means of direct observations \citep{engvold1998,ballester2006,mackay2010} or through numerical simulations \citep{xia2016,xia2017,claes2020}. In that context, early analytical work by \citet{vanderlinden1991} based on linear MHD suggests the hypothesis that finite perpendicular thermal conduction induces fine structure in unstable linear eigenmodes. Since this pioneering work of \citet{vanderlinden1991}, not much research has been done regarding the full MHD spectrum where nonadiabatic effects are at play, for the simple reason that to date, there existed no numerical tool to solve the full system of linearised MHD equations with all the physical effects included. This is why we developed the new and open-source {\legolas} code.
+
+{\legolas} builds on the heritage of early numerical codes, most notably LEDA \citep{kerner1985}, which allowed studies of the ideal or resistive MHD spectrum for laboratory plasmas, approximated by a diffuse cylindrical plasma column (or flux tube) and CASTOR \citep{kerner1998}, which applied to resistive spectra of general tokamak configurations. The latter has follow-up codes such as FINESSE \citep{belien2002} and PHOENIX \citep{blokland2007_phoenix}, extending it to stationary and axisymmetric truly \gls{2D} configurations. LEDA was later extended by \citet{vanderlinden1992}, where nonadiabatic effects like anisotropic thermal conduction and optically thin radiative losses were added to the equations using a simple analytic function to treat radiative cooling effects. A different branch of LEDA, called LEDAFLOW \citep{nijboer1997}, was developed to investigate the resistive MHD spectrum, augmented with gravitational and flow effects, but omitting those nonadiabatic terms. Because these codes were developed decades ago and focus has shifted away from linear MHD, their further development was stalled, although in laboratory fusion context, tools to compute multidimensional equilibria and their linear modes are very important for diagnosing experiments. The original codes, like LEDA(FLOW), were not flexible in the sense that adding different equilibria or accounting for additional terms in the equations would be a major undertaking, as parts were hard-coded to (limited) computational resources of that time. Furthermore, programming languages and numerical tools like LAPACK \citep{book_lapack} to solve eigenvalue problems have come a long way.
+
+This prompted us to develop a brand new, modern MHD spectral code which we named {\legolas}, an acronym for ``Large Eigensystem Generator for One-dimensional pLASmas''. The {\legolas} code is able to handle both Cartesian and cylindrical geometries, and introduces many new features, such as selecting between modern cooling curves that treat optically thin radiative cooling effects. Furthermore, every aspect of the code is modularised, making it ready to be extended with additional physics or modern algorithmic requirements such as mesh refinement. The main goal of this Chapter is to discuss the mathematical foundations behind the {\legolas} framework, present the code in terms of its implementation details and to validate it against a plethora of test cases that ensure a correct treatment of the governing equations.
+
+These tests include eigenmode quantifications of ideal, static MHD configurations under adiabatic conditions, where the static -- that is, no equilibrium flow -- and adiabatic linear MHD equations make the problem self-adjoint. When performing a standard Fourier analysis in the ignorable directions, the resulting eigenvalue problem is then Hermitian, meaning that all eigenfrequencies will be either fully real (stable waves) or fully complex (pure damped or unstable modes), hence they are found on the real or imaginary axis of the complex eigenfrequency plane, and the full MHD spectrum will be both left-right and up-down symmetric. However, in nature, physical conditions may be far from ideal. The inclusion of nonideal effects like resistivity or thermal conduction lifts the self-adjointness of the eigenvalue problem, allowing the eigenmodes to move away from the axes into the complex plane, and the up-down symmetry gets broken. As long as the equilibrium configuration is static, all (adiabatic or non-adiabatic) modes will still have a complementary mode that lies mirrored around the imaginary axis, making the entire spectrum left-right symmetric. This is related to the forward and backward propagating mode symmetry, or the equivalent statement on the parity-time (\gls{PI}) symmetry.
+
+However, for typical astrophysical plasmas, the conditions are far from static: tokamak plasmas, astrophysical jets, solar coronal loops, accretion disks, etc., all have equilibrium flows. The inclusion of a background flow breaks the left-right symmetry of the MHD spectrum, resulting in an even more complicated spectral structure. However, the study of the ideal, linear MHD spectrum is flowing plasmas is still governed by a pair of self-adjoint operators \citep{goedbloed2011,book_MHD}, and it leaves the up-down symmetry of the spectrum intact (where every overstable mode has an equivalent damped counterpart at the same frequency). The combination of flow and nonadiabatic effects, where both left-right and up-down eigenfrequency symmetries are broken, has never been explored in earnest. All of the above makes it clear that a numerical approach becomes essential, especially when the equilibrium is no longer homogeneous. Because in reality virtually no astrophysical configuration is spatially homogeneous, we need a flexible numerical tool to explore the spectrum systematically.
+
+{\legolas} solves the linearised MHD equations including various nonadiabatic effects and (among others) resistivity and gravity assuming a one-dimensional (\gls{1D}) equilibrium profile with the possibility of a background flow. A standard Fourier analysis for the perturbations is combined with a finite element representation of the eigenfunctions in the important coordinate. The original system is transformed into an eigensystem for the complex eigenfrequencies $\omega$. We make use of a general formalism to include two kinds of geometries: a plane Cartesian stratified slab or a (possibly also stratified) cylinder, through the inclusion of a scale factor originating from the divergence, gradient, and curl operators. {\legolas} can handle the hydrodynamic limit (where all equilibrium magnetic field components are set to zero), enabling us to investigate the stability of hydrodynamic static and stationary equilibria as well. The resulting system of equations is solved in weak form, transforming the original system into a non-Hermitian complex eigenvalue problem, which is then solved. This results in a calculation of all eigenfrequencies and corresponding eigenfunctions of the system, such that a detailed analysis of mode stability -- but also the entire overview on all supported linear wave modes -- becomes possible.
+
+
+\section{Problem description and equations} \label{sec: problem description}
 In this Section we will develop the mathematical formalism leading up to the set of linearised equations. The inhomogeneous equilibrium profiles under consideration make the linearisation process much more complicated compared to Chapter \ref{ch: spectroscopy}, and we also include a lot more physical effects than before.
 
 \subsection{Full set of MHD equations}
@@ -230,14 +255,14 @@ To ensure the background is in magnetostatic equilibrium, we set the time-depend
   \left(B_{02}v_{01} - B_{01}v_{02}\right)' = 0, \\
   \Bigl[\eps \left(B_{01}v_{03} - B_{03}v_{01}\right)\Bigr]' = 0,
 \end{gather}
-where the prime denotes the derivative with respect to $u_1$. We will continue to use this notation throughout the remaining Chapters. The above set of equations describe an equilibrium state for a generalised background. If we set $v_{01} = B_{01} = 0$ however, this reduces to only two conditions for the time-independent parts, given by
+where the prime denotes the derivative with respect to $u_1$. The above set of equations describe an equilibrium state for a generalised background. If we set $v_{01} = B_{01} = 0$ however, this reduces to only two conditions for the time-independent parts, given by
 \begin{gather}
   \left(\rho_0 T_0 + \frac{1}{2}B_{02}^2 + \frac{1}{2}B_{03}^2\right)'
     + \rho_0 g
     + \frac{\eps'}{\eps}\left(B_{02}^2 - \rho_0 v_{02}^2\right) = 0, \label{eq: force_equilibrium} \\
   \rho_0 \HLF_0 - \frac{1}{\eps}\left(\eps \skappaperp{0} T_0'\right)' = 0. \label{eq: thermal_equilibrium}
 \end{gather}
-The first equation originates from the momentum equation \eqref{eq: momentum} and should always be satisfied as it expresses a force-balanced state. The second condition originates from the non-adiabatic terms in the energy equation and should (only) be accounted for if these terms are included. The prime again denotes the derivative with respect to $u_1$. Note that the third term in Equation \eqref{eq: force_equilibrium} is only included for a cylinder, since $\eps' = 0$ in a Cartesian geometry. This translates to the well-known fact that the centrifugal and tensional parts of the Lorentz force are absent for a Cartesian slab. Furthermore a cylindrical equilibrium profile should satisfy on-axis regularity conditions, meaning that $v_{02}$, $v_{03}'$, $B_{02}$ and $B_{03}'$ all have to be equal to zero at $r = 0$. When considering an accretion disk in the cylindrical limit, the inner edge of the disk is at $r = 1$, so lengths are then expressed in this inner disk radius and no regularity conditions apply in that case.
+The first equation originates from the momentum equation \eqref{eq: momentum} and should always be satisfied as it expresses a force-balanced state. The second condition originates from the non-adiabatic terms in the energy equation and should (only) be accounted for if these terms are included. Note that the third term in Equation \eqref{eq: force_equilibrium} is only included for a cylinder, since $\eps' = 0$ in a Cartesian geometry. This translates to the well-known fact that the centrifugal and tensional parts of the Lorentz force are absent for a Cartesian slab. Furthermore a cylindrical equilibrium profile should satisfy on-axis regularity conditions, meaning that $v_{02}$, $v_{03}'$, $B_{02}$ and $B_{03}'$ all have to be equal to zero at $r = 0$. When considering an accretion disk in the cylindrical limit, the inner edge of the disk is at $r = 1$, so lengths are then expressed in this inner disk radius and no regularity conditions apply in that case.
 
 \subsubsection{Implications on the radiative cooling terms}
 It is worth discussing that we explicitly kept $\HLF_0$ in the equilibrium expressions. This term is actually needed to ensure a thermally stable state, and is \emph{not necessarily zero} but depends on the physical effects under consideration, in particular perpendicular thermal conduction and the choice of heating function. Generally speaking, the heating function $\HLFheat$ can be anything -- for example heating through dissipative Alfv\'en waves \citep{vanderholst2014} -- but since there is still no well-defined parametrisation for coronal heating to date this term can be assumed to be as convenient as possible, that is, constant in time but possibly varying in space to ensure thermodynamic balance. Note that $\HLFheat$ should always be consistent with a given equilibrium profile as to exactly balance out the radiative losses (and possibly the thermal conduction effects and/or ohmic heating terms), in order to reach a thermal equilibrium state. This indirectly implies that a constant heating term is not necessarily independent of location, but dependent on the connection between the radiative losses and equilibrium temperature profile, which, in general, are both spatially dependent. It is worth noting that the inclusion of time-dependent background heating (or flows for that matter) can influence the spectrum in itself, as shown in for example \citet{barbulescu2019, hillier2019}, but due to the time-dependence of those effects the assumption of a stationary background state is no longer applicable.
@@ -361,42 +386,56 @@ in normalised units. In order to connect this new equation with the others we ta
 \end{equation}
 and an additional term $-\rho_0 \nabla \Phi_1$ is added on the right hand side of the momentum equation \eqref{eq: linearised_momentum}.
 
-The above formalism is included for completeness, however we will not use selfgravity in any of the applications in this thesis. The gravitational potential and Poisson equation will be omitted from the equations that follow and we will stick to the Cowling approximation; however, the corresponding matrix elements will be given in the Appendices.
+The above formalism is included for completeness, although we will not use selfgravity in any of the applications in this thesis. The gravitational potential and Poisson equation will be omitted from the equations that follow and we will stick to the Cowling approximation; however, the corresponding matrix elements will be given in the Appendices.
 
-\section{Emergence of the matrix eigenvalue problem}
-In this Section we will go in-depth on how the eigenvalue problem arises from the above set of linearised equations. At first glance this might look straightforward; however, as will become clear in part \ref{ss: fourier} the first obstacle appears when the linearised equations have been fully worked out and the eigenvalue problem becomes apparent.
+\section{Emergence of the matrix eigenvalue problem} \label{sec: eigenvalue problem}
+In this Section we will go in-depth on how the eigenvalue problem arises from the above set of linearised equations.
+The main idea here is similar to what we did in Chapter \ref{ch: spectroscopy}: now that we have expressions for the linearised equations we can perform a Fourier analysis in the ignorable coordinates, which will give us an eigenvalue problem that can be solved to obtain all modes in the system under consideration. At first glance this may look quite straightforward to do; however, as will become clear in the sections that follow, every step in this process introduces numerical and mathematical challenges that have to be overcome first.
 
 \subsection{Fourier analysis} \label{ss: fourier}
-Now that we have a detailed description of the linear equations the next step is to perform a Fourier analysis with an exponential time dependence, imposing standard Fourier modes on the $u_2$ and $u_3$ coordinates of a perturbed quantity $f_1$, given by
+The first step in the eigenvalue approach is to perform a Fourier analysis with an exponential time dependence on the above set of linearised equations, imposing standard Fourier modes on the $u_2$ and $u_3$ coordinates of a perturbed quantity $f_1$, given by
 \begin{equation} \label{eq: fourier_analysis}
-  f_1 = \hat{f_1}(u_1)\exp\Bigl[i(k_2 u_2 + k_3 u_3 - \omega t)\Bigr].
+  f_1 = \hat{f_1}(u_1)\exp\Bigl[\icomplex(k_2 u_2 + k_3 u_3 - \omega t)\Bigr].
 \end{equation}
 In this form the wave numbers $k_2$ and $k_3$ correspond to $k_y$ and $k_z$ in Cartesian geometry, and to $m$ and $k$ in a cylindrical geometry. Note that $m$ is quantified to integer values, since the $\theta$-direction is periodic. For reasons that will become clear in a moment, we apply the following transformation to the perturbed quantities
 \begin{equation}
   \begin{alignedat}{4} \label{eq: transformation}
     \eps \rho_1 &= \widetilde{\rho_1},
     \qquad&
-    i\eps v_1 &= \widetilde{v_1},
+    \icomplex \eps v_1 &= \widetilde{v_1},
     \qquad&
     v_2 &= \widetilde{v_2},
     \qquad&
     \eps v_3 &= \widetilde{v_3}, \\
     \eps T_1 &= \widetilde{T_1},
     &
-    i a_1 &= \widetilde{a_1},
+    \icomplex a_1 &= \widetilde{a_1},
     &
     \eps a_2 &= \widetilde{a_2},
     &
     a_3 &= \widetilde{a_3}. \\
   \end{alignedat}
 \end{equation}
-This particular transformation simplifies the resulting set of equations and has as additional effect that all adiabatic and incompressible flow terms are real, such that we are only dealing with imaginary terms if resistivity or non-adiabatic effects are included. This is in analogy to the fact that the purely adiabatic case is governed by self-adjoint operators: one for the case without flow and two for the case with flow included \citep{goedbloed2018_web1,goedbloed2018_web2}. The final set of Fourier-analysed linearised equations is given below, where the tilde notation in Equation \eqref{eq: transformation} is dropped for the sake of simplicity. From now on, tildes will no longer be written explicitly since there is no confusion possible.
+This particular transformation simplifies the resulting set of equations and has as additional effect that all adiabatic and incompressible flow terms are real, such that we are only dealing with imaginary terms if resistivity or non-adiabatic effects are included. This is in analogy to the fact that the purely adiabatic case is governed by self-adjoint operators: one for the case without flow and two for the case with flow included \citep{goedbloed2018_web1,goedbloed2018_web2}. For brevity we introduce the following quantities
+\begin{equation} \label{eq: F_G_operators}
+  \Fplus \equiv \Fplusfull,
+  \qquad
+  \Gmin \equiv \Gminfull,
+\end{equation}
+as is common notation in MHD spectral theory following \citet{book_MHD}. These symbols essentially represent the parallel ($\Fplus$) and perpendicular ($\Gmin$) parts of the gradient operator applied to a perturbed quantity, with terms originating from the exponential Fourier factor. In other words, we could write $B_0 \kpara = \Fplus$
+and $B_0 \kperp = \Gmin$. We can introduce a similar symbol for the background flow field, given by
+\begin{equation} \label{eq: V_operator}
+  \Vplus \equiv \Vplusfull,
+\end{equation}
+which is similar to $\Fplus$ but now with flow terms instead of magnetic field terms.
+
+The final set of Fourier-analysed linearised equations is given below, where the tilde notation in Equation \eqref{eq: transformation} is dropped for the sake of simplicity. From now on, tildes will no longer be written explicitly since there is no confusion possible.
 
 \paragraph{Continuity equation}
 \begin{equation} \label{eq: full_continuity}
   \omega\rho_1 =
     -\rho_0' v_1 + \rho_0\left(k_2 v_2 + k_3 v_3 - v_1'\right)
-    -i v_{01}\rho_1' + \rho_1 \left(\frac{k_2 v_{02}}{\varepsilon} + k_3 v_{03} - i v_{01}'\right)
+    -\icomplex v_{01}\rho_1' + \rho_1 \left(\Vplus - \icomplex v_{01}'\right)
 \end{equation}
 
 \paragraph{Momentum-1 equation}
@@ -404,7 +443,8 @@ This particular transformation simplifies the resulting set of equations and has
   \begin{aligned}
   \omega\rho_0 v_1  &=
     \eps\left(\frac{T_0 \rho_1}{\eps} + \frac{T_1 \rho_0}{\eps}\right)'
-    + g \rho_1 \\
+    + g \rho_1
+    + \rho_0 \left(\Vplus - \icomplex v_{01}'\right)v_1 \\
     &\quad
 		+ B_{02} \left\{
       - \frac{k_2 k_3}{\eps}a_2 + \frac{k_2^2}{\eps}a_3 + \Bigl[\eps\left(k_3a_1 - a_3'\right)\Bigr]'
@@ -417,10 +457,8 @@ This particular transformation simplifies the resulting set of equations and has
     + B_{03}' \left(a_2' - k_2a_1\right) \\
     &\quad
     + \left(v_{01} v_{01}' - \frac{\eps' v_{02}^2}{\eps}\right)\rho_1
-		+ \rho_0 \left(\frac{k_2 v_{02}}{\eps} + k_3 v_{03} - i v_{01}'\right)v_1 \\
-    &\quad
 		- 2 \eps' \rho_0 v_{02} v_2
-    - i\eps\rho_0 v_{01} \left(\frac{v_1}{\eps}\right)'
+    - \icomplex \eps\rho_0 v_{01} \left(\frac{v_1}{\eps}\right)'
   \end{aligned}
 \end{equation}
 
@@ -430,18 +468,16 @@ This particular transformation simplifies the resulting set of equations and has
   \omega\rho_0 \eps v_2 &=
     \frac{1}{\eps} k_2 T_0 \rho_1
     + \frac{1}{\eps}k_2 \rho_0 T_1
-    + i B_{01} \left\{
+    + \icomplex B_{01} \left\{
       -\frac{k_2 k_3}{\eps}a_2  + \frac{k_2^2}{\eps}a_3 + \Bigl[\eps\left(k_3 a_1  - a_3'\right)\Bigr]'
     \right\} \\
     &\quad
     + B_{03} \left[- \left(\frac{k_2^2}{\eps} + \eps k_3^2\right)a_1  + \frac{ k_2}{\eps}a_2' +  \eps k_3a_3'\right]
     + \frac{(\eps B_{02})'}{\eps}\left(a_2 k_3 - a_3 k_2\right) \\
     &\quad
-    - \frac{\left(\eps v_{02}\right)'}{\eps} i v_{01} \rho_1
-    - \frac{\left(\eps v_{02}\right)'}{\eps}\rho_0 v_1
-    + \rho_0 \Bigl(- i \eps' v_{01} + k_2 v_{02} + \eps k_3 v_{03}\Bigr)v_2 \\
-    &\quad
-    - i \eps \rho_0 v_{01} v_2'
+    - \frac{\left(\eps v_{02}\right)'}{\eps} \left(\icomplex v_{01} \rho_1 + \rho_0 v_1\right)
+    + \eps\rho_0 \left(\Vplus - \icomplex \frac{\eps'}{\eps} v_{01}\right)v_2
+    - \icomplex \eps \rho_0 v_{01} v_2'
   \end{aligned}
 \end{equation}
 
@@ -452,16 +488,18 @@ This particular transformation simplifies the resulting set of equations and has
       k_3 T_0 \rho_1
       + k_3 \rho_0 T_1
 		  + B_{03}' \left(k_3 a_2  - k_2 a_3\right)
-      - iv_{01} v_{03}' \rho_1
+      - \icomplex v_{01} v_{03}' \rho_1
       - \rho_0 v_{03}'v_1 \\
       &\quad
 		  + B_{02} \left[
         \left(\frac{k_2^2}{\eps} + \eps k_3^2\right)a_1  - \frac{k_2}{\eps}a_2'  - \eps k_3 a_3'
       \right]
-      + \rho_0 v_3 \left(\frac{k_2 v_{02}}{\eps} + k_3 v_{03}\right) \\
+      + \rho_0 v_3 \Vplus \\
 		&\quad
-    + i B_{01} \left[-k_3^2 a_2  + k_2 k_3 a_3  + \eps\left(- \frac{k_2}{\eps}a_1 + \frac{a_2'}{\eps}\right)'\right]
-    - i \eps \rho_0 v_{01} \left(\frac{v_3}{\eps}\right)'
+    + \icomplex B_{01} \left[
+      -k_3^2 a_2  + k_2 k_3 a_3  + \eps\left(- \frac{k_2}{\eps}a_1 + \frac{a_2'}{\eps}\right)'
+    \right]
+    - \icomplex \eps \rho_0 v_{01} \left(\frac{v_3}{\eps}\right)'
   \end{aligned}
 \end{equation}
 
