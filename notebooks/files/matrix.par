@@ -1,0 +1,29 @@
+&gridlist
+  gridpoints = 6
+/
+
+&solvelist
+  solver = "QR-invert"
+/
+
+&physicslist
+/
+
+&equilibriumlist
+  equilibrium_type = "kelvin_helmholtz_cd"
+  use_defaults = .true.
+/
+
+&savelist
+  logging_level = 2
+  basename_datfile = "datfile_matrix"
+  show_results = .true.
+  write_eigenfunctions = .false.
+  write_matrices = .true.
+/
+
+&unitslist
+/
+
+&paramlist
+/

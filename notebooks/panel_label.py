@@ -7,6 +7,7 @@ def add_panel_label(
     color="grey",
     boxstyle="round",
     bold=False,
+    outside=False,
 ):
     """
     Annotates given text in one of the corners of the specified axis.
@@ -76,15 +77,24 @@ def add_panel_label(
     if loc == "top left":
         x = 0.5 * bb_width
         y = 1 - 0.5 * bb_height
+        if outside:
+            x = x - bb_width
+            y = y + bb_height
     elif loc == "top right":
         x = 1 - 0.5 * bb_width
         y = 1 - 0.5 * bb_height
+        if outside:
+            x, y = x + bb_width, y + bb_height
     elif loc == "bottom left":
         x = 0.5 * bb_width
         y = 0.5 * bb_height
+        if outside:
+            x, y = x - bb_width, y - bb_height
     elif loc == "bottom right":
         x = 1 - 0.5 * bb_width
         y = 0.5 * bb_height
+        if outside:
+            x, y = x + bb_width, y - bb_height
     else:
         raise ValueError
     ax.text(
