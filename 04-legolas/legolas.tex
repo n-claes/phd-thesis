@@ -653,12 +653,86 @@ To summarise, the main idea behind a finite element approach is threefold:
   \item[iii)] When solving the system one obtains coefficients of the chosen linear combination, calculated such that the difference between the exact solution and the approximation ($\equiv$ \emph{the residual}) becomes minimal .
 \end{enumerate}
 
-Therefore, once the domain is chosen, the approximation of a state variable $x^i$ (with $i$ the state vector index) for a domain divided into $N$ subdomains (nodes) is given by
+
+
+\subsubsection{Variational analysis and Galerkin form}
+Before proceeding with our analysis we hold a small mathematical interlude on variational analysis and look at how writing the problem in weak Galerkin form is quite convenient for our current formalism. An excellent journey through the basics of finite element methods can be found in \citet{book_fem1}, whereas \citet{book_MHD} give a thorough discussion on the Galerkin form; here we follow a similar reasoning and highlight the key ideas behind the weak formalism. Consider a given inhomogeneous differential equation of the form
+\begin{equation} \label{eq: inhomo_diff_eq}
+  -\bigl[p(u_1)x(u_1)'\bigr]' + q(u_1)x(u_1) - f(u_1) = 0,
+\end{equation}
+on an interval $u_1 \in [0, 1]$ for given (known) functions $p(u_1), q(u_1)$ and $f(u_1)$, where the prime denotes the derivative with respect to $u_1$. For simplicity think of the function $x(u_1)$ as one of the perturbed variables in one of the linearised equations, furthermore we assume the first and second order derivatives of $x(u_1)$ exist on
+$[0, 1]$. If we were to solve the above equation on a domain discretised in $N$ subdomains, we would obtain an approximate solution $\hat{x}(u_1)$. In a finite element analysis this solution $\hat{x}(u_1)$ is given by a linear combination of basis functions. Before diving into the higher-order basis functions that {\legolas} uses, we first look at a simple linear basis function $h_i$ such that
+\begin{equation} \label{eq: linear_basisfunctions}
+  x(u_1) \approx \hat{x}(u_1) = \sum_{j = 0}^N x_j h_j(u_1),
+\end{equation}
+where $x_j$ are the coefficients in the linear combination. Note that $\hat{x}(u_1)$ is only an \emph{approximate solution}, so when we substitute this back into the original equation \eqref{eq: inhomo_diff_eq} this will not yield zero, but some $u_1$-dependent function instead. This is essentially the difference between the exact and approximate solution and is called the \emph{residual} $\hat{r}_s^N(u_1)$, given by
+\begin{equation} \label{eq: residual}
+  r_s^N(u_1) \equiv \sum_{j=0}^N x_j\left[-\Bigl(p(u_1)h_j'(u_1)\Bigr)' + q(u_1)h_j(u_1)\right] - f(u_1).
+\end{equation}
+The next question is quite straightforward: ``how can we calculate the coefficients $x_j$ in the linear combination, such that the residual becomes as close to zero as possible over our domain?'', which essentially implies that the approximate solution approaches the exact solution. This is usually done by requiring that the (sort of) averaged residual over the domain becomes zero, that is,
+\begin{equation} \label{eq: weighted_residual_formalism}
+  \int_0^1 w_k(u_1) r_s^N(u_1)du_1 = 0 \qquad\text{for}\qquad k = 0, 1 \ldots N,
+\end{equation}
+where $w_k$ is called a weight function, and the number of weight functions is taken to be equal to the number of coefficients $x_j$ in our approximate solution. This in turn implies that we now have $N + 1$ algebraic equations for $x_j$, which can be solved after selecting a weight function. The solution $\hat{x}(u_1)$ is said to converge if the residual vanishes in the limit $N \rightarrow \infty$ everywhere on the domain.
+
+In principle one is free to choose any weight function; the special case where $w_k$ is taken equal to the basis function $h_k$ is called the \emph{Galerkin method}. The weighted residual formalism
+\eqref{eq: weighted_residual_formalism} then takes on the expression
+\begin{equation}
+  -\sum_{j=0}^N\int_0^1 h_k x_j \frac{d}{du_1}\left(p\frac{dh_j}{du_1}\right)du_1
+  + \sum_{j=0}^N\int_0^1 h_k x_j q h_j du_1
+  - \sum_{j=0}^N\int_0^1 h_k f = 0,
+\end{equation}
+with the index $k$ ranging from 0 to $N$. The first term in this equation can be ``simplified'' further by performing integration by parts, which will also introduce a non-integral term that should be evaluated in the domain boundaries. These terms can in turn be exploited further, and we will come back to them when we discuss the boundary conditions. The formulation after applying integration by parts is called the \emph{weak Galerkin formalism}, and will be the main mathematical principle in our numerical approach. A convenient consequence of this formalism is that we are able to rewrite all second-order derivatives into combinations of integrals containing first-order derivatives and surface terms.
+
+\subsubsection{The MHD equations in weak Galerkin form}
+The above implies that if we rewrite our Fourier-analysed MHD equations using the Galerkin method they will change into a system of algebraic equations, which is eventually what we are aiming at. Noting that {\legolas} uses a combination of quadratic and cubic basis functions, we can approximate a state variable $x^i$ (with $i$ the state vector index) for a domain divided into $N$ subdomains (nodes) by
 \begin{equation} \label{eq: linear_combo}
   x^i(u_1) \approx \sum_{j=0}^N \Bigl(H_j^1(u_1)x_{j1}^i + H_j^2(u_1)x_{j2}^i\Bigr),
 \end{equation}
 where $H_j^1(u_1)$ and $H_j^2(u_1)$ denote the quadratic or cubic elements at node $j$.
-\begin{figure}[b]
+The cubic Hermite and quadratic basis functions themselves, hereafter denoted by $C_j$ and $Q_j$, respectively, are given by
+\begingroup
+\allowdisplaybreaks
+\begin{align}
+  Q^1_j(x) &=
+  \begin{cases}
+    \dfrac{4\left(x - x_{j-1}\right)\left(x_j - x\right)}{\left(x_j - x_{j-1}\right)^2}
+    \qquad &\text{for}~ x_{j-1} \leq x \leq x_j,	\\
+    0
+    \qquad &\text{elsewhere},
+  \end{cases} \label{eq: basisfunction_Q1} \\
+  C^1_j(x) &=
+  \begin{cases}
+    \left(\dfrac{x - x_{j-1}}{x_j - x_{j-1}}\right)^2\left(3 - 2\dfrac{x - x_{j-1}}{x_j - x_{j-1}}\right)
+    \qquad &\text{for}~ x_{j-1} \leq x \leq x_j,	\\
+    \left(\dfrac{x_{j+1} - x}{x_{j+1} - x_j}\right)^2\left(3 - 2\dfrac{x_{j+1} - x}{x_{j+1} - x_j}\right)
+    \qquad &\text{for}~ x_j \leq x \leq x_{j+1},	\\
+    0
+    \qquad &\text{elsewhere},
+  \end{cases}	\label{eq: basisfunction_C1} \\
+  Q^2_j(x) &=
+  \begin{cases}
+    \dfrac{\left(2x - x_j - x_{j-1}\right)\left(x - x_{j-1}\right)}{\left(x_j - x_{j-1}\right)^2}
+    \qquad &\text{for}~ x_{j-1} \leq x \leq x_j,	\\
+    \dfrac{\left(2x - x_{j+1} - x_j\right)\left(x - x_{j+1}\right)}{\left(x_{j+1} - x_j\right)^2}
+    \qquad &\text{for}~ x_j \leq x \leq x_{j+1},	\\
+    0
+    \qquad &\text{elsewhere},
+  \end{cases} \label{eq: basisfunction_Q2} \\
+  C^2_j(x) &=
+  \begin{cases}
+    \left(x - x_j\right)\left(\dfrac{x - x_{j-1}}{x_j - x_{j-1}}\right)^2
+    \qquad &\text{for}~ x_{j-1} \leq x \leq x_j,	\\
+    \left(x - x_j\right)\left(\dfrac{x_{j+1} - x}{x_{j+1} - x_j}\right)^2
+    \qquad &\text{for}~ x_j \leq x \leq x_{j+1},	\\
+    0
+    \qquad &\text{elsewhere},
+  \end{cases} \label{eq: basisfunction_C2}
+\end{align}
+\endgroup
+as in, for example, \citet{kerner1998} and \citet{book_MHD}, and are shown graphically along with their derivatives in Figure \ref{fig: basisfunctions}. Because we have two basis functions per subdomain, this allows for the approximation of both the original variable and its derivative by differentiation of Equation \eqref{eq: linear_combo}. Here it should also become clear why we are using the weak Galerkin formalism, as the integration by parts gets rid of any second-order derivatives.
+
+\begin{figure}[t]
   \centering
   \includegraphics[width=\textwidth]{basisfunctions.png}
   \caption{
@@ -666,79 +740,47 @@ where $H_j^1(u_1)$ and $H_j^2(u_1)$ denote the quadratic or cubic elements at no
   }
   \label{fig: basisfunctions}
 \end{figure}
-The Hermite and quadratic basis functions themselves, hereafter denoted by $C_j$ and $Q_j$, respectively, are given by
 
-\begingroup
-\allowdisplaybreaks
-\begin{align}
-  Q^1_j(x) &=
-  \begin{cases}
-    \dfrac{4\left(x - x_{j-1}\right)\left(x_j - x\right)}{\left(x_j - x_{j-1}\right)^2},	\\
-    0, 	\\
-    0,
-  \end{cases} \label{eq: basisfunction_Q1} \\
-  C^1_j(x) &=
-  \begin{cases}
-    \left(\dfrac{x - x_{j-1}}{x_j - x_{j-1}}\right)^2\left(3 - 2\dfrac{x - x_{j-1}}{x_j - x_{j-1}}\right) 	\qquad &\text{for}~ x_{j-1} \leq x \leq x_j,	\\
-    \left(\dfrac{x_{j+1} - x}{x_{j+1} - x_j}\right)^2\left(3 - 2\dfrac{x_{j+1} - x}{x_{j+1} - x_j}\right) 	\qquad &\text{for}~ x_j \leq x \leq x_{j+1},	\\
-    0	\qquad &\text{elsewhere},
-  \end{cases}	\label{eq: basisfunction_C1} \\
-  Q^2_j(x) &=
-  \begin{cases}
-    \dfrac{\left(2x - x_j - x_{j-1}\right)\left(x - x_{j-1}\right)}{\left(x_j - x_{j-1}\right)^2},	\\
-    \dfrac{\left(2x - x_{j+1} - x_j\right)\left(x - x_{j+1}\right)}{\left(x_{j+1} - x_j\right)^2}, 	\\
-    0,
-  \end{cases} \label{eq: basisfunction_Q2} \\
-  C^2_j(x) &=
-  \begin{cases}
-    \left(x - x_j\right)\left(\dfrac{x - x_{j-1}}{x_j - x_{j-1}}\right)^2	\qquad &\text{for}~ x_{j-1} \leq x \leq x_j,	\\
-    \left(x - x_j\right)\left(\dfrac{x_{j+1} - x}{x_{j+1} - x_j}\right)^2	\qquad &\text{for}~ x_j \leq x \leq x_{j+1},	\\
-    0	\qquad &\text{elsewhere},
-  \end{cases} \label{eq: basisfunction_C2}
-\end{align}
-\endgroup
-as in, for example, \citet{kerner1998} and \citet{book_MHD}, and are shown graphically along with their derivatives in Figure \ref{fig: basisfunctions}. Because we have two basis functions per subdomain, this allows for the approximation of both the original variable and its derivative by differentiation of Equation \eqref{eq: linear_combo}.
+We now proceed by rewriting our original set of equations \eqref{eq: full_continuity}--\eqref{eq: full_induction3} into weak Galerkin form. Each of the eight equations is multiplied by an appropriate element of the chosen basis (weight function), denoted by $h_j$, and integrate over the relevant domain. Because there are eight unknowns in our eigenvalue system, together with two basis functions and $N$ subdomains, this implies that the final matrix eigenvalue problem will have $16 N$ equations, resulting in a $16N \times 16N$ matrix. By extension, it becomes clear that using basis functions of even higher order will increase the size of this eigensystem considerably.
 
-\subsubsection{Variational analysis and Galerkin form}
-Before proceeding with our analysis we hold a small mathematical interlude on variational analysis, and how writing the problem in weak Galerkin form is quite convenient in our current formalism.
-A thorough discussion is given in \citet[Chapter 15]{book_MHD}; here we follow a similar reasoning and highlight the key ideas behind the weak formalism. Consider a given inhomogeneous differential equation of the form
+As an example we can write a part of the momentum-1 equation in weak Galerkin form. Because it is one of the simpler expressions and excellent as a short example, we consider the $T_1$ component on the right-hand side of Equation \eqref{eq: full_momentum1}, that is,
 \begin{equation}
-  -\bigl[p(u_1)R(u_1)'\bigr]' + q(u_1)R(u_1) = f(u_1),
+  \omega \rho_0 v_1 = \eps \left(\frac{\rho_0 T_1}{\eps}\right)'.
 \end{equation}
-on an interval $u_1 \in [0, 1]$ for given (known) functions $p(u_1), q(u_1)$ and $f(u_1)$, where the prime denotes the derivative with respect to $u_1$ and we assume the first and second order derivatives of $R(u_1)$ exist on $[0, 1]$.
-If we were to solve the above equation on a domain discretised in $N$ subdomains, we would obtain an approximate solution $\hat{R}(u_1)$. The quality of this solution can be estimated by calculating the \emph{residual} $\hat{r}_s^N(u_1)$, that is, the difference between the analytical and approximate solution, which can be quantified without actually knowing the actual solution by straightforwardly filling in $\hat{R}$ into the original differential equation:
-\begin{equation} \label{eq: residual}
-  \hat{r}_s^N(u_1) \equiv -\bigl[p(u_1)\hat{R}(u_1)'\bigr]' + q(u_1)\hat{R}(u_1) - f(u_1).
+These particular terms correspond to element $(2, 5)$ in the matrices. This ``number'' links to the indices of the state vector $\statevec$, because the momentum-1 equation is associated with $v_1$, or index $2$ in the state vector \eqref{eq: statevector}, and the $T_1$ component is associated with index $5$. As explained earlier we multiply the above equation with a weight function, and since we are using the Galerkin form this weight function is equal to the basis function, in this case the one associated with $v_1$ (i.e. a cubic polynomial), with notation $\hj{2}$. In the finite element representation adopted here, the $(v_1, T_1)$ contribution can be written as
+\begin{equation} \label{eq: example_rho1_T1}
+  \sum_{j=0}^N\omega \int \rho_0 \hj{2}\hk{2}du_1 =
+  \sum_{j=0}^N\int \eps \hj{2}\left(\frac{\rho_0}{\eps}\hk{5}\right)'du_1,
 \end{equation}
-This residual should be as small as possible, and the solution $\hat{R}(u_1)$ is said to converge if the residual vanishes in the limit $N \rightarrow \infty$ everywhere on the domain; or, in other words, when the approximate solution is equal to the exact solution.
+The $u_1$ dependence of the equilibrium density $\rho_0$ and basis functions $h^2$ and $h^5$ is implied. In this case, $h^2$ is cubic, because $v_1$ is associated with a cubic basis function; analogously $h^5$ is quadratic ($T_1$). The integrals are called \emph{matrix elements}, since the indices translate to the actual position in the final matrices of the eigenvalue problem. We will discuss this a little further in this section.
 
-In a finite element analysis this solution $\hat{R}(u_1)$ is given by a linear combination of basis functions as given by Equation \eqref{eq: linear_combo}, but to keep things simple here we will stick with a single (linear) basis function $h_i$ such that
-\begin{equation} \label{eq: linear_combo_R}
-  R(u_1) \approx \hat{R}(u_1) = \sum_{i = 0}^N r_i h_i(u_1),
-\end{equation}
-where now $r_i$ are the coefficients in the linear combination. Writing the original differential equation in its integral form
+The matrix element corresponding to the left-hand side of Equation \eqref{eq: example_rho1_T1} can therefore be written as
 \begin{equation}
-  \int_0^1\Bigl(-\bigl[p(u_1)R(u_1)'\bigr]' + q(u_1)R(u_1) - f(u_1)\Bigr)du_1 = 0,
+  \bmat_{jk}(2, 2) = \int \rho_0 \hj{2}\hk{2}du_1,
 \end{equation}
-then we can obtain a linear system of algebraic equations for the coefficients $\{r_i\}$ by requiring that the weighted integrals of the residual \eqref{eq: residual} vanish for the approximate solution, that is,
-\begin{equation} \label{eq: galerkin_form}
-  \int_0^1h_l\Biggl(-\bigl[p(u_1)\hat{R}(u_1)'\bigr]' + q(u_1)\hat{R}(u_1) - f(u_1)\Biggr) = 0,
+For the other side of the equal sign we can write the matrix element as
+\begin{equation} \label{eq: amat_rho1_T1}
+  \begin{aligned}
+    \amat_{jk}(2, 5) &=
+      \int \eps \hj{2}\left(\frac{\rho_0}{\eps}\hk{5}\right)'du_1, \\
+      &\qquad \begin{cases}
+        \text{u} = \eps\hj{2} \rightarrow \text{du} = \left(\eps'\hj{2} + \eps\dhj{2}\right)\text{d}u_1 \\
+        \text{dv} = \left(\dfrac{\rho_0}{\eps}\hk{5}\right)'\text{d}u_1
+          \rightarrow \text{v} = \dfrac{\rho_0}{\eps}\hk{5}
+      \end{cases} \\
+      &= \bigl.\rho_0 \hj{2}\hk{5}\bigr|_\Omega
+        - \int \frac{\eps'}{\eps}\rho_0 \hj{2}\hk{5}du_1
+        - \int \rho_0 \dhj{2}\hk{5}du_1,
+  \end{aligned}
 \end{equation}
-where the weight functions $w_l$ are taken equal to the basis functions; the function $\hat{R}$ is given by Equation \eqref{eq: linear_combo_R}. The above expression is called the \emph{Galerkin method}, where the original differential equation is now rewritten as a linear system of $N + 1$ algebraic equations for $N + 1$ unknowns $\{R_i\}_{i = 0, 1, \ldots N}$.
+where we applied integration by parts using the standard notation ``u'' and ``v'' to denote the parts, and the first term has to be evaluated over the domain $\Omega$.
 
-\subsubsection{The MHD equations in weak Galerkin form}
-Using the Galerkin form we just discussed we can turn our original set of equations \eqref{eq: full_continuity}--\eqref{eq: full_induction3} algebraic in nature, by writing the eigenvalue problem as a set of integral equations. Each of the eight equations is multiplied by an appropriate element of the chosen basis, denoted by $h_j$, and integrated over the relevant domain. Mathematically this can be written as
-\begin{equation}
-  \int_\Omega\Bigl(\amat \statevec - \omega \bmat \statevec\Bigr)h_j du_1 = 0,
-\end{equation}
-which will yield an equation similar to \eqref{eq: galerkin_form}. However, the matrix $\amat$ contains second-order derivatives with respect to $u_1$. With the problem written in the above form we can reduce these to derivatives of first order, thereby simplifying the integrals. This is achieved by performing integration by parts, which introduces additional surface terms that have to be evaluated at the boundaries. This integration by parts allows for solutions that are continuously differentiable to a lower degree (and hence less ``smooth''), and this is called the \emph{weak Galerkin formulation} of the problem. The surface terms that are introduced by integration by parts can in turn be exploited to enforce boundary conditions. Because there are eight unknowns in our eigenvalue system, together with two basis functions and $N$ subdomains, this implies that the final matrix eigenvalue problem will have $16 N$ equations, resulting in a $16N \times 16N$ matrix. By extension, it becomes clear that using basis functions of even higher order will increase the size of this eigensystem considerably.
-
-
-
-
-
+The same strategy is applied to all equations in the linear system, from which it follows that $\bmat$ will only have equal-number matrix elements (i.e. only $(1, 1)$, $(2, 2)$, etc.), implying that $\bmat$ is fully symmetric and real. The $\amat$-matrix on the other hand, will have cross-term elements such that it is, in general, not symmetric. Furthermore, $\amat$ might be complex, depending on the included physical effects. Terms that contain derivatives of the state vector components, as for example $(v_1, T_1)$, are integrated by parts.
 
 \subsubsection{Integrals through Gaussian quadrature}
+When all the matrix elements have been calculated and the entire system is rewritten in the weak Galerkin form, then all elements of course contain one or more integrals that still have to be calculated. This is the next ``obstacle'' in our mathematical treatment: because the coefficient functions are in general quite complicated expressions depending on $u_1$ we have to suppose that the solutions of those integrals are not known, and can only be calculated analytically for very simple equilibrium expressions. A naive first idea could be to make use of Riemann sums, where we approximate a given integral by a finite sum of small regions, and for sufficiently small partitions (i.e. a large number of summation terms), this sum will asymptotically converge to the actual solution. However, we are dealing with \emph{a lot} of integrals, where the actual number strongly scales with the finite element domain discretisation. While Riemann sums may sound like a good idea, they are quite cumbersome and slow and will probably have a major performance impact on the assembly of the matrices.
+
+A much better idea would be Gaussian quadrature, which is...
 
 % \subsection{System assembly}
 
