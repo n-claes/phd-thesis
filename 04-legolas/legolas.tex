@@ -399,7 +399,7 @@ and an additional term $-\rho_0 \nabla \Phi_1$ is added on the right hand side o
 
 The above formalism is included for completeness, although we will not use selfgravity in any of the applications in this thesis. The gravitational potential and Poisson equation will be omitted from the equations that follow and we will stick to the Cowling approximation; however, the corresponding matrix elements will be given in the Appendices.
 
-\section{Emergence of the matrix eigenvalue problem} \label{sec: eigenvalue problem}
+\section{Obtaining the eigenvalue problem} \label{sec: eigenvalue problem}
 In this Section we will go in-depth on how the eigenvalue problem arises from the above set of linearised equations.
 The main idea here is similar to what we did in Chapter \ref{ch: spectroscopy}: now that we have expressions for the linearised equations we can perform a Fourier analysis in the ignorable coordinates, which will give us an eigenvalue problem that can be solved to obtain all modes in the system under consideration. At first glance this may look quite straightforward to do; however, as will become clear in the sections that follow, every step in this process introduces numerical and mathematical challenges that have to be overcome first.
 
@@ -559,14 +559,14 @@ The final set of Fourier-analysed linearised equations is given below, where the
       \frac{T_0'}{B_0^2}\left(\kappapfK{0} + \dkappaperpdB\right)
       \Biggl[\frac{iB_{01}}{\eps}\left(k_3 a_2 - k_2 a_3\right) + B_{02}a_3' \Biggr.\Biggr. \\
     &
-      \Biggl. \Biggl. - \frac{B_{03}}{\eps}a_2' - \Gmin a_1\Biggr]\Biggr\}
+      \Biggl. \Biggl. - \frac{B_{03}}{\eps}a_2' + \Gmin a_1\Biggr]\Biggr\}
     - i \gmone \left[
       \kappapfK{0}\Fplus^2
       + \skappaperp{0}\left(\frac{k_2^2}{\eps^2} + k_3^2\right)
     \right] T_1 \\
     &
     + \gmone \kappapfK{0} \eps B_{01} T_0' \left[
-        \frac{2 a_1}{B_0^2}\Fplus\Gmin - \frac{a_2'}{\eps}\left(k_3 - \frac{2 B_{03}}{B_0^2}\Fplus\right)
+        -\frac{2 a_1}{B_0^2}\Fplus\Gmin - \frac{a_2'}{\eps}\left(k_3 - \frac{2 B_{03}}{B_0^2}\Fplus\right)
         + a_3'\left(\frac{k_2}{\eps} - \frac{2 B_{02}}{B_0^2}\Fplus\right)
     \right] \\
     &
@@ -638,7 +638,7 @@ Before we can solve for the eigenfrequencies $\omega$, we first have to rewrite 
 
 
 \subsection{Finite element analysis} \label{ss: finite_elements}
-The system of Equations \eqref{eq: full_continuity}--\eqref{eq: full_induction3} actually define a generalised complex eigenvalue problem in $\omega$ of the form $\amat \statevec = \omega \bmat \statevec$ in which the state vector $\statevec$ is given by
+The system of Equations \eqref{eq: full_continuity}--\eqref{eq: full_induction3} actually defines a generalised complex eigenvalue problem in $\omega$ of the form $\amat \statevec = \omega \bmat \statevec$ in which the state vector $\statevec$ is given by
 \begin{equation} \label{eq: statevector}
   \statevec = \left(\rho_1, v_1, v_2, v_3, T_1, a_1, a_2, a_3\right)
    = \left(x^1, x^2, x^3, x^4, x^5, x^6, x^7, x^8\right),
@@ -684,7 +684,7 @@ In principle one is free to choose any weight function; the special case where $
 \end{equation}
 with the index $k$ ranging from 0 to $N$. The first term in this equation can be ``simplified'' further by performing integration by parts, which will also introduce a non-integral term that should be evaluated in the domain boundaries. These terms can in turn be exploited further, and we will come back to them when we discuss the boundary conditions. The formulation after applying integration by parts is called the \emph{weak Galerkin formalism}, and will be the main mathematical principle in our numerical approach. A convenient consequence of this formalism is that we are able to rewrite all second-order derivatives into combinations of integrals containing first-order derivatives and surface terms.
 
-\subsubsection{The MHD equations in weak Galerkin form}
+\subsection{The MHD equations in weak Galerkin form}
 The above implies that if we rewrite our Fourier-analysed MHD equations using the Galerkin method they will change into a system of algebraic equations, which is eventually what we are aiming at. Noting that {\legolas} uses a combination of quadratic and cubic basis functions, we can approximate a state variable $x^i$ (with $i$ the state vector index) for a domain divided into $N$ subdomains (nodes) by
 \begin{equation} \label{eq: linear_combo}
   x^i(u_1) \approx \sum_{j=0}^N \Bigl(H_j^1(u_1)x_{j1}^i + H_j^2(u_1)x_{j2}^i\Bigr),
@@ -778,11 +778,110 @@ where we applied integration by parts using the standard notation ``u'' and ``v'
 The same strategy is applied to all equations in the linear system, from which it follows that $\bmat$ will only have equal-number matrix elements (i.e. only $(1, 1)$, $(2, 2)$, etc.), implying that $\bmat$ is fully symmetric and real. The $\amat$-matrix on the other hand, will have cross-term elements such that it is, in general, not symmetric. Furthermore, $\amat$ might be complex, depending on the included physical effects. Terms that contain derivatives of the state vector components, as for example $(v_1, T_1)$, are integrated by parts.
 
 \subsubsection{Integrals through Gaussian quadrature}
-When all the matrix elements have been calculated and the entire system is rewritten in the weak Galerkin form, then all elements of course contain one or more integrals that still have to be calculated. This is the next ``obstacle'' in our mathematical treatment: because the coefficient functions are in general quite complicated expressions depending on $u_1$ we have to suppose that the solutions of those integrals are not known, and can only be calculated analytically for very simple equilibrium expressions. A naive first idea could be to make use of Riemann sums, where we approximate a given integral by a finite sum of small regions, and for sufficiently small partitions (i.e. a large number of summation terms), this sum will asymptotically converge to the actual solution. However, we are dealing with \emph{a lot} of integrals, where the actual number strongly scales with the finite element domain discretisation. While Riemann sums may sound like a good idea, they are quite cumbersome and slow and will probably have a major performance impact on the assembly of the matrices.
+When all the matrix elements have been calculated and the entire system is rewritten in the weak Galerkin form, then all elements of course contain one or more integrals that still have to be calculated. This is the next ``obstacle'' in our mathematical treatment: because the coefficient functions are in general quite complicated expressions depending on $u_1$ we have to suppose that the solutions of those integrals are not known, and can only be calculated analytically for very simple equilibrium expressions. A naive first idea could be to make use of Riemann sums, where we approximate a given integral by a finite sum of small regions, and for sufficiently small partitions (i.e. a large number of summation terms), this sum will asymptotically converge to the actual solution. However, we are dealing with \emph{a lot} of integrals, the number of which strongly scales with the finite element domain discretisation. While Riemann sums may sound like a good idea, they are quite cumbersome, slow, and will probably have a major performance impact on the assembly of the matrices.
 
-A much better idea would be Gaussian quadrature, which is...
+A much better idea would be Gaussian quadrature, which essentially approximates the integral with a sum as well, but instead of area partitions it relies on Gaussian weights and nodes originating from the roots of the n-th degree Legendre polynomial; this allows for an \emph{exact} integration of degree $2n - 1$ polynomials \citep{book_MHD}. Additionally, it uses far fewer nodes compared to Riemann sums and is hence much more efficient both in terms of accuracy and calculations needed to achieve a solution due to a clever choice of weighting scheme. As Gaussian quadrature formalisms can be found in any standard textbook on numerical analysis, we will not go into much detail regarding the mathematical background and convergence properties. {\legolas} uses a four-point Gaussian quadrature to numerically approximate the integrals, and as such an integral in the interval $[x_{j-1}, x_j]$ can be expressed as
+\begin{equation}
+  \int_{x_{j-1}}^{x_j} f(u_1)du_1 \approx
+    \frac{1}{2}\left(x_j - x_{j-1}\right)\sum_{i=1}^4 w_i f\left(
+     \frac{1}{2}\left(x_j - x_{j-1}\right)\xi_i + \frac{1}{2}\left(x_{j-1} + x_j\right)
+    \right),
+\end{equation}
+where $\xi_i$ and $w_i$ are the evaluation points (nodes) and weights of the 4-point Gaussian quadrature, given by
+\begin{equation} \label{eq: gaussian_nodes}
+  \begin{aligned}
+    \left(\xi_i, w_i\right) &= \left(
+      \pm \sqrt{\frac{3}{7} - \frac{2}{7}\sqrt{\frac{6}{5}}}, \frac{18 + \sqrt{30}}{36}
+    \right)
+    \approx (\pm 0.339981, 0.652145), \\
+    \left(\xi_i, w_i\right) &= \left(
+      \pm \sqrt{\frac{3}{7} + \frac{2}{7}\sqrt{\frac{6}{5}}}, \frac{18 - \sqrt{30}}{36}
+    \right)
+    \approx (\pm 0.861136, 0.347854).
+  \end{aligned}
+\end{equation}
+The function $f$ denotes the integral coefficients, which are essentially the equilibrium quantities and basis functions evaluated in the various evaluation points.
 
-% \subsection{System assembly}
+\section{Assembly of the system}
+Armed with the MHD equations in weak Galerkin form and detailed knowledge on the finite element treatment and how to approach the integrals, all that is left is putting the pieces together into a consistent formalism. The main goal here is to eventually obtain an eigenvalue problem in which both matrices purely consist of numbers, such that they can be passed on to various linear algebra solvers. At this point we have all matrix elements calculated, such that there are three steps remaining in the formalism:
+\begin{itemize}
+  \item[i)] \textbf{Matrix assembly}: Translate the matrix elements into actual positions within the matrices and evaluate the various integrals at the same time, thereby assembling the actual matrices $\amat$ and $\bmat$. Special attention must be given to how the finite element representation, matrix elements and locations in the matrices are interconnected.
+  \item[ii)] \textbf{Boundary conditions}: We still have to specify proper boundary conditions and take care of the surface terms introduced through integration by parts.
+  \item[iii)] \textbf{Eigenfunction assembly}: When the eigenvalue problem is solved, the eigenvectors are obtained within the finite element formalism and still have to be transformed to ``proper'' eigenfunctions.
+\end{itemize}
+
+\subsubsection{Matrix assembly}
+The actual assembly of both matrices $\amat$ and $\bmat$ in {\legolas} is done by sequential iteration over the grid points. From Equations \eqref{eq: basisfunction_Q1}--\eqref{eq: basisfunction_C2}, we see that the finite elements have a localised nature around every grid point $j$, meaning that only the elements associated with a certain region (that is, the grid point $j$ itself and its neighbours $j - 1$ and $j + 1$) yield a nonzero contribution. However, it is actually easier implementation-wise to loop over the elements in the interval $[x_{j-1}, x_j]$ instead of over those in $[x_{j-1}, x_{j+1}]$, because then the actual integration of the matrix elements can be done in the same way, independent of whether the basis functions are cubic or quadratic. If only the interval $[x_{j-1}, x_j]$ is considered, we end up with 16 possible combinations of the basis functions for every grid point. This translates into a $4 \times 4$ submatrix for every variable, where every one of the 16 elements corresponds to one specific combination of the shape functions. As there are eight variables in the state vector, this implies a $32 \times 32$ matrix block for every grid point, hereafter dubbed a ``quadblock'' as it consists of four $16 \times 16$ blocks (hereafter called ``subblocks''). Every one of those subblocks inside a quadblock corresponds to a quarter section of the aforementioned submatrix, which is a $2 \times 2$ block in every subblock. Hence, to recap, a $2 \times 2$ block times eight variables represents a $16 \times 16$ subblock, of which four combined form a $32 \times 32$ quadblock for every grid point. Note that for the case of self-gravity we have nine equations, hence an $18 \times 18$ subblock and a $36 \times 36$ quadblock.
+
+The Gaussian quadrature used to numerically approximate the integrals actually implies that every grid interval
+$[x_{j-1}, x_j]$ is subdivided into four points, meaning that the equilibrium expressions are probed using $4(N - 1)$ points rather than $N$ points. The way the matrices are then assembled is thus done on a double-loop basis, where the outer loop iterates over the intervals $[x_{j-1}, x_j]$ and the inner loop iterates over the four Gaussian nodes. This inner loop calculates the basis functions and matrix elements at every point, then multiplies the coefficients with the Gaussian weights and finally adds them all together in a consistent manner. Because every quadblock corresponds to the interval $[x_{j-1}, x_j]$, we still have to account for the contribution of the $x_{j+1}$ grid point. This is done by partially overlapping the quadblock in the next grid point with the one from the previous grid point.
+
+Figure \ref{fig: matrix_assembly} shows a visual representation of the structure and assembly process for the $\amat$-matrix, only six grid points were used for the purpose of illustration. Panel a shows the general matrix, highlighting the block-tridiagonal structure. The dashed grey lines denote the $32 \times 32$ quadblocks of the matrix, and every dot represents a nonzero value. In total, five quadblocks can be distinguished for six grid points, one for every grid interval. Panel b shows a zoom-in of the quadblock corresponding to the second grid interval as annotated on the left panel, where it can be seen that the top-left corner of this quadblock overlaps with the bottom-right corner of the previous quadblock corresponding to the first grid interval. A single quadblock is further divided into four subblocks, with the location of the different state variables annotated on Panel c of Figure \ref{fig: matrix_assembly}.
+The matrix element $\amat(2, 5)$ is highlighted in every subblock, which corresponds to the $(v_1, T_1)$ contribution, which are cubic $(v_1)$ and quadratic $(T_1)$ variables. The $2 \times 2$ blocks in the top-left corner of the quadblock corresponds to the top-left $2 \times 2$ corner of the right panel, as indicated by the background colours. Panel c shows the various (16) combinations of the regular basis functions for a (cubic, quadratic) contribution, where the blue curve corresponds to the cubic basis functions and the orange curves to the quadratic ones. It should be noted that Panel c only shows one specific case, that is, the regular $\hj{2}\hk{5}$ terms of the matrix element. If, for example, the $\hj{2}\hk{7}$ element is calculated (which would be an $a_2$ term in the momentum-1 equation), the quadratic basis functions have to be replaced by their cubic counterparts, because $a_2$ is also a cubic variable. A similar reasoning can be made for the other matrix elements. \vfill
+
+\begin{figure}[t!]
+  \centering
+  \includegraphics[width=\textwidth]{matrix_assembly.png}
+  \caption{
+    General assembly and structure of the finite element (complex) $\amat$ matrix. Panel \textbf{a}: example of a full matrix for six grid points, showing the block-tridiagonal structure where dots represent nonzero values. Panel \textbf{b} zooms in on one quadblock, showing the dependence of the different subblock positions with respect to the variables. The $2 \times 2$ blocks corresponding to (cubic, quadratic) element $(2, 5)$ are highlighted.
+    Panel \textbf{c}: $2 \times 2$ block assembly for a general regular (cubic, quadratic) matrix element. Cubic elements are shown in blue, quadratic ones in orange. The dotted gray line denotes zero.
+  }
+  \label{fig: matrix_assembly}
+\end{figure}
+
+The term $pH_j^{\alpha\beta}H_j^{\alpha\beta}$ at the top of every subpanel on Panel c denotes which combination of the basis functions should be used, where $p$ stands for the integral coefficients. The exponent $\alpha\beta$ refers to the expressions for the basis functions, where $\alpha = 1$ stands for $Q_j^1$ or $C_j^1$, that is, Equations \eqref{eq: basisfunction_Q1} and \eqref{eq: basisfunction_C1}; while $\alpha = 2$ stands for $Q_j^2$ or $C_j^2$, hence Equations \eqref{eq: basisfunction_Q2} and \eqref{eq: basisfunction_C2}, depending on the variable under consideration (quadratic or cubic). The parameter $\beta$ stands for which part of the basis function should be taken: $\beta = 1$ means the first equation in cases, while $\beta = 2$ means the second one. As an example, we can look at $H_j^{12}H_j^{21}$: because $\amat(2, 5)$ represents a cubic and quadratic variable, this translates into $C_j^{12}Q_j^{21}$. For the cubic part, we therefore take the second equation of $C_j^1$, corresponding to $x_j \leq x \leq x_{j + 1}$. The quadratic part on the other hand is given by $Q_j^{21}$, which means that we take the first equation of $Q_j^2$, corresponding to $x_{j-1} \leq x \leq x_j$. This process is repeated for all matrix elements.
+
+{\legolas} implements ``matrix splitting'', which means that every physical contribution is treated as a separate matrix. This is mainly done for numerical reasons: the code will simply avoid calculating matrix elements corresponding to physical terms that were disabled, thereby avoiding unnecessary calculations. As every physical contribution has its own matrix, the eigenvalue problem can be written as
+\begin{equation}
+	\omega \Bigl[
+	\underbrace{\bmat}_{\substack{\text{\tiny regular} \\ \text{\tiny terms}}}
+	+ \underbrace{\bmathall}_{\substack{\text{\tiny Hall} \\ \text{\tiny terms}}}
+	\Bigr]\statevec
+	= \Bigl[
+		\underbrace{\amat}_{\substack{\text{\tiny regular} \\ \text{\tiny terms}}}
+		+ \underbrace{\flowmat}_{\substack{\text{\tiny flow} \\ \text{\tiny terms}}}
+		+ \underbrace{\etamat}_{\substack{\text{\tiny resistive} \\ \text{\tiny terms}}}
+		+ \underbrace{\viscmat}_{\substack{\text{\tiny viscous} \\ \text{\tiny terms}}}
+		+ \underbrace{\coolmat}_{\substack{\text{\tiny cooling} \\ \text{\tiny terms}}}
+		+ \underbrace{\condmat}_{\substack{\text{\tiny conductive} \\ \text{\tiny terms}}}
+		+ \underbrace{\hallmat}_{\substack{\text{\tiny Hall} \\ \text{\tiny terms}}}
+	\Bigr]\statevec,
+\end{equation}
+but for all intents and purposes we will simply call the left- and right-hand side of this equation the $\bmat$ and $\amat$-matrices, respectively.
+
+
+\subsubsection{Boundary conditions}
+The system of differential Equations \eqref{eq: full_continuity}--\eqref{eq: full_induction3} still has to be complemented by a set of appropriate boundary conditions on both sides of the domain. For a Cartesian geometry, we look at a domain enclosed by two conducting walls. Clearly, the velocity component perpendicular to the walls has to be zero because there cannot be any propagation into a solid boundary. Mathematically, this translates into $\bv \cdot \unit{n} = 0$, where $\unit{n}$ represents the normal vector to the wall. Following the same reasoning, we also require that $\bb \cdot \unit{n} = 0$, so in terms of a vector potential, this implies $\unit{n} \times \ba = 0$. Hence, applying this to the set of linearised equations means that for the Cartesian case $v_1, a_2$, and $a_3$, all have to be zero on the boundaries. Furthermore, because we are dealing with a perfectly conducting wall, one has to take care when thermal conduction is included. In that case, the rigid wall directly influences the temperature because it acts as an energy reservoir essentially eliminating the temperature perturbation. Hence, if and only if perpendicular thermal conduction is taken into account, we have to supplement the boundary conditions by an additional conditions $T_1 = 0$ at the boundary. In theory there is a second possibility, which is treating the wall as a perfect insulator instead of a perfect conductor. In that case, there is no heat flux, which translates to the boundary condition $T_1' = 0$ instead of $T_1 = 0$. For now, we only consider the latter condition, that is, the one corresponding to a perfectly conducting wall.
+
+In cylindrical geometry, we have the exact same boundary conditions as for the Cartesian case at the outer wall $r = R$, or at the outer edge of the accretion disk at $R$. The same is true at the inner disk edge, but for a flux tube extending to $r = 0$ we have to take the regularity conditions into account when treating the cylinder axis $r = 0$, which comes down to the fact that $r v_r$ should go to zero when approaching $r = 0$. Looking back at the transformations \eqref{eq: transformation} we applied, it follows that this condition is equivalent to $\widetilde{v_1} = 0$. Analogously, the same holds true for $a_2$ and $a_3$ such that these conditions are identical to the ones we applied for the Cartesian case, which is quite convenient implementation-wise. We again have to consider an additional condition if perpendicular thermal conduction is taken into account, because then $r T_1 = 0$ should also hold on the cylinder axis, which, similar to $v_1$, translates into $\widetilde{T_1} = 0$ at $r = 0$.
+
+In the case of confinement by a perfectly conducting wall, we thus have straightforward boundary conditions, that is, $v_1 = 0, a_2 = 0, a_3 = 0$, and $T_1 = 0$ for both the Cartesian and cylindrical geometries on both sides (dropping the tildes). The latter boundary condition should only be taken into account if and only if perpendicular thermal conduction is included. These conditions are called \emph{essential boundary conditions}, meaning they \emph{have} to be satisfied by the system and should thus be explicitly handled.
+
+The integration by parts resulting from the weak Galerkin formulation gives rise to additional surface terms, which should also be evaluated at the boundaries. These kinds of conditions are called \emph{natural boundary conditions}, as they emerge in a natural way by reducing second-order derivatives to first-order derivatives when rewriting the eigenvalue problem. For simplicity we consider $B_{01} = v_{01} = 0$. In this case the additional surface terms for the momentum equation can be written as
+
+\begin{equation}
+  \begin{aligned}
+    S_{v_1} &= \left[
+      T_0 \hj{2}\hk{1}
+      + \rho_0\hj{2}\hk{5}
+      - \eps \Gmin \hj{2}\hk{6}
+      + B_{03}\hj{2}\dhk{7}
+      - \eps B_{02}\hj{2}\dhk{8}
+    \right]_{\partial \Omega} \\
+    &= v_1 \Bigl[
+      T_0 \rho_1
+      + \rho_0 T_1
+      - \eps \Gmin a_1
+      + B_{03}a_2'
+      - \eps B_{02}a_3'
+    \Bigr]_{\partial \Omega},
+  \end{aligned}
+\end{equation}
+where the number in the superscript on $h_{j/k}$ denotes the index of the variable in the state vector $\statevec$.
+The subscript $\partial \Omega$ means that these terms should be evaluated at the left or inner edge, as well as at the right or outer edge. In a similar manner, the surface terms for the energy and induction equations are given by
+
+
+
 
 
 

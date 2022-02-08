@@ -57,10 +57,17 @@
 % matrices
 \newcommand{\statevec}{\boldsymbol{X}}
 \nomenclature{$\statevec$}{notation for the state vector in an eigenvalue problem}
-\newcommand{\amat}{\mathcal{A}}
+\newcommand{\amat}{\mathbf{A}}
 \nomenclature{$\amat$}{the A-matrix in a standard eigenvalue problem $\amat\statevec = \omega\statevec$}
-\newcommand{\bmat}{\mathcal{B}}
+\newcommand{\bmat}{\mathbf{B}}
 \nomenclature{$\bmat$}{the B-matrix in a general eigenvalue problem $\amat\statevec = \omega\bmat\statevec$}
+\newcommand{\etamat}{\mathbf{R}}
+\newcommand{\flowmat}{\mathbf{F}}
+\newcommand{\viscmat}{\mathbf{\Sigma}}
+\newcommand{\coolmat}{\mathbf{\Lambda}}
+\newcommand{\condmat}{\mathbf{K}}
+\newcommand{\hallmat}{\mathbf{H}}
+\newcommand{\bmathall}{\mathbf{B}_\hallmat}
 
 % shortcuts
 \newcommand{\icomplex}{\text{i}}
@@ -108,12 +115,12 @@
   \rho_0^2\dHLFrho - \left(\kappapara \kpara^2 + \rho_0 \dHLFT\right)\left(\alfvenspeed^2 + \isosoundspeed^2\right)
 }
 \newcommand{\Fplusfull}{\frac{k_2 B_{02}}{\eps} + k_3B_{03}}
-\newcommand{\Gminfull}{\frac{k_2 B_{03}}{\eps} - k_2B_{02}}
+\newcommand{\Gminfull}{\frac{k_2 B_{03}}{\eps} - k_3B_{02}}
 \newcommand{\Vplusfull}{\frac{k_2 v_{02}}{\eps} + k_3v_{03}}
-\newcommand{\hj}[1]{~h_j^{#1}}
-\newcommand{\hk}[1]{h_k^{#1}~}
-\newcommand{\dhj}[1]{~\dfrac{dh_j^{#1}}{dr}}
-\newcommand{\dhk}[1]{\dfrac{dh_k^{#1}}{dr}~}
+\newcommand{\hj}[1]{h_j^{#1}}
+\newcommand{\hk}[1]{h_k^{#1}}
+\newcommand{\dhj}[1]{\dfrac{dh_j^{#1}}{dr}}
+\newcommand{\dhk}[1]{\dfrac{dh_k^{#1}}{dr}}
 
 
 % text shortcuts
