@@ -22,6 +22,10 @@ Frobenius
 Galerkin
 Gaussians
 gratia
+gravito
+Gravito
+gridpoints
+hbox
 helio
 Hermite
 isocontours
@@ -35,6 +39,7 @@ magnetohydrodynamics
 magnetorotational
 magnetosonic
 magnetostatic
+magnetothermal
 microturbulent
 nonadiabatic
 nonideal
@@ -59,7 +64,11 @@ subblock
 subblocks
 submatrix
 subpanel
+subspectra
+Suydam
 timestep
 tokamak
 tridiagonal
 uniturbulence
+unmagnetised
+wavenumber
