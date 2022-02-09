@@ -345,6 +345,8 @@ $v_{01} \neq 0$ and incompressible if $v_{01} = 0$. It should be noted that also
   \end{aligned}
 \end{equation}
 
+\begingroup
+\allowdisplaybreaks
 \begin{equation} \label{eq: linearised_energy}
   \begin{aligned}
     \rho_0\frac{\partial T_1}{\partial t} =&
@@ -374,6 +376,7 @@ $v_{01} \neq 0$ and incompressible if $v_{01} = 0$. It should be noted that also
       + \gmone \frac{d\eta}{dT}T_1\left(\nabla \times \bb_0\right)^2, \\
   \end{aligned}
 \end{equation}
+\endgroup
 
 \begin{equation} \label{eq: linearised_induction}
   \frac{\partial \ba_1}{\partial t} =
@@ -529,38 +532,38 @@ The final set of Fourier-analysed linearised equations is given below, where the
   \begin{aligned}
     \omega\rho_0T_1 &=
     \gmone T_0 \rho_0 \left(k_2 v_2 + k_3 v_3 -  v_1'\right) - T_0'\rho_0 v_1
-    - i \eps \rho_0 v_{01} \left(\frac{T_1}{\eps}\right)' \\
+    - \icomplex \eps \rho_0 v_{01} \left(\frac{T_1}{\eps}\right)' \\
     &
-    - \frac{1}{\eps}i \gmone T_0 \left(\eps v_{01}\right)'\rho_1
-    + \rho_0 \left(\Vplus - i \gmone\frac{\left(\eps v_{01}\right)'}{\eps} \right) T_1 \\
+    - \frac{1}{\eps}\icomplex \gmone T_0 \left(\eps v_{01}\right)'\rho_1
+    + \rho_0 \left(\Vplus - \icomplex \gmone\frac{\left(\eps v_{01}\right)'}{\eps} \right) T_1 \\
     &
-    - i \gmone \dHLFT \rho_0 T_1  - i \gmone \left(\HLF_0 + \dHLFrho \rho_0\right) \rho_1 \\
+    - \icomplex \gmone \dHLFT \rho_0 T_1  - \icomplex \gmone \left(\HLF_0 + \dHLFrho \rho_0\right) \rho_1 \\
     &
-    + 2 i \gmone \eta_0 \Biggl\{ \Biggr.
+    + 2 \icomplex \gmone \eta_0 \Biggl\{ \Biggr.
       B_{03}'\left[-k_3^2a_2 + k_2 k_3 a_3 + \eps\left(-\frac{k_2}{\eps}a_1  + \frac{1}{\eps}a_2'\right)'\right] \\
     &
     + \frac{\left(B_{02} \eps\right)'}{\eps}\left[
       - \frac{k_2 k_3}{\eps}a_2 + \frac{k_2^2}{\eps} a_3 + \Bigl(\eps k_3 a_1 - \eps a_3'\Bigr)'
     \right] \Biggl. \Biggr\} \\
     &
-    + i \gmone \left\{
+    + \icomplex \gmone \left\{
       \left[B_{03}'^2 + \left(\frac{\left(B_{02} \eps\right)'}{\eps}\right)^2\right]\frac{d\eta}{dT} T_1
     + \eps B_{01}^2\left(\frac{2}{\eps}\kappapfK{0}T_1' - \frac{T_0'}{\eps B_0^2}\dkappaperpdrho \rho_1\right)'
     \right\} \\
     &
-    + i\gmone \eps B_{01}\left\{
+    + \icomplex \gmone \eps B_{01}\left\{
       \left[
-        2 i \kappapfK{0}\left(\frac{\eps'}{\eps}iB_{01} + \Fplus\right)
+        2 \icomplex \kappapfK{0}\left(\frac{\eps'}{\eps}\icomplex B_{01} + \Fplus\right)
         + \frac{B_{01}}{B_0^2}T_0'\left(\dkappaparadT - \dkappaperpdT\right)
       \right]\frac{T_1}{\eps}
     \right\}' \\
     &
-    + 2i\gmone \eps B_{01}^2\Biggl\{
+    + 2\icomplex \gmone \eps B_{01}^2\Biggl\{
       \frac{T_0'}{B_0^2}\left(\kappapfK{0} + \dkappaperpdB\right)
-      \Biggl[\frac{iB_{01}}{\eps}\left(k_3 a_2 - k_2 a_3\right) + B_{02}a_3' \Biggr.\Biggr. \\
+      \Biggl[\frac{\icomplex B_{01}}{\eps}\left(k_3 a_2 - k_2 a_3\right) + B_{02}a_3' \Biggr.\Biggr. \\
     &
       \Biggl. \Biggl. - \frac{B_{03}}{\eps}a_2' + \Gmin a_1\Biggr]\Biggr\}
-    - i \gmone \left[
+    - \icomplex \gmone \left[
       \kappapfK{0}\Fplus^2
       + \skappaperp{0}\left(\frac{k_2^2}{\eps^2} + k_3^2\right)
     \right] T_1 \\
@@ -570,14 +573,14 @@ The final set of Fourier-analysed linearised equations is given below, where the
         + a_3'\left(\frac{k_2}{\eps} - \frac{2 B_{02}}{B_0^2}\Fplus\right)
     \right] \\
     &
-    + i \gmone \kappapfK{0}T_0'\left(1 - 2\frac{B_{01}^2}{B_0^2}\right)\Fplus\left(k_3 a_2 - k_2 a_3\right)
+    + \icomplex \gmone \kappapfK{0}T_0'\left(1 - 2\frac{B_{01}^2}{B_0^2}\right)\Fplus\left(k_3 a_2 - k_2 a_3\right)
     - \gmone \kappapfK{1}\eps B_{01}T_0'\Fplus \\
     &
     - \gmone \kappapfK{0} \eps B_{01} \Fplus \left(\frac{T_1}{\eps}\right)'
     + \gmone B_{01}\left(T_0' \kappapfK{0}\right)' \left(k_3 a_2 - k_2 a_3\right) \\
     &
-    + i\gmone \left(T_0' \skappaperp{1}\eps\right)'
-    + i\gmone \left[\skappaperp{0}\eps \left(\frac{T_1}{\eps}\right)'\right]',
+    + \icomplex \gmone \left(T_0' \skappaperp{1}\eps\right)'
+    + \icomplex \gmone \left[\skappaperp{0}\eps \left(\frac{T_1}{\eps}\right)'\right]',
   \end{aligned}
 \end{equation}
 }
@@ -589,9 +592,9 @@ The final set of Fourier-analysed linearised equations is given below, where the
     \omega \eps a_1 &=
       B_{02}v_3 - \eps B_{03}v_2
       + \eps\Vplus a_1  - v_{02}a_2' - \eps v_{03}a_3'
-      - i \eta_0 \left(\frac{k_2^2}{\eps} + \eps k_3^2\right)a_1 \\
+      - \icomplex \eta_0 \left(\frac{k_2^2}{\eps} + \eps k_3^2\right)a_1 \\
       &\quad
-      + i \eta_0 \frac{k_2}{\eps} a_2' + i \eta_0 \eps k_3 a_3'
+      + \icomplex \eta_0 \frac{k_2}{\eps} a_2' + \icomplex \eta_0 \eps k_3 a_3'
   \end{aligned}
 \end{equation}
 }
@@ -601,13 +604,13 @@ The final set of Fourier-analysed linearised equations is given below, where the
 \begin{equation} \label{eq: full_induction2}
   \begin{aligned}
     \omega a_2 &=
-      i B_{01} v_3 - B_{03} v_1
-      + i k_2 v_{01}a_1 + k_3 v_{03} a_2 - i v_{01} a_2' - k_2 v_{03} a_3 \\
+    \icomplex B_{01} v_3 - B_{03} v_1
+      + \icomplex k_2 v_{01}a_1 + k_3 v_{03} a_2 - \icomplex v_{01} a_2' - k_2 v_{03} a_3 \\
       &\quad
-      + i B_{03}' \frac{d\eta}{dT} T_1
-      - i \eta_0 k_3^2 a_2
-      + i \eta_0 k_2 k_3 a_3
-      + i \eta_0\eps \left(- \frac{k_2}{\eps}a_1  + \frac{1}{\eps}a_2'\right)'
+      + \icomplex B_{03}' \frac{d\eta}{dT} T_1
+      - \icomplex \eta_0 k_3^2 a_2
+      + \icomplex \eta_0 k_2 k_3 a_3
+      + \icomplex \eta_0\eps \left(- \frac{k_2}{\eps}a_1  + \frac{1}{\eps}a_2'\right)'
   \end{aligned}
 \end{equation}
 }
@@ -617,16 +620,16 @@ The final set of Fourier-analysed linearised equations is given below, where the
 \begin{equation} \label{eq: full_induction3}
   \begin{aligned}
     \omega \eps a_3 &=
-    - i \eps B_{01} v_2 + B_{02} v_1
-    + i \eps k_3 v_{01} a_1
+    - \icomplex \eps B_{01} v_2 + B_{02} v_1
+    + \icomplex \eps k_3 v_{01} a_1
     - k_3 v_{02} a_2
     + k_2 v_{02} a_3
-    - i v_{01} a_3' \\
+    - \icomplex v_{01} a_3' \\
     &\quad
-    - i T_1 \frac{d\eta}{dT} \frac{\left(B_{02} \eps\right)'}{\eps}
-    + i \eta_0 \frac{k_2 k_3}{\eps} a_2
-    - i \eta_0 \frac{k_2^2}{\eps}a_3
-    - i \eta_0 \Bigl(\eps k_3 a_1 - \eps a_3'\Bigr)'.
+    - \icomplex T_1 \frac{d\eta}{dT} \frac{\left(B_{02} \eps\right)'}{\eps}
+    + \icomplex \eta_0 \frac{k_2 k_3}{\eps} a_2
+    - \icomplex \eta_0 \frac{k_2^2}{\eps}a_3
+    - \icomplex \eta_0 \Bigl(\eps k_3 a_1 - \eps a_3'\Bigr)'.
   \end{aligned}
 \end{equation}
 }
@@ -857,9 +860,10 @@ In cylindrical geometry, we have the exact same boundary conditions as for the C
 
 In the case of confinement by a perfectly conducting wall, we thus have straightforward boundary conditions, that is, $v_1 = 0, a_2 = 0, a_3 = 0$, and $T_1 = 0$ for both the Cartesian and cylindrical geometries on both sides (dropping the tildes). The latter boundary condition should only be taken into account if and only if perpendicular thermal conduction is included. These conditions are called \emph{essential boundary conditions}, meaning they \emph{have} to be satisfied by the system and should thus be explicitly handled.
 
+\paragraph{Natural boundary conditions}
 The integration by parts resulting from the weak Galerkin formulation gives rise to additional surface terms, which should also be evaluated at the boundaries. These kinds of conditions are called \emph{natural boundary conditions}, as they emerge in a natural way by reducing second-order derivatives to first-order derivatives when rewriting the eigenvalue problem. For simplicity we consider $B_{01} = v_{01} = 0$. In this case the additional surface terms for the momentum equation can be written as
 
-\begin{equation}
+\begin{equation} \label{eq: natural_boundary_v1}
   \begin{aligned}
     S_{v_1} &= \left[
       T_0 \hj{2}\hk{1}
@@ -879,16 +883,39 @@ The integration by parts resulting from the weak Galerkin formulation gives rise
 \end{equation}
 where the number in the superscript on $h_{j/k}$ denotes the index of the variable in the state vector $\statevec$.
 The subscript $\partial \Omega$ means that these terms should be evaluated at the left or inner edge, as well as at the right or outer edge. In a similar manner, the surface terms for the energy and induction equations are given by
+\begin{equation} \label{eq: natural_boundary_T1}
+  \begin{aligned}
+    S_{T_1} &= \icomplex \gmone T_1\Biggl[
+      T_0'\dkappaperpdrho \rho_1
+      + \left(T_0'\dkappaperpdT - \frac{\eps'}{\eps}\skappaperp{0}\right)T_1
+      + \skappaperp{0}T_1'
+    \Biggr. \\
+    &+ 2\left(\eta_0 k_3 (\eps B_{02})' - \eta_0 k_2 B_{03}' - \eps T_0' \Gmin \dkappaperpdB\right)a_1 \\
+    &+ 2\left(T_0' B_{03} \dkappaperpdB + \eta_0 B_{03}'\right)a_2'
+     - 2\left(\eps B_{02}T_0'\dkappaperpdB + \eta_0 (\eps B_{02})'\right)a_3'
+    \Biggr],
+  \end{aligned}
+\end{equation}
+
+\begin{equation} \label{eq: natural_boundary_a2}
+  S_{a_2} = \icomplex \eta_0 a_2 \bigl(a_2' - k_2 a_1\bigr),
+\end{equation}
+
+\begin{equation} \label{eq: natural_boundary_a3}
+  S_{a_3} = \icomplex \eta_0 \eps a_3 \bigl(a_3' - k_3 a_1\bigr),
+\end{equation}
+
+which should all be evaluated at the boundaries. For the case of a solid wall, we see that the natural boundary conditions simplify considerably, because if $v_1, a_2$, and $a_3$ are all zero at the wall, then $S_{v_1}, S_{a_2}$ and $S_{a_3}$ are also zero and can be omitted. The natural boundary condition on $T_1$ is only relevant if resistivity or perpendicular thermal conduction is included. However, in the case of the latter, the additional essential boundary condition requires that $T_1 = 0$, in which case $S_{T_1}$ drops out as well. The only combination in which the surface terms for the energy equation are nonzero is when resistivity is included but perpendicular thermal conduction is omitted. In that case, the resistive heating terms should be included in the calculation, which is done by adding the appropriate terms to the matrix elements $\amat(5, 6)$, $\amat(5, 7)$ and $\amat(5, 8)$.
+
+Currently, only fixed wall boundary conditions are implemented in {\legolas}. However, the surface terms described here can be used to impose other types of boundary conditions as well. In the case of a plasma-vacuum-wall transition, we have, for example, Bessel functions at the outer boundary of a cylindrical geometry \citep{book_roberts}, which encode the analytic vacuum solution for the electromagnetic field in the outer vacuum region. These expressions can then be used to rewrite the surface terms \eqref{eq: natural_boundary_v1}--\eqref{eq: natural_boundary_a3} in an appropriate way such that they can be added to their respective subblock positions in the matrix. This is one of the planned extensions to be included in future versions of {\legolas}.
+
+\paragraph{Essential boundary condition}
+The essential boundary conditions as described earlier have to be implemented explicitly. This is done by omitting the relevant basis functions that do not satisfy the boundary conditions on the edges. Consider as an example the variable $v_1$, which is associated with a cubic basis function. From Figure \ref{fig: basisfunctions}, we see that the only cubic element that is nonzero at the left boundary is $C_j^{12}$, which implies that the matrix elements where it appears should be zeroed out. Looking back at how the quadblock is composed in Figure \ref{fig: matrix_assembly}, the boundary condition $v_1 = 0$ corresponds to forcing the odd rows and columns of the $v_1$ contribution to zero, for subblocks $1, 2,$ and $3$ on the left boundary (that is, the first node $j$) because these correspond to the $2 \times 2$ blocks in blue, green and red on the right panel. Similarly, on the right side (viz. the last node $j$), only $C_j^{11}$ is nonzero, which implies that the odd rows and columns of subblocks $2, 3,$ and $4$ have to be zeroed out (corresponding to green, red, and yellow). Extending this reasoning to the essential boundary condition on $T_1$, we see that in this case the even rows and columns should be handled because $T_1$ is associated with a quadratic element. This is done for both matrices.
+
+Of course, ``just'' zeroing out rows and columns in a matrix has the unpleasant side effect that the matrices become singular. For the $\amat$-matrix, this is not necessarily a problem; however, the $\bmat$ matrix is not allowed to be singular because it is inverted when solving the general eigenvalue problem using the QR-algorithm. Therefore, we introduce a one on $\bmat$'s diagonal at the location that was zeroed out, and an element $\delta$ on $\amat$'s diagonal. The effect of this is that one essentially ``forces'' the boundary condition, because this implies that $\delta x_j^i = \omega x_j^i$. By extension, if $\delta$ is taken to be a large number (we take $\delta = 10^{20}$), this means that $x_j^i = 0$ which corresponds to the essential boundary we want to impose. The only side effect of this approach is that it introduces eigenvalues equal to $\delta$. However, because $\delta$ is taken to be large, these will not influence the spectrum in any way, and they can be easily filtered out during postprocessing. This method thus provides a relatively easy and straightforward way to impose Dirichlet boundary conditions at the edges. The imposed boundary conditions are noticeable on Panel a of Figure \ref{fig: matrix_assembly}, especially for the first node. The odd rows and columns that were zeroed out can clearly be seen, together with the elements introduced on the main diagonal.
 
 
 
-
-
-
-
-
-
-% \subsection{Matrix assembly}
 % \subsubsection{Assembly of the eigenfunctions}
 % \subsubsection{Derived eigenfunction quantities}
 
