@@ -279,6 +279,41 @@ Of course, the strong damping for the fast modes as we go further into the fast-
 
 
 \subsection{Quasi-modes in resistive MHD}
+We now turn to a nonadiabatic case, where resistivity is important. We will compute the resistive MHD spectrum for a case where the equilibrium varies across an interface, which gives rise to so-called quasi-modes. These are essentially surface waves undergoing damping, due to the fact that the global quasi-mode overlaps in frequency with the continuum range, causing resonant absorption. Quasi-modes are quite important in solar physics, as they can be indirectly related to the coronal heating problem as discussed in, for example, \citet{poedts1989} and \citet{poedts1991}.
+
+A detailed analytical treatment of quasi-modes including theoretical growth rates is given in \citet{book_priest}, where they start from an inhomogeneous layer of width $l$ connecting two regions of uniform plasma. This can be reproduced by introducing a linear density profile between two homogeneous regions in a Cartesian geometry, however, this would mean that the density derivative shows rather strong discontinuities near the edges of the transition layer. We therefore opt for a smooth profile by introducing a sine dependence such that
+
+\begin{equation}
+  \rho_0(x) =
+  \begin{cases}
+    \rho_1 &\text{if}~x_0 \leq x < s - \dfrac{1}{2}l, \\
+    \dfrac{1}{2}\rho_1\left[
+      1 + \dfrac{\rho_2}{\rho_1} - \left(1 - \dfrac{\rho_2}{\rho_1}\right)\sin\left(\dfrac{\pi(x - s)}{l}\right)
+    \right] &\text{if}~s - \dfrac{1}{2}l \leq x \leq s + \dfrac{1}{2}l, \\
+    \rho_2 &\text{if}~s + \dfrac{1}{2}l < x \leq x_1,
+  \end{cases}
+\end{equation}
+where $s$ denotes the midpoint between $x_0$ and $x_1$, representing the left and right edges of the Cartesian grid, respectively, and equal to $0$ and $1$ such that $s = 0.5$. The width of the transition region $l = 0.1$ is taken to be small as to reduce the influence of the walls. If $l \rightarrow 0$, the inhomogeneous region disappears, and we simply have a discontinuous jumpy in the plasma. Furthermore, we take $\rho_1 = 0.9$, $\rho_2 = 0.1$, $B_{02} = 0$, $B_{03}$ = 1, and $T_0 = 0$. The magnetic field is unidirectional along the $z$-axis, and setting the temperature (and thus pressure) to zero provides an additional test on the handling of zero rows in the matrix. This zero-temperature case is frequently encountered in fully nonlinear MHD simulations which artificially adopt a zero plasma beta. It has as an important consequence that the slow continuum collapses to marginal frequency, eliminating many interesting modes from the spectrum. Additionally, we adopt wavenumbers $k_3 = 0.05$ and $k_2 = 1$, such that $k_3 << k_2$. As discussed in \citet{book_priest}, the quasi-modes are damped, such that they move away from the real eigenfrequency axis with complex eigenvalues $\omega = \omega_\text{R} + \icomplex \omega_\text{I}$ given by
+\begin{equation} \label{eq: quasimode}
+  \omega_\text{R} = \pm \sqrt{\frac{\rho_1 \omega_\text{A1}^2 + \rho_2 \omega_\text{A2}^2}{\rho_1 + \rho_2}},
+  \qquad
+  \omega_\text{I} = -\frac{\pi k_z l \left(\omega_\text{A2}^2 - \omega_\text{A1}^2\right)}{8\omega_\text{R}},
+\end{equation}
+with $\omega_\text{A}^2 = k_z^2 \alfvenspeed^2$. This analytic result originates from a complex analysis of the linearised initial value problem. However, there is one caveat: it is impossible to obtain complex eigenvalues away from the real or imaginary axis in an ideal plasma, due to the matrix operator being Hermitian in ideal MHD. Because the (ideal) quasi-mode is damped, we therefore include a (small) value for the resistivity, $\eta = 10^{-4}$, which is sufficient to make the matrix operator non-Hermitian and allows for complex eigenvalues away from the horizontal axis.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{quasimodes.png}
+  \caption{
+    Panel \textbf{a}: part of the MHD spectrum containing the quasi-mode, the red dot denotes the theoretical prediction of Equation \eqref{eq: quasimode}. Panels \textbf{b} and \textbf{c} show plots of the sinusoidal density profile and Alfv\'en frequency as a function of the grid, respectively. Note that these two panels only show part of the grid, near the transition region. The inset shows the real part of the $v_x$ (orange) and $\rho$ (blue) normalised eigenfunctions associated with the quasi-mode. The blue dot in Panel \textbf{c} denotes the squared quasi-mode frequency, matching the squared Alfv\'en frequency at $x = 0.5$. The vertical dotted line denotes the middle of the grid.
+  }
+  \label{fig: quasimodes}
+\end{figure}
+
+
+The magnetic Reynolds number in this case varies between $\magneticreynolds \approx 10^4$ and $\magneticreynolds \approx 3 \times 10^4$. Figure \ref{fig: quasimodes} shows the MHD spectrum in Panel a, for 501 gridpoints, with the theoretical prediction for the global quasi-mode location annotated with a red dot. The actual quasi-mode is also denoted in the figure and is slightly more damped than its theoretical counterpart. This is to be expected, because the inclusion of resistivity imposed additional damping on the eigenvalues, shifting them downwards. It should be noted that increasing the with $l$ of the transition layer moves the quasi-mode farther down and to the right in the figure, such that it eventually merges with the damped modes found on the branch immediately to its right. This phenomenon, where the quasi-modes merge with the resistive branches, is discussed in more detail in \citet{vandoorsselaere2007}. The inset in Panel a depicts the $\rho$ (blue) and $v_x$ (orange) eigenfunctions associated with the quasi-mode, showing localised variation near the transition region as expected. Note that the spectrum as shown in Figure \ref{fig: quasimodes}, left Panel a, is still left-right symmetric, but that resistivity has broken the up-down symmetry, with all modes here found in the stable (damped) half plane.
+
+
 \subsection{Resistive tearing modes}
 \subsection{Tearing modes with varying resistivity}
 
