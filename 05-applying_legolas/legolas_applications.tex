@@ -144,6 +144,38 @@ $\kinkspeed \approx 1.38~\alfvenspeed \approx 0.55~c_\text{Ae}$, and we use the 
 Similar to Figure \ref{fig: fluxtube_photospheric}, Panels e and f represent the first three body modes in the $m = 0$ and $m = 1$ sequences (Panel e), of which the first mode is indicated in Panel b. Panel f shows the first three modes of the $m = 2$ and $m = 3$ sequences, with the first, second, and third modes indicated with a solid, dashed and dotted line, respectively. The colours of Panels c--f are consistent with the legend. Figure \ref{fig: fluxtube_coronal} reproduces the analytical results in \citet[Figure 6.7]{book_roberts}, which are based on the analytic dispersion relation containing Bessel functions.
 
 \subsection{Tokamak current profile}
+Next we discuss an example initially given in \citet{kerner1985}, which shows the ideal MHD spectrum in the presence of an unstable $m = -2$ interchange mode in a cylindrical geometry. We start from a so-called tokamak current profile, in which an axial current density of the form $\boldsymbol{j}_0 = \left(0, 0, j_0(1 - r^2)^\nu\right)$ is assumed, with $j_0$ a given constant. This yields a twisted magnetic field profile in which the longitudinal component $B_{0z}$ is uniform and equals one, while the poloidal component $B_{0\theta}$ is given by
+\begin{equation} \label{eq: tokamak_btheta}
+  B_{0\theta} = \frac{j_0}{2r\left(\nu + 1\right)}\left[1 - \left(1 - r^2\right)^{\nu + 1}\right],
+\end{equation}
+for a given value of $\nu$. For the equilibrium considered here, we take $\nu = 0$, making the current profile constant over the flux tube. This means that $B_{0\theta}$ has a linear profile in $r$ such that the magnetic field lines have a constant pitch and the current is distributed equally in the plasma. An expression for the pressure (and hence temperature) can be found by integrating the force-balance Equation \eqref{eq: force_equilibrium} and assuming that, for example, the pressure vanishes at the outer boundary, resulting in a parabolic pressure profile. Hence, for a cylindrical geometry in which $r \in [0, 1]$, this yields the following equilibrium configuration:
+\begin{equation}
+  \begin{gathered}
+    \rho_0 = 1,
+    \qquad
+    p_0 = \frac{1}{4}j_0^2\left(1 - r^2\right),
+    \qquad
+    B_{02} = \frac{1}{2}j_0 r,
+    \qquad
+    B_{03} = 1,
+  \end{gathered}
+\end{equation}
+where we assumed a uniform density. We introduce an additional parameter $q$, called the \emph{safety factor}, given by
+\begin{equation}
+  q(r) = \frac{rk_z B_{0z}}{B_{0\theta}} = \frac{2k_z}{j_0}.
+\end{equation}
+
+We performed 39 runs, varying the $q$ factor between 1.9 and 2.1 in order to probe the regime containing the unstable $m = -2$ interchange mode, which is associated with the vanishing of the factor $m + kq$, that is, the $\bk \cdot \bb$ product. This implicitly constrains the value for $j_0$, and we assigned $k_2 = m = -2$ and $k_3 = k = 0.2$ for all runs. It should be noted that this particular equilibrium configuration requires a relatively high resolution near $q = 2$ to correctly resolve the unstable modes; here we used 501 gridpoints for all runs. The complete spectrum is shown in Figure \ref{fig: tokamak_current}, where the squared eigenvalues are plotted as a function of the safety factor. The three main branches, that is, fast, Alfv\'en and slow, are denoted on the right side of the figure, as well as the region where the modes become unstable $(\omega^2 < 0)$. We see that in the region near the $m = -2$ interchange instabilities, the slow and Alfv\'en modes collapse to zero, which is due to the vanishing of the combination $\Fplus$ (see Equation \eqref{eq: F_G_operators} in Chapter \ref{ch: Legolas}) in the ideal MHD equations \citep{book_MHD}. The slow and Alfv\'en continua are annotated in the figure in red and cyan, respectively. The Alfv\'en continuum is collapsed to a single point for this equilibrium configuration, while the slow continuum covers a range in frequency. Note in particular how the full spectrum ranges over many orders of magnitude in the $\omega^2$ view shown here: an intrinsic property (and challenge!) posed by MHD spectral theory.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{kerner_tokamak.png}
+  \caption{
+    Complete MHD spectrum for a tokamak current profile in the presence of the $m = -2$ interchange mode. The squared eigenvalues are plotted against the safety factor $q$, instabilities correspond to $\omega^2 < 0$. The various branches are indicated on the right side of the figure.
+  }
+  \label{fig: tokamak_current}
+\end{figure}
+
 \subsection{KH and CD instabilities}
 \subsection{Suydam cluster modes}
 

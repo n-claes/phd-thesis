@@ -50,6 +50,7 @@ nucleous
 overdamped
 overstable
 photospheric
+poloidal
 postprocessing
 prechosen
 pressureless
