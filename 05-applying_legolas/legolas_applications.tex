@@ -64,9 +64,24 @@ Next we discuss a modified case of the gravito-MHD waves, namely a spectrum show
     B_{03} = B_c \exp\left(-\frac{1}{2}\right)\cos\left(\lambda x\right),
   \end{gathered}
 \end{equation}
-where magnetic shear was introduced through the parameter $\lambda$. The quantities $\alpha$ and $B_c$ are assigned the same values as in Equation \eqref{eq: gravito_mhd}; though now $g = 0.5$ and $p_c = 0.25$, which yield a plasma beta $\beta = 0.5$. The wave vectors are given by $k_y = \pi\sin(\theta)$ and $k_z = \pi\cos(\theta)$, such that $k_0^2 \approx 10$. The angle $\theta$ was varied between 0 and $\pi$ for a total of 100 runs at 351 grid points each, shown in Figure REFTODO.
+where magnetic shear was introduced through the parameter $\lambda$. The quantities $\alpha$ and $B_c$ are assigned the same values as in Equation \eqref{eq: gravito_mhd}; though now $g = 0.5$ and $p_c = 0.25$, which yield a plasma beta $\beta = 0.5$. The wave vectors are given by $k_y = \pi\sin(\theta)$ and $k_z = \pi\cos(\theta)$, such that $k_0^2 \approx 10$. The angle $\theta$ was varied between 0 and $\pi$ for a total of 100 runs at 351 grid points each, shown in Figure \ref{fig: quasi_parker}.
+
+The left panels handle the case without magnetic shear, that is, $\lambda = 0$, which basically reduces to the one from the previous subsection. In this case, the slow and Alfv\'en continua collapse into single point values, denoted in red and cyan, respectively. The right panels show the same configuration where $\lambda = 0.3$ was taken, introducing magnetic shear, which introduces genuine continua seen as bands. These continua affect the overall stability and organise the entire MHD spectrum: all discrete modes are fully aware of the essential spectrum formed by these (slow and Alfv\'en) continua and the (fast) accumulation points at infinite frequency. All features of the original figure in \citet{book_MHD} are reproduced. The inset zooms into the region where both continua overlap, showing quasi-interchange and interchange instabilities. Once more, each run, shown here collectively in Figure \ref{fig: quasi_parker}, actually has a spectrum that is left-right and up-down symmetric in the eigenfrequency plane. This is depicted on Panels c and d, which show the eigenfrequency view for one single case $(\theta = 0.3\pi)$. The continuum ranges separate nicely: the collapsed single point values are denoted by cyan (Alfv\'en) and red (slow) points on Panel c, and the genuine continua are shown with cyan and red bands on Panel d. The instabilities themselves are situated on the (positive) imaginary axis, due to the self-adjointness of the eigenvalue problem.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{quasi_parker.png}
+  \caption{
+    Spectrum showing Parker and quasi-Parker modes without (\textbf{a}, \textbf{c}) and with (\textbf{b}, \textbf{d}) magnetic shear. The slow and Alfv\'en continua are shown in red and cyan, respectively, where the insets zoom into the region of quasi-interchange modes. The bottom row of panels show the eigenfrequency view for the single case $\theta = 0.3\pi$. The continua are again annotated in the panels, visualising the collapsed single point values (Panel \textbf{c}) as well as the genuine continuum ranges (Panel \textbf{d}).
+  }
+  \label{fig: quasi_parker}
+\end{figure}
+
+As explained in \citet{book_MHD}, we see from this eigenmode computation that the Parker instability, which is there for $\bk_0$ parallel to $\bb_0$, becomes a quasi-Parker instability away from perfect alignment and connects smoothly to well-known quasi-interchange instabilities that occur here (marginally) away from perpendicular orientation. Quantifying how the equilibrium parameters influence the growth rates of these unstable branches can only be done numerically, for example with {\legolas}.
 
 \section{Adiabatic, cylindrical cases}
+Next we move on to cylindrical configurations, which provide tests for the scale factor $\eps$ in the equations. Analytical results from the literature are again well reproduced. Furthermore, we look at different spectra previously obtained by the LEDA code, discussed in various papers, and compare those with the new spectra from {\legolas}.
+
 \subsection{Magnetic flux tubes}
 \subsection{Tokamak current profile}
 \subsection{KH and CD instabilities}
