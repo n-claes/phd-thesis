@@ -35,6 +35,7 @@ Keppens
 LAPACK
 LEDAFLOW
 Legolas
+magnetoacoustic
 magnetohydrodynamic
 magnetohydrodynamics
 magnetorotational
@@ -49,6 +50,7 @@ nonlinearly
 nonzero
 nucleous
 overdamped
+overstability
 overstable
 photospheric
 poloidal
@@ -63,6 +65,7 @@ Selfgravity
 Shafranov
 skyblue
 Spex
+Sturmian
 subblock
 subblocks
 submatrix

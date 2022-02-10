@@ -248,7 +248,36 @@ The bottom row of panels d--g shows the real part of the $\rho$ and $r v_r$ eige
 
 
 \section{Resistive, Cartesian cases}
+All cases discussed up to now handles an adiabatic equilibrium configuration with or without the inclusion of flow. The up-down symmetry of all the MHD spectra shown so far is perfectly maintained, related to the fact that these cases are in essence time-reversible. Every instability (or overstability in the case of flow) has a damped counterpart. We now move on to include additional effects, that is, we now calculate spectra for time-irreversible cases, where either resistivity or non-adiabatic effects enter, which will break the up-down symmetry. We first focus on the inclusion of resistivity.
+
+
 \subsection{Resistive homogeneous plasmas}
+To start with we take a look at the simplest configuration, that is, a homogeneous plasma in a Cartesian geometry with resistivity included. The uniform equilibrium is given by
+\begin{equation} \label{eq: resistive_homo_equilibrium}
+  \rho_0 = 1,
+  \qquad
+  B_{02} = 0,
+  \qquad
+  B_{03} = 1,
+  \qquad
+  T_0 = \frac{1}{2}\beta B_0^2
+\end{equation}
+where we take a plasma beta of $\beta = 0.25$, $k_2 = k_y = 0$, $k_3 = k_z = 1$, and $x \in [0, 1]$. The value for the resistivity is assumed to be constant and given by $\eta = 10^{-3}$, as described in \citet{book_MHD}. This spectrum is calculated using 1001 gridpoints; the result is shown in Figure \ref{fig: resistive_homo}. In ideal MHD the fast modes form a Sturmian sequence (that is, the oscillation of the eigenfrequencies increases then the number of modes increases, which in turn implies a larger real part of $\omega$) of stable fast magnetoacoustic waves with frequencies accumulating to infinite frequency (related to the $p$ modes in our stratified example). The slow modes have an anti-Sturmian sequence toward their accumulation point (in essence the collapsed slow continuum) and the Alfv\'en modes are degenerate \citep{book_MHD}. When resistivity is included, the fast modes become damped and the Alfv\'en and slow modes trace out semicircles on the bottom-half of the complex plane. The semicircles and initial fast-mode sequence shown in Figure \ref{fig: resistive_homo} are in perfect agreement with the spectrum depicted in \citet[Figure 14.6]{book_MHD}. These semicircles can be quantified analytically; their radius does not depend on resistivity. The magnetic Reynolds number, calculated as $\magneticreynolds = (x_1 - x_0)\alfvenspeed / \eta$, is equal to 1000.
+
+Due to the rather extreme resolution employed here, we trace much further into the fast-mode sequence, where we see something interesting: the fast modes appear on curves that loop around, breaking the purely Sturmian behaviour for a moment, after which they continue again toward infinity. This implies that initially, the fast modes become more damped at higher mode frequencies up to a certain turning point at which they achieve maximal damping (the bottom of the loop). After passing this turning point, the oscillation frequency of the modes increases again and the damping frequency seems to converge toward one single value.
+
+Of course, the strong damping for the fast modes as we go further into the fast-mode sequence must have consequences for the original uniform (ideal) equilibrium state. In what follows, we will adopt the common practice of computing resistive MHD spectra about an ideal MHD state, which itself will evolve when resistivity is acting. This is directly related to the discussion on the equilibrium background in Section \ref{ss: equilibrium conditions} when resistivity is taken into account.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{resistive_homo.png}
+  \caption{
+    Panel \textbf{a}: spectrum for a homogeneous medium with constant resistivity. Panel \textbf{b} zooms in near the origin, showing the start of the fast-mode sequence. Panel \textbf{c} zooms in further, revealing the semicircles traced out by the Alfv\'en and slow modes (outer and inner semicircles, respectively).
+  }
+  \label{fig: resistive_homo}
+\end{figure}
+
+
 \subsection{Quasi-modes in resistive MHD}
 \subsection{Resistive tearing modes}
 \subsection{Tearing modes with varying resistivity}
