@@ -49,6 +49,7 @@ nonzero
 nucleous
 overdamped
 overstable
+photospheric
 postprocessing
 prechosen
 pressureless
@@ -72,3 +73,4 @@ tridiagonal
 uniturbulence
 unmagnetised
 wavenumber
+wavenumbers
