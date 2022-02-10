@@ -177,6 +177,42 @@ We performed 39 runs, varying the $q$ factor between 1.9 and 2.1 in order to pro
 \end{figure}
 
 \subsection{KH and CD instabilities}
+As a first test for the inclusion of flow into the equations, we look at the interaction between the KHIs and current-driven (\gls{CD}) instabilities in a magnetised astrophysical jet, following \citet{baty2002}. This model uses a cylindrical jet with a supersonic background flow aligned with the axis and sheared in the radial direction. The equilibrium configuration is taken such that Kelvin-Helmholtz surface modes can develop and is generally given by
+\begin{equation} \label{eq: kh_cd_equilibrium}
+  \begin{gathered}
+    \rho_0 = 1,
+    \qquad
+    v_{02} = 0,
+    \qquad
+    v_{03} = \frac{1}{2}\mathcal{V}\tanh\left(\frac{r_j - r}{a}\right), \\
+    B_{02} = B_{0\theta} \frac{r r_c}{r_c^2 + r^2},
+    \qquad
+    B_{03} = B_{0z}, \\
+    T_0 = \frac{p_0}{\rho_0} - \frac{B_{0\theta}^2}{2\rho_0}\left(1 - \frac{r_c^4}{\left(r_c^2 + r^2\right)^2}\right).
+  \end{gathered}
+\end{equation}
+Here, $r_j$ denotes the jet radius and $r_c$ quantifies the radial variation, taken to be $r_j = 1$ and $r_c = 0.5$, with $r \in [0, 2]$. The parameter $\mathcal{V}$ represents the amplitude of the velocity, given by $\mathcal{V} = 1.63$, while the chosen velocity profile ensures that the shear layer is situated at the jet radius with a radial width given by $a = 0.1r_j$. Both the density $\rho_0$ and the pressure on-axis $p_0$ are chosen to be equal to unity. The parameters $B_{0\theta}$ and $B_{0z}$ control the amplitude and twist of the magnetic field, as explained in \citet{baty2002}. The original work discusses three different magnetic field configurations, we choose the profile with
+\begin{equation}
+  B_{0\theta} = 0.4\left(\frac{r_c^2 + r_j^2}{r_j r_c}\right),
+  \qquad
+  B_{0z} = 0.25,
+\end{equation}
+such that $B_{02} = 0.4$ at the jet radius. Furthermore, the azimuthal and longitudinal wavenumbers are taken to be $k_2 = m = -1$ and $k_3 = k = \pi$.
+
+The entire spectrum is calculated using 501 gridpoints and shown in Figure \ref{fig: kh_cd}. Panel a depicts the full slow and Alfv\'en spectra with the KH and first three CD unstable modes ($\omega_\text{I} > 0$) denoted on the figure itself. The real and imaginary parts of the $\rho$, $r v_r$, and $v_z$ eigenfunctions for each of these modes are shown on the subsequent panels. Those for the KH mode (Panels c--d) are localised around the jet radius $r = 1$, which is also the point where the Alfv\'enic Mach number drops to zero (Panel b). The quantity $V_0$ in the Figure legend represents the velocity magnitude, here given by $V_0 = \sqrt{v_{02}^2 + v_{03}^2}$. Panels e through j depict the eigenfunctions of the first three CD modes, with the first, second, and third shown in the first, second, and third rows of the bottom panels, respectively. The left column shows the real part, the right column the imaginary part of the eigenfunction. The CD modes have an increasing number of nodes on $r \in [0, 1]$, which is most clearly visible by looking at the
+$r v_r$ eigenfunction (green): no nodes for the first CD mode (Panels e--f), one node for the second CD mode (Panels g--h), and two nodes for the third CD mode (Panels i--j).
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{kh_cd.png}
+  \caption{
+    Panel \textbf{a}: MHD spectrum for the equilibrium configuration given in \eqref{eq: kh_cd_equilibrium}. The KH and CD instabilities are indicated on the panel. Panel \textbf{b}: sonic and Alfv\'enic Mach numbers; the other panels show the real and imaginary parts of the $\rho$ (blue), $r v_r$ (green) and $v_z$ (red) eigenfunctions, for the KH mode (Panels \textbf{c} and \textbf{d}), first CD mode (Panels \textbf{e}--\textbf{f}), second CD mode (Panels \textbf{g}--\textbf{h}), and third CD mode (Panels \textbf{i}--\textbf{j}).
+  }
+  \label{fig: kh_cd}
+\end{figure}
+
+Note that here, we are still in adiabatic conditions such that the up-down symmetry (relating to time reversal) is still present in the eigenfrequency plane, but the introduction of equilibrium flow caused left-right symmetry breaking between the forwards and backwards propagating modes. As pointed out in \citet{goedbloed2018_web1}, the study of MHD spectra of stationary (i.e. with flow) equilibria is still governed by two self-adjoint operators, but as seen in Figure \ref{fig: kh_cd}, modes can enter the complex plane at various locations (identified by the spectral web; \citet{goedbloed2018_web2}). The correspondence with the original figure in \citet{baty2002} is one-to-one for the KH and CD modes, but here we have a lot more detail near the axes due to the (much) higher resolution employed. This resolution aspect will be further discussed in Section \ref{sec: convergence}.
+
 \subsection{Suydam cluster modes}
 
 \section{Resistive, Cartesian cases}
@@ -189,7 +225,7 @@ We performed 39 runs, varying the $q$ factor between 1.9 and 2.1 in order to pro
 \subsection{Nonadiabatic discrete Alfv\'en waves}
 \subsection{Magnetothermal instabilities}
 
-\section{Convergence}
+\section{Convergence} \label{sec: convergence}
 
 \section{The Legolas testing framework}
 
