@@ -184,10 +184,11 @@ As a first test for the inclusion of flow into the equations, we look at the int
     \qquad
     v_{02} = 0,
     \qquad
-    v_{03} = \frac{1}{2}\mathcal{V}\tanh\left(\frac{r_j - r}{a}\right), \\
-    B_{02} = B_{0\theta} \frac{r r_c}{r_c^2 + r^2},
+    v_{03} = \frac{1}{2}\mathcal{V}\tanh\left(\frac{r_j - r}{a}\right),
     \qquad
     B_{03} = B_{0z}, \\
+    B_{02} = B_{0\theta} \frac{r r_c}{r_c^2 + r^2},
+    \qquad
     T_0 = \frac{p_0}{\rho_0} - \frac{B_{0\theta}^2}{2\rho_0}\left(1 - \frac{r_c^4}{\left(r_c^2 + r^2\right)^2}\right).
   \end{gathered}
 \end{equation}
@@ -214,6 +215,37 @@ $r v_r$ eigenfunction (green): no nodes for the first CD mode (Panels e--f), one
 Note that here, we are still in adiabatic conditions such that the up-down symmetry (relating to time reversal) is still present in the eigenfrequency plane, but the introduction of equilibrium flow caused left-right symmetry breaking between the forwards and backwards propagating modes. As pointed out in \citet{goedbloed2018_web1}, the study of MHD spectra of stationary (i.e. with flow) equilibria is still governed by two self-adjoint operators, but as seen in Figure \ref{fig: kh_cd}, modes can enter the complex plane at various locations (identified by the spectral web; \citet{goedbloed2018_web2}). The correspondence with the original figure in \citet{baty2002} is one-to-one for the KH and CD modes, but here we have a lot more detail near the axes due to the (much) higher resolution employed. This resolution aspect will be further discussed in Section \ref{sec: convergence}.
 
 \subsection{Suydam cluster modes}
+Next we look at Suydam cluster modes in a cylindrical geometry, which arise from the presence of a Suydam surface in the equilibrium configuration, that is, a location where $\bk \cdot \bb_0 = 0$. Shear flow effects are included, and the equilibrium is given by
+\begin{equation} \label{eq: suydam_equilibrium}
+  \begin{gathered}
+    \rho_0 = 1,
+    \qquad
+    v_{02} = 0,
+    \qquad
+    v_{03} = v_{0z}\left(1 - r^2\right),
+    \qquad
+    B_{02} = J_1(\alpha r), \\
+    B_{03} = \sqrt{1 - P_1}J_0(\alpha r),
+    \qquad
+    p_0 = P_0 + \frac{1}{2}P_1 J_0^2(\alpha r),
+  \end{gathered}
+\end{equation}
+where $\alpha = 2$, $P_0 = 0.05$, $P_1 = 0.1$, and $v_{0z} = 0.14$; the functions $J_0$ and $J_1$ denote the Bessel functions of the first kind. The wavenumbers were chosen to be $k_2 = m = 1$ and $k_3 = k = -1.2$, ensuring a Suydam surface at $r \approx 0.483$.
+
+The spectrum is calculated using 501 gridpoints for $r \in [0, 1]$ and is shown in Figure \ref{fig: suydam_cluster}. The resulting locations of the various off-axis outer modes are in agreement with the results given in \citet{nijboer1997}. However, because this spectrum is calculated using a five times higher resolution, we have much more intricate detail near the Suydam surface, revealing even more off-axis modes (inset in Panel a). The top two panels on the right side of Figure \ref{fig: suydam_cluster} show the sonic and Alfv\'enic Mach numbers (Panel b), together with the $\bk \cdot \bb_0 = B_{02}k_2/r + B_{03}k_3$ and $\bk \cdot \bv_0 = v_{02}k_2/r + v_{03}k_3$ profiles as a function of radius (Panel c), respectively. The location of the Suydam surface at $r \approx 0.483$ is denoted with a red cross.
+
+The bottom row of panels d--g shows the real part of the $\rho$ and $r v_r$ eigenfunctions, for the four modes annotated in Panel a with the location of the Suydam surface indicated with a vertical red line. $\omega_1$ en $\omega_3$ correspond to modes on the left side of the Suydam surface, the other two correspond to modes on the right side. All eigenfunctions shown here show the specific variation associated with their localised behaviour on the left side of the red dashed line, while it is vice verse for the other two modes. For visual purposes the horizontal axis in Panels e and f is different from the one in Panels c and d, because the former correspond to the next modes in the Suydam sequence, showing stronger radial variation. Note that the original Suydam criterion \citep{book_MHD} is related to static equilibria, the generalisation of these Suydam cluster criteria is presented in \citet{wang2004}.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{suydam_cluster.png}
+  \caption{
+    Panel \textbf{a}: Suydam cluster spectrum for the equilibrium given in \eqref{eq: suydam_equilibrium}. Inset: zoom-in near the Suydam surface, revealing more detail. Panel \textbf{b} depicts the sonic and Alfv\'enic Mach numbers as a function of radius, Panel \textbf{c} shows the $\bk \cdot \bb_0$ and $\bk \cdot \bv_0$ curves where the red cross denotes the Suydam surface. The bottom row of panels shows the real part of the $\rho$ and $r v_r$ eigenfunctions, for the four modes in the Suydam sequence annotated in Panel \textbf{a}. The dotted red line denotes the location of the Suydam surface.
+  }
+  \label{fig: suydam_cluster}
+\end{figure}
+
+
 
 \section{Resistive, Cartesian cases}
 \subsection{Resistive homogeneous plasmas}
