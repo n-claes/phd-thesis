@@ -315,7 +315,54 @@ The magnetic Reynolds number in this case varies between $\magneticreynolds \app
 
 
 \subsection{Resistive tearing modes}
-\subsection{Tearing modes with varying resistivity}
+Now we move on to an inhomogeneous medium with the inclusion of resistivity and an optional linear flow profile, discussed in \citet{book_MHD}. The geometry is Cartesian, with $x \in [-0.5, 0.5]$ and an equilibrium configuration given by
+\begin{equation} \label{eq: resistive_tearing}
+  \begin{gathered}
+    \rho_0 = 1,
+    \qquad
+    B_{02} = \sin(\alpha x),
+    \qquad
+    B_{03} = \cos(\alpha x), \\
+    T_0 = \frac{1}{2}\beta B_0^2,
+    \qquad
+    v_{02} = \mathcal{V}x,
+    \qquad
+    v_{03} = 0,
+  \end{gathered}
+\end{equation}
+where $k_3 = k_z = 0$, $\beta = 0.15$, and $\alpha = 4.73884$, with a constant resistivity value of $\eta = 10^{-4}$. The magnetic configuration chosen here is a linear force-free field with shear, where $\alpha$ is the proportionality constant between the current and magnetic field, that is, $\boldsymbol{j_0} = \alpha \bb_0$. This specific choice of parameters violates the tearing mode stability criterion \citep{book_MHD}, which results in an isolated, unstable tearing mode. Spectra are calculated both for $\mathcal{V} = 0$ (no flow) and $\mathcal{V} = 0.15$, the inclusion of a linear velocity profile in the latter case introduces a Doppler shift in the slow and Alfv\'en continua, and the results are shown for 501 gridpoints in Figure \ref{fig: resistive_tearing}. Panels a and b show spectra for
+$\mathcal{V} = 0$, $k_2 = k_y = 0.49$ (no flow) and $\mathcal{V} = 0.15$, $k_y = 1.5$ (linear flow profile), respectively, revealing the intricate behaviour of the damped slow and Alfv\'en sequences. The purely imaginary unstable tearing mode is annotated with an arrow. The resistivity $\eta$ is equal to $10^{-4}$ for both cases, yielding a magnetic Reynolds number of $\magneticreynolds \approx 10^4$. These results are in perfect agreement with the original spectra depicted in \citet[Figures 14.7--14.9]{book_MHD}. Note that these cases still have left-right symmetry maintained, despite the presence of equilibrium flow. However, this is purely because the flow profile and domain happen to be chosen in a symmetric way, such that forward and backward modes behave symmetrically.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{resistive_tearing.png}
+  \caption{
+    Resistive spectra of the equilibrium given in Equation \eqref{eq: resistive_tearing}, unstable to the tearing mode (annotated with an arrow). Panels \textbf{a} and \textbf{b} show the spectrum without and with a linear flow profile, respectively, zoomed in to reveal the complex structure of the slow and Alfv\'en modes (fast modes are not shown). Panels \textbf{c} and \textbf{d}: growth rate of the tearing mode vs. fixed $k_y$, varying $\eta$ and fixed $\eta$, varying $k_y$, respectively. Both bottom panels are cases without flow, with 64 runs of 351 gridpoints each, per panel. The red line in Panels \textbf{c} and \textbf{d} denotes the theoretical growth rate prediction given in Equation \eqref{eq: tearing_growthrate}.
+  }
+  \label{fig: resistive_tearing}
+\end{figure}
+
+For a thorough discussion on tearing modes, we refer to \citet{book_MHD}, where they perform a detailed analysis on the resistive MHD equations to derive an analytical expression for the growth rate of the tearing mode, given by
+\begin{equation} \label{eq: tearing_growthrate}
+  \begin{aligned}
+    \text{Im}(\omega) &= \magneticreynolds^{-3/5}(KH)^{2/5}\left(\frac{\Delta'}{C}\right)^{4/5}\alfvenspeed / a,
+    \qquad
+    \text{in which} \\
+    \Delta' &= -2\sqrt{H^2 - K^2}\cot\left(\frac{1}{2}\sqrt{H^2 - K^2}\right),
+  \end{aligned}
+\end{equation}
+with $\magneticreynolds = a \alfvenspeed / \eta$ the magnetic Reynolds number, $a$ the width of the slab, and $\alfvenspeed$ the Alfv\'en velocity. The other parameters in this equation are variables introduced during the analysis, given by
+\begin{equation}
+  H = \alpha a,
+  \qquad
+  K = k_0 a,
+  \qquad
+  C = 2\pi\frac{\Gamma(3/4)}{\Gamma(1/2)} \approx 2.1236.
+\end{equation}
+
+Panels c and d of Figure \ref{fig: resistive_tearing} show a comparison of the tearing mode growth rate between the {\legolas} results (using the no-flow case) and Equation \eqref{eq: tearing_growthrate}. Panel c holds $k_y = 1.5$ constant but varies the resistivity, reaching Reynolds numbers of $\approx 10^8$, a feat that is nearly impossible to achieve if fully nonlinear codes would be used instead. The correspondence between the theoretical and numerical growth rates is nearly one-to-one, except for large resistivity values as the theoretical approximation starts to break down in those regimes. In Panel d we keep $\eta = 10^{-6}$ (magnetic Reynolds number of $\approx 10^6$) constant and vary $k_y$ between 0.1 and 3.5, which again yields excellent agreement between theory and numerical results. For both Panels c and d we performed 64 runs of 351 gridpoints each.
+
+
 
 \section{Nonadiabatic, cylindrical cases}
 \subsection{Nonadiabatic discrete Alfv\'en waves}
