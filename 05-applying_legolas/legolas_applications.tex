@@ -176,7 +176,7 @@ We performed 39 runs, varying the $q$ factor between 1.9 and 2.1 in order to pro
   \label{fig: tokamak_current}
 \end{figure}
 
-\subsection{KH and CD instabilities}
+\subsection{KH and CD instabilities} \label{ss: kh_cd_instabilities}
 As a first test for the inclusion of flow into the equations, we look at the interaction between the KHIs and current-driven (\gls{CD}) instabilities in a magnetised astrophysical jet, following \citet{baty2002}. This model uses a cylindrical jet with a supersonic background flow aligned with the axis and sheared in the radial direction. The equilibrium configuration is taken such that Kelvin-Helmholtz surface modes can develop and is generally given by
 \begin{equation} \label{eq: kh_cd_equilibrium}
   \begin{gathered}
@@ -365,10 +365,118 @@ Panels c and d of Figure \ref{fig: resistive_tearing} show a comparison of the t
 
 
 \section{Nonadiabatic, cylindrical cases}
+Because {\legolas} is the first linear MHD code to simultaneously include nonadiabatic effects, resistivity, and flow, there are no known previously calculated spectra where all these physical effects are included. Nevertheless, there exist some spectra in the literature where solely nonadiabatic effects are included (and where the equilibrium is static and no resistivity is incorporated), so we will use these as a base comparison for testing the nonadiabatic terms in the implementation.
+
 \subsection{Nonadiabatic discrete Alfv\'en waves}
+The first spectrum we will look at is that of nonadiabatic discrete Alfv\'en waves, described in \citet{keppens1993}. The basic cylindrical equilibrium represents a solar loop, and nonadiabatic effects included were optically thin radiative losses and parallel thermal conduction. It was pointed out how a cluster sequence of discrete Alfv\'en waves may become unstable and could lead to disruptions or oscillatory behaviour in loops or prominences.
+
+This particular equilibrium uses an axial current profile in a cylindrical geometry, yielding the same magnetic configuration as given in Equation \eqref{eq: tokamak_btheta} although this time with $\nu = 2$ such that a current distribution is present throughout the loop. The pressure profile can be obtained through integration of the equation for magnetostatic equilibrium \eqref{eq: force_equilibrium} without flow. As a boundary condition, we impose that the pressure vanishes at the plasma boundary $r = R$, which can be used to constrain the integration constant. Furthermore, a parabolic density profile is used, yielding an equilibrium configuration given by
+\begin{equation} \label{eq: discrete_alfven_equilibrium}
+  \begin{gathered}
+    \rho_0 = 1 - \left(1 - d\right)\left(\frac{r}{R}\right)^2,
+    \qquad
+    B_{02} = \frac{1}{6}j_0 r\left(r^4 - 3r^2 + 3\right),
+    \qquad
+    B_{03} = 1, \\
+    \begin{aligned}
+      p_0 = ~&\frac{j_0^2}{720}\Bigl[
+        12\left(R^{10} - r^{10}\right)
+        - 75\left(R^8 - r^8\right)
+        + 200\left(R^6 - r^6\right) \\ \Bigl.
+        &- 270\left(R^4 - r^4\right)
+        + 180\left(R^2 - r^2\right)
+      \Bigr],
+    \end{aligned}
+  \end{gathered}
+\end{equation}
+in which $d = 0.2$ and $j_0 = 0.125$. The cylinder wall is taken at $R = 1$. The equilibrium temperature profile can be derived using $T_0 = p_0 / \rho_0$ and $T_0' = \left(p_0'\rho_0 - \rho_0'p_0\right)/\rho_0^2$, where the prime denotes the derivative with respect to $r$. Only conduction parallel to the magnetic field lines is taken into account,
+because cross-field thermal conduction acts on too long a timescale in this case \citep{keppens1993}.
+
+The wavenumbers $k_2 = m$ and $k_3 = k$ are taken to be 1 and 0.05, respectively. The heating term is assumed to be as such that it exactly balances out the optically thin radiative losses in the equilibrium state. We use the cooling curve introduced by \citet{rosner1978}, which represents a piecewise cooling law with predetermined coefficients. Because the inclusion of nonadiabatic effects requires us to specify unit normalisations in order to loop up the dimensional values in the cooling tables, we take reference values of 50 G for the magnetic field, $1.5 \times 10^{-15}$ g cm$^{-3}$ for the density and $10^{10}$ cm as a length scale. This automatically constrains all other normalisations through the ideal gas law, assuming a fully ionised plasma.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{discrete_alfven.png}
+  \caption{
+    Panel \textbf{a}: discrete Alfv\'en spectrum; the Alfv\'en continuum is annotated in cyan. Six discrete modes were found, denoted $\omega_1$ through $\omega_6$. The insets depict zoom-ins; the regions are annotated in the figure. Panel \textbf{b} shows a plot of the Alfv\'en continuum vs. radius; the minimum is denoted by a red cross. The six panels in the bottom-right corner show the imaginary part of the $r v_r$ eigenfunctions for modes $\omega_1$ through $\omega_6$, the red dotted line represents the location of the minimum of the Alfv\'en continuum.
+  }
+  \label{fig: discrete_alfven}
+\end{figure}
+
+The spectrum is calculated using 501 gridpoints, Figure \ref{fig: discrete_alfven} shows the discrete Alfv\'en spectrum (Panel a) along with a plot of the Alfv\'en continuum (Panel b). In total, six discrete modes (that is, modes that fall outside of the Alfv\'en continuum) were found in contrast with the five discrete modes in the original paper by \citet{keppens1993}. The discrete modes are annotated according to their overtones, where $\omega_1$ represents the fundamental mode (FM) and $\omega_6$ the fifth overtone (OT). This last overtone does not show up for resolutions below $\sim 200$ gridpoints, which explains why it is not present in the original work. The imaginary part of the $r v_r$ eigenfunction corresponding to each of these six modes is shown in the bottom-right panels of Figure \ref{fig: discrete_alfven}, where the location of the minimum in the Alfv\'en continuum is indicated by a red dotted line. Note that the number of eigenfunction nodes increases when considering modes further in the Alfv\'en sequence: the eigenfunction corresponding to $\omega_1$ has no nodes, and $\omega_2$ through $\omega_6$ have one, two, three, four, and five nodes, respectively. Table \ref{tab: discrete_alfven} shows a detailed comparison between the discrete modes found by {\legolas} and the ones from \citet{keppens1993}.
+We multiplied these latter by $\icomplex$, because they use the convention $\exp(st)$ rather than $\exp(-\icomplex \omega t)$ in the Fourier analysis (thus, $\omega = \icomplex s$).
+
+\begin{table}[t]
+	\centering
+	\caption{
+    Comparison of discrete Alfv\'en eigenvalues between \texttt{Legolas} and the original work by \citet{keppens1993}
+  }
+	\begin{tabular}{c c c}
+		\hline
+		\textbf{Eigenvalue}		&		\texttt{Legolas}									&				original work	\\
+		\hline
+      FM $\omega_1$	    &	$-0.1044166 + 1.7261\times 10^{-07}\icomplex$	&	$-0.1043688 + 1.7\times 10^{-07}\icomplex$	\\
+      1st OT $\omega_2$	&	$-0.1090794 + 6.5883\times 10^{-08}\icomplex$	&	$-0.1090706 + 6.7\times 10^{-08}\icomplex$	\\
+      2nd OT $\omega_3$	&	$-0.1096034 + 8.3813\times 10^{-09}\icomplex$	&	$-0.1096018 + 8.4\times 10^{-09}\icomplex$	\\
+      3rd OT $\omega_4$ &	$-0.1096779 + 2.5325\times 10^{-09}\icomplex$	&	$-0.1096777 + 2.5\times 10^{-09}\icomplex$	\\
+      4th OT $\omega_5$	&	$-0.1096872 + 3.7770\times 10^{-10}\icomplex$	&	$-0.1096871 + 4.0\times 10^{-10}\icomplex$	\\
+      5th OT $\omega_6$	&	$-0.1096883 + 7.4336\times 10^{-11}\icomplex$	&					---
+	\end{tabular}
+	\label{tab: discrete_alfven}
+\end{table}
+
+In reality, the mode sequence is expected to be an infinite sequence accumulating at the local minimum in the Alfv\'en continuum, as indicated in Panel b on Figure \ref{fig: discrete_alfven}. Both the real and imaginary parts of the eigenvalues are in excellent agreement. It should be noted that when the nonadiabatic effects are omitted, the imaginary parts of these discrete modes become zero, such that they lie on the real axis, representing stable waves. The inclusion of nonadiabatic effects hence has almost no influence on their oscillation frequency and solely pushes these modes into the unstable part of the imaginary plane. In \citet{keppens1993}, it was pointed out how these discrete Alfv\'en mode sequences can be studied by means of a WKB analysis. However, this only correctly predicted the damped or overstable nature of the higher-order modes: to determine whether the most global modes of the sequence are overstable or damped requires a full numerical calculation, now possible with a tool like {\legolas}.
+
+
 \subsection{Magnetothermal instabilities}
+As a final test, we look at magnetothermal instabilities, originally depicted in \citet{vanderlinden1992}. The geometry is cylindrical with $r \in [0, 1]$ and an isothermal equilibrium profile given by
+\begin{equation} \label{eq: magnetothermal_equilibrium}
+  \begin{gathered}
+    T_0 = 1,
+    \qquad
+    B_{02} = \frac{r}{1 + r^2},
+    \qquad
+    B_{03} = 0,
+    \qquad
+    p_0 = \frac{1}{2\left(1 + r^2\right)^2},
+    \qquad
+    \rho_0 = \frac{p_0}{T_0},
+  \end{gathered}
+\end{equation}
+with $k_2 = m = 0$ and $k_3 = k = 1$. There is no $B_{0z}$, such that this configuration actually represents a z-pinch (which is very unstable), and we are looking at axisymmetric (sausage) $m = 0$ modes here. Field-aligned thermal conduction is included, cross-field thermal conduction is omitted. Optically thin radiative losses are accounted for, and we use the same cooling curve and heating assumptions as for the nonadiabatic discrete Alfv\'en waves in the previous subsection. Reference values are taken to be $2.6$ MK for the temperature, 10 G for the magnetic field and $10^8$ cm for the length scale. As before, this automatically constrains all other normalisations as well. There parameters are representative for solar coronal loops and arcades.
+
+Both the Alfv\'en and slow continua collapse into marginal (zero) frequency. However, including finite parallel thermal conduction and radiative losses introduces the thermal continuum. Together with the marginal slow-Alfv\'en frequencies, this organises the modes such that thermal instabilities merge with magnetic modes, introducing magnetothermal branches. Figure \ref{fig: magnetothermal} shows the MHD spectrum for 1001 gridpoints in the region of the magnetothermal branches, where the bottom-right Panel c zooms in further near the origin. The modes denoted by $I_{+1}$ and $T_1$ represent fundamental magnetic and thermal modes, respectively, meaning they are not coalesced.
+The overtones of these modes on the other hand are coalesced; these are denoted by $\left(I_{+2}, T_2\right)^-$ and $\left(I_{+15}, T_{15}\right)^-$ for the 1st and 14th overtones, respectively. The minus sign in superscript means they are located on the negative side of the real axis. There are corresponding modes on the positive part of the real axis, as without flow, we maintain left-right symmetry of the spectrum. The first 14 overtones are in excellent agreement with those described in \citet{vanderlinden1992} and are encircled in red on Panel a. However, the original work only displays solutions up to the 14th overtone. The resolution used here is much higher than the originally published results, allowing us to probe the region near the origin as well. Panel c zooms in near the origin, denoted by the dashed rectangle in Panel a, revealing a complex mixture of different branches and scattered modes. It seems that the original magnetothermal branches split, and a dense region covered with many magnetothermal modes appears. The (analytically known) thermal continuum is annotated in green on the figure, and is represented by a dense, continuous range of discrete eigenvalues on the imaginary axis. Because this is the first time that such high resolutions are possible for computing the magnetothermal modes, it is left to future work to clarify how the MHD spectrum allows for such complex mode interactions, revealing the possible presence of areas covered by modes in the complex eigenfrequency plane.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{magnetothermal.png}
+  \caption{
+    Magnetothermal instabilities for $m = 0$ and $k = 1$. The fundamental modes and 14 overtones discussed in the original work are encircled by red and denoted in the left Panel \textbf{a}. Panel \textbf{b} shows the thermal continuum as a function of radius. Panel \textbf{c} zooms into the region denoted by dashed lines in Panel \textbf{a}, revealing various other modes forming intricate structures.
+  }
+  \label{fig: magnetothermal}
+\end{figure}
 
 \section{Convergence} \label{sec: convergence}
+As is clear from all cases discussed in this Chapter, increasing the resolution can have a major influence on the spectrum, depending on whether or not all modes are sufficiently resolved. Generally speaking, the further one goes in a specific sequence, that is, looking at larger mode numbers that represent overtones having more and more nodes in their eigenfunctions, the higher the resolution that is required in order to resolve the mode completely. For eigenfunctions, it is usually immediately clear if a mode is resolved or not, because higher mode numbers translate into more oscillations in the eigenfunction. Hence, once the number of oscillations approaches the amount of gridpoints, the eigenfunction will no longer be resolved.
+
+For the eigenfrequencies it is not a priori clear when a specific $\omega$ is resolved. One way to constrain an eigenvalue is to do multiple runs, each time increasing the resolution. Once an eigenvalue no longer shifts in the complex plane, it can be considered resolved, and increasing the resolution even further will not have much effect on its value. Now, the question of how many gridpoints are typically needed to be able to speak of a ``resolved'' spectrum naturally arises. This will strongly depend on the type of equilibrium considered: for smooth equilibria without sharp transitions, one can get away with a few dozen gridpoints and already reach an acceptable accuracy for most modes. However, in the case of equilibria with large gradients, or even with localised discontinuities (interfaces), one has to make sure that a sufficient number of gridpoints are taken in order to sufficiently resolve that jump.
+
+Furthermore, the amount of eigenvalues in the spectrum increases with resolution, because there are as many eigenfrequencies as the dimension of the matrices (which is 16 times the number of gridpoints, at least for the 8 MHD equations). It is therefore entirely possible that one starts probing parts of the spectrum that were initially not visible at lower resolutions, simply because there were no eigenvalues in that region for that amount of gridpoints. An example is given here, where we look back at the Kelvin-Helmholtz equilibrium discussed in Section \ref{ss: kh_cd_instabilities}. Figure \ref{fig: convergence} shows this equilibrium for the exact same values as employed earlier, but every panel shows the spectrum for a different resolution, with the amount of gridpoints given in the top-left corner. The first three panels start out at low resolution, increasing from 26 to 76 gridpoints. Three modes are annotated on the figure, corresponding to the KH and CD modes discussed earlier. These modes are already decently resolved even at the lowest resolutions and can be considered completely resolved at around 100 gridpoints. However, the region near the horizontal axis is another matter entirely. At low resolutions (first three panels), we see that most of the modes here are almost randomly scattered in the complex plane. At around 100 gridpoints, they start lining up and form a more intricate ``elliptic'' pattern. This is the point where the original paper by \citet{baty2002} stopped, because back then it was not really feasible to run these codes at higher resolutions, and they were only interested in the most unstable KH and CD modes that were resolved, and that determined the early evolution of a full nonlinear MHD simulation that they performed.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{convergence.png}
+  \caption{
+    Spectrum of the Kelvin-Helmholtz and current-driven equilibrium as shown in Figure \ref{fig: kh_cd}, using the same parameters as in Section \ref{ss: kh_cd_instabilities}, at various resolutions (indicated on the top-left of each panel). The inset on the top two rows of panels zooms near the horizontal axis, for vertical axis values between $-0.1$ and $0.1$. The insets on the bottom row of panels have slightly different vertical bounds, from $-0.03$ to $0.03$.
+  }
+  \label{fig: convergence}
+\end{figure}
+
+When the resolution is increased even further, we see that the near-axis modes shift even closer to the real eigenfrequency axis, and as visible on the insets of each panel, these modes start to form intriguing patterns at high resolutions. The amount of ``scattered'' modes decreases considerably, and a helix-like structure is formed at very high resolutions (1001 gridpoints, lower-right panel). These complex and almost geometric patterns may arise in various different equilibria as well and call for extensive research in this topic. A complementary means to identify which modes are actually resolved is to exploit the spectral web; see \citet{goedbloed2018_web1, goedbloed2018_web2} and \citet[Ch. 12--13]{book_MHD}, who locate eigenmodes on specific curves and their intersections. These curves relate to the two self-adjoint operators at play in stationary, adiabatic MHD. Only a combined approach using high-resolution {\legolas} runs, modern linear algebra solvers, and physical insight in MHD spectral theory will in time reveal the true importance of these modes.
+
+Based on the conclusions drawn here, it is clear that the resolution required depends on the part of the spectrum that is to be investigated. For isolated modes, about 100 gridpoints is usually more than sufficient to resolve most of them, although this also depends on the equilibrium under consideration. For large-scale surveys of the spectrum, large resolutions should be employed in order to reveal possible regions of interest.
+
 
 \section{The Legolas testing framework}
 
