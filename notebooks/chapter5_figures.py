@@ -1,3 +1,4 @@
+from matplotlib import ticker
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
@@ -328,9 +329,141 @@ def discrete_alfven_figure():
     )
 
 
+def magnetothermal_figure():
+    filedir = (datadir / "12_magnetothermal/datfiles").resolve()
+    ds = pylbo.load(*sorted(filedir.glob("*.dat")))
+
+    fig, axes = plt.subplots(3, 2, figsize=(16, 8))
+    grid = axes[0, 1].get_gridspec()
+    [ax.remove() for ax in axes[:, 0]]
+    axl = fig.add_subplot(grid[:, 0])
+    [ax.remove() for ax in axes[1:, 1]]
+    axb = fig.add_subplot(grid[1:, 1])
+    axt = axes[0, 1]
+
+    # left plot + bot-right plot
+    for ax in (axl, axb):
+        ax.plot(ds.eigenvalues.real, ds.eigenvalues.imag, ".b")
+        ax.axhline(y=0, linestyle="dotted", color="grey", alpha=0.3)
+        ax.axvline(x=0, linestyle="dotted", color="grey", alpha=0.3)
+        ax.set_xlabel(r"Re($\omega$)")
+        ax.set_ylabel(r"Im($\omega$)")
+    # left plot
+    axl.set_xlim(-0.025, 0.025)
+    axl.set_ylim(-0.005, 0.12)
+    add_panel_label(axl, "a", loc="top right")
+
+    # top-right plot
+    wth = ds.continua["thermal"]
+    axt.plot(
+        ds.grid_gauss, np.imag(wth), lw=3, color="limegreen", label="$\omega_{th}$"
+    )
+    axt.yaxis.tick_right()
+    axt.set_ylim(0.002, 0.014)
+    axt.set_yticks(np.linspace(0.002, 0.014, 3))
+    axt.set_xlabel("r")
+    axt.legend(loc="lower left")
+    add_panel_label(axt, "b", loc="top right")
+
+    # bot-right plot
+    x1, x2, y1, y2 = -0.008, 0.008, 0.001, 0.015
+    patch = patches.Rectangle(
+        (x1, y1),
+        width=(x2 - x1),
+        height=(y2 - y1),
+        facecolor="none",
+        edgecolor="grey",
+        linestyle="dashed",
+        alpha=0.8,
+        lw=2,
+    )
+    axl.add_patch(patch)
+    axb.plot(
+        np.real(wth),
+        np.imag(wth),
+        color="limegreen",
+        lw=7,
+        alpha=0.5,
+        label=r"$\omega_{th}$",
+    )
+    axb.legend(loc="upper left")
+    axb.yaxis.set_label_position("right")
+    axb.yaxis.tick_right()
+    axb.set_xlim(x1, x2)
+    axb.set_ylim(y1, y2)
+    axb.set_xticks(np.linspace(-0.005, 0.005, 5))
+    axb.set_yticks(np.linspace(y1, y2, 5))
+    axb.yaxis.set_major_formatter(ticker.FormatStrFormatter("%.3f"))
+    add_panel_label(axb, text="c", loc="top right")
+
+    # annotating eigenvalues
+    on_axis_guess = [0.112j, 0.027j]
+    _, on_axis_evs = ds.get_nearest_eigenvalues(ev_guesses=on_axis_guess)
+    # annotate the on-axis ones with text
+    on_axis_text = ["$I_{+1}$ fund.", "$T_{1}$ fund."]
+    boxprops = dict(boxstyle="round", color="grey", alpha=0.05)
+    arrowprops = dict(arrowstyle="->", connectionstyle="arc3, rad=0.05")
+    for ev, text in zip(on_axis_evs, on_axis_text):
+        print(f"Eigenvalue found: {ev}")
+        axl.scatter(ev.real, ev.imag, s=100, edgecolor="red", facecolor="none")
+        axl.annotate(
+            text,
+            xy=(ev.real + 0.001, ev.imag),
+            xytext=(0.005, ev.imag),
+            bbox=boxprops,
+            arrowprops=arrowprops,
+        )
+
+    overtones_guess = [
+        -0.0196 + 0.0439j,
+        -0.01991 + 0.032066j,
+        -0.01867 + 0.025752j,
+        -0.017279 + 0.021843j,
+        -0.0160 + 0.0191j,
+        -0.01489 + 0.017255j,
+        -0.01392 + 0.015782j,
+        -0.013082 + 0.014618j,
+        -0.0123 + 0.0136j,
+        -0.01168 + 0.012885j,
+        -0.01109 + 0.012219j,
+        -0.010566 + 0.011647j,
+        -0.0100 + 0.0111j,
+        -0.00965 + 0.010710j,
+    ]
+    idxs, evs = ds.get_nearest_eigenvalues(ev_guesses=overtones_guess)
+    for ev in evs:
+        print(f"Eigenvalue found: {ev}")
+        axl.scatter(ev.real, ev.imag, s=75, edgecolor="red", facecolor="none")
+    text1 = "$(I_{+2}, T_{2})^-$"
+    axl.annotate(
+        text1,
+        xy=(evs[0].real + 0.0005, evs[0].imag),
+        xytext=(evs[0].real + 0.004, evs[0].imag),
+        bbox=boxprops,
+        arrowprops=arrowprops,
+    )
+    text2 = "$(I_{+15}, T_{15})^-$"
+    arrowprops = dict(arrowstyle="->", connectionstyle="arc3, rad=-0.05")
+    axl.annotate(
+        text2,
+        xy=(evs[-1].real, evs[-1].imag + 0.001),
+        xytext=(evs[-1].real - 0.003, evs[-1].imag + 0.01),
+        bbox=boxprops,
+        arrowprops=arrowprops,
+    )
+
+    fig.subplots_adjust(hspace=0.35, wspace=0.02)
+    fig.savefig(
+        "../05-applying_legolas/figures/magnetothermal.png",
+        bbox_inches="tight",
+        dpi=400,
+    )
+
+
 def main():
     # quasi_parker_figure()
-    discrete_alfven_figure()
+    # discrete_alfven_figure()
+    magnetothermal_figure()
 
 
 if __name__ == "__main__":
