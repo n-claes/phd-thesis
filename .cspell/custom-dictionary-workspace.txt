@@ -56,6 +56,7 @@ photospheric
 poloidal
 postprocessing
 prechosen
+preflare
 pressureless
 quadblock
 quadblocks
