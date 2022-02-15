@@ -47,6 +47,7 @@ nonadiabatic
 nonideal
 nonlinear
 nonlinearly
+nontrivial
 nonzero
 nucleous
 overdamped
@@ -65,6 +66,7 @@ selfgravity
 Selfgravity
 Shafranov
 skyblue
+slabsize
 Spex
 Sturmian
 subblock

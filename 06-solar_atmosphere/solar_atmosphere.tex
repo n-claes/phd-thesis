@@ -1,5 +1,7 @@
 \chapter{MHD spectroscopy of a solar atmosphere} \label{ch: solar_atmosphere}
 
+\graphicspath{{06-solar_atmosphere/figures/}}
+
 \begin{chapterquote}[Jean-Luc Picard][Star Trek TNG: `Attached']
   There is a way out of every box, a solution to every puzzle; it's just a matter of finding it.
 \end{chapterquote}
@@ -24,8 +26,67 @@ In Section \ref{sec: analytical_work} we first revisit the analytical work done 
 
 
 \section{Revisiting analytical models} \label{sec: analytical_work}
+We first revisit a solar atmospheric model described by \citet{nye1976}, who considered an isothermal atmosphere with a horizontal magnetic field independent of height and an exponentially decreasing density profile in a uniform gravitational field. This particular setup results in a constant sound speed and density scale height, which, combined with a wave vector parallel to the magnetic field, makes it analytically tractable. The equilibrium background is given in normalised units by
+\begin{equation} \label{eq: nye-thomas}
+  \begin{gathered}
+    \soundspeed^2 = \gamma T_0,
+    \qquad
+    H = \frac{T_0}{g} = \text{const.}, \\
+    \rho_0(x) = \rho_{00}\exp(-x/H),
+    \qquad
+    B_{0z} = \sqrt{\gamma \rho_{00}T_0 \beta^2} = \text{const.},
+  \end{gathered}
+\end{equation}
+where $H$ denotes the density scale height, $\rho_{00}$ is taken equal to one, and $\beta^2 = c_\text{A0}^2/\soundspeed^2$ is a dimensionless parameter (not to be confused with the plasma beta), defined as the ratio between the Alfv\'en velocity at $x = 0$ and the (constant) sound speed. Furthermore solar gravity is assumed, hence the dimensional value for $g = 274$ m s$^{-2}$ ($\approx$ 1.66 in normalised units). In our setup we take a reference scale height of one and use that to constrain the background temperature. \citet{nye1976} then proceeded in deriving a dispersion relation for waves with a wavenumber $k_z$ purely aligned with the constant horizontal magnetic field, which was then evaluated for various values of $Hk_z$ and $\beta^2$. We on the other hand can plug in the equilibrium configuration defined in Equation \eqref{eq: nye-thomas} in {\legolas} which will return the full eigenvalue spectrum with all eigenfunctions. It should be noted that the original work only considers modes in the fast sequence, while in our full spectrum calculations also the slow and Alfv\'en sequences are present. Also, the analytical work assumes an infinite atmosphere with exponential vanishing eigenfunctions bounded by a slid wall at the lower boundary, while here we have a finite slab with solid wall boundaries on both sides. We therefore take the slabsize sufficiently large (about 15 scale heights) to approximate an infinite atmosphere. All runs in this Section are performed using a resolution of 250 grid points and unit normalisations taken as 1 MK, 10 Gauss, and 50 Mm for the unit temperature, unit magnetic field, and unit length, respectively.
+
+
 \subsection{Purely parallel propagation} \label{ss: parallel_propagation}
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{nye_thomas_ky0.png}
+  \caption{
+    Spectrum plots with eigenfunctions for the equilibrium in Equation \eqref{eq: nye-thomas}, for $\beta^2 = 10^{-4}$ (Panel \textbf{a}) and $\beta^2 = 0.5$ (Panel \textbf{b}), $k_y = 0$ in both cases. The blue and orange dots denote the first and second modes of the fast sequence, respectively. Panel \textbf{c}: $v_x$ eigenfunctions of the four modes annotated with a cross on Panel \textbf{a}, near $Hk_z \approx 0.3$, representing the first four modes of the fast sequence. Panel \textbf{d}: $v_x$ eigenfunctions of the modes marked with crosses on Panel \textbf{b}.
+    All eigenfunctions are normalised; the colours are consistent between the panels.
+  }
+  \label{fig: nye-thomas-ky0}
+\end{figure}
+
+Figure \ref{fig: nye-thomas-ky0} shows spectrum plots for $\beta^2 = 10^{-4}$ (Panel a) and $\beta^2 = 0.5$ (Panel b), using the equilibrium given in Equation \eqref{eq: nye-thomas}. The full spectrum is shown with dots, where every vertical line of dots represents one {\legolas} run for that particular $k_z$ value. The first two modes of the fast sequence are annotated in blue and orange, respectively. The solid red and cyan lines denote the maxima of the slow and Alfv\'en continua, respectively, with their minima near zero (but finite). Hence, everything to the left of the cyan line in Panel a consists of purely fast modes, the region between the cyan and red line contains fast modes overlapping with the Alfv\'en continuum, and the dense collection of points below the red line corresponds to an overlapping between the slow and Alfv\'en continua. Panel c shows the $v_x$ eigenfunctions of the first four modes in the fast sequence at $H k_z \approx 0.3$ -- that is, the crossed in blue, orange, green and red, respectively, at that particular wave number. Since the magnetic field scales with the parameter $\beta$ -- where we again note that this is \emph{not} the plasma beta parameter, see Equation \eqref{eq: nye-thomas} -- this case is approximately hydrodynamic.
+
+Panel b in Figure \ref{fig: nye-thomas-ky0} has a dynamically important magnetic field $\beta^2 = 0.5$ and shows a similar setup to Panel a. The slow and Alfv\'en continua have their minima annotated with red and cyan dashed lines, respectively. The slow continuum is constrained to a narrow band, with the Alfv\'en continuum partially overlapping. The maximum value of the latter lies far beyond the upper limit of that panel. Hence, only the modes at $k_z = 0$ represent purely fast modes; all others above the solid red line are overlapping with the Alfv\'en continuum. The first two modes of each fast sequence are again annotated in blue and orange, respectively. The $v_x$ eigenfunctions in Panel d correspond to the six annotated modes on Panel b, and they become more and more localised when $k_z$ increases.
+
+It should be noted that the first sequence of modes in Figure \ref{fig: nye-thomas-ky0} does in fact correspond to the $k_y = 0$ and $k_z = 0$ case. This implies that the slow and Alfv\'en continua collapse to $w = 0$, and one could mistakenly be under the impression that there would be no modes present for this case. However, the Fourier dependence assumed by {\legolas}, as in Equation \eqref{eq: fourier_analysis}, does in fact allow for nontrivial $\omega$ solutions if $k_y = k_z = 0$ and $\hat{f}_1 \neq 0$, representing fast modes propagating in the $x$-direction perpendicular to the magnetic field.
+Both spectra show an excellent correspondence to the plots given by \citet{nye1976}, which were obtained by analytically solving the dispersion relation. However, \citet{nye1976} never mentioned the presence of the slow and Alfv\'en continua, which were not described by their dispersion relation.
+
+
 \subsection{Effects of non-parallel propagation} \label{ss: non_parallel_propagation}
+As seen in Figure \ref{fig: nye-thomas-ky0}, there is an overlap between the fast mode sequence and the Alfv\'en continuum. However, when the wave vector is taken to be parallel to the magnetic field, the Alfv\'en continuum is no longer relevant in the sense that it completely decouples from the fast modes. This is the reason why that particular case becomes analytically tractable, even though the background equilibrium is homogeneous. However, there is no need to force that condition when using {\legolas}, and hence we can introduce a nonzero value for $k_y$. Even a small value of $k_y$ will have considerable effects due to the overlap with the Alfv\'en continuum, since the latter will no longer decouple, resulting in a resonance between the fast modes and the continuum.
+It can be shown using a Frobenius expansion -- for a thorough discussion on this topic we refer to \citet{book_MHD} -- that this will introduce a singularity with a $\left(x - x_\text{A}\right)^{-1}$ behaviour in the eigenfunctions perpendicular to the magnetic field, where $x_\text{A}$ is the resonance radius.
+
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.65\textwidth]{nye_thomas_kynonzero.png}
+  \caption{
+    Panel \textbf{a}: spectrum plot for the equilibrium in Equation \eqref{eq: nye-thomas} with $\beta^2 = 0.5$ and
+    $k_y = 0.05$. Blue and orange dots denote the first and second mode of the fast sequences, respectively.
+    Panel \textbf{b} shows $v_y$ eigenfunctions of the four modes annotated with crosses in the fast sequence at
+    $H k_z \approx 2.2$, clearly showing the $1/x$ behaviour at $x = x_\text{A}$ due to overlap and resonance with the Alfv\'en continuum. The arrows denotes the resonance radius predicted by Equation \eqref{eq: resonance_radius}.
+  }
+  \label{fig: nye-thomas-kynonzero}
+\end{figure}
+
+In the case considered here it is actually possible to make an estimate of this radius, by starting from the regular expression for the Alfv\'en continuum $\omega_\text{A}^+ = \left(\bk \cdot \bb_0\right)/ \sqrt{\rho(x)}$. Since the magnetic field is homogeneous, this expression can be inverted to yield $x_\text{A}$ as a function of frequency:
+\begin{equation} \label{eq: resonance_radius}
+  x_\text{A} = 2 H \ln\left(\frac{\omega}{k_z B_{0z}}\right),
+\end{equation}
+where we used the fact that $\rho_{00} = 1$ and the magnetic field is aligned with the $z$-axis. If we now substitute the frequency of the fast mode under consideration, Equation \eqref{eq: resonance_radius} will give an indication where in the eigenfunction the $1/x$ singularity will occur. Naturally, this also implies that the location of this singularity is frequency and wavenumber dependent, resulting in a larger $x_\text{A}$ when the frequency increases; that is, for higher modes in the sequence, and a smaller $x_\text{A}$ when $k_z$ increases.
+
+Figure \ref{fig: nye-thomas-kynonzero} shows the same setup as Panel b in Figure \ref{fig: nye-thomas-ky0}, but now with $k_y = 0.05$. As seen on Panel a the spectrum itself is practically unaffected, the first two modes of each fast sequence are again annotated. Panel b shows the $v_y$ eigenfunctions for the four modes at $H k_z \approx 2.2$, clearly showing the $1/x$ singular behaviour. The arrows denote the estimated value for the resonance radius $x_\text{A}$ according to Equation \eqref{eq: resonance_radius} in the same colour as its eigenfunction, with values given by $x_\text{A} \approx 1.63$, $x_\text{A} \approx 2.33$, $x_\text{A} \approx 2.83$ and $x_\text{A} \approx 3.22$ for the first, second, third and fourth mode of the fast sequence at that value for $k_z$, respectively. Since these modes correspond fo the same fast mode sequence, and thus have the same value for $k_z$, we indeed see the singularity moving to the right on the figure, locating itself at larger $x_\text{A}$ values for higher mode numbers.
+
+It should be noted that these eigenfunctions do not show a ``real'' $1/x$ behaviour in the sense that the eigenfunctions rather show a spiked oscillation instead of extending towards infinity. This is due to {\legolas} trying to approximate those eigenfunctions with the limited number of gridpoints at its disposal. The more the resolution is increased, the more this singular $1/x$ profile will be resolved. This truly singular behaviour due to this resonance is particular to ideal MHD, but we could also activate resistive terms in {\legolas}, to then get a fully resolved complex eigenfrequency at finite resistivity with a spatially resolved eigenfunction behaviour.
+
+
 \subsection{Inclusion of non-adiabatic effects} \label{ss: non_adiabatic_effects}
 
 \section{A realistic solar atmosphere model} \label{sec: solar_atmosphere}
