@@ -88,6 +88,33 @@ It should be noted that these eigenfunctions do not show a ``real'' $1/x$ behavi
 
 
 \subsection{Inclusion of non-adiabatic effects} \label{ss: non_adiabatic_effects}
+As a final extension to this rather simple model, we again consider the $\beta^2 = 0.5$ configuration from Section \ref{ss: parallel_propagation} but now include non-adiabatic effects: thermal conduction parallel to the magnetic field lines and optically thin radiative losses based on the {\spexdm} cooling curve given in Figure \ref{fig: coolingcurves}. Since this will cause the introduction of complex eigenfrequencies, we now focus on the full spectrum for $k_z = 2$ and $k_y = 0$. Figure \ref{fig: nye-thomas-nonadiabatic} shows the corresponding spectrum for 250 gridpoints in Panel a, whereas Panel b shows the exact same spectrum but without non-adiabatic effects for comparison. The thermal, slow, and Alfv\'en continua are annotated in green, red, and cyan, respectively. By comparing Panels a and b it can be seen that the thermal continuum shifts from its marginal solution in the adiabatic case to the dense band of modes on the imaginary axis as given by Equation \eqref{eq: slow_thermal_continuum}, in this case with both a stable and unstable part. The same holds true for the slow continuum, which shifts from its purely real adiabatic solution to an intricate loop in the complex plane, becoming partially unstable. The inset on Panel a zooms in on the slow sequence, revealing a single discrete mode annotated by a pink cross, with the imaginary part of its $\rho$ and $v_x$ eigenfunctions shown in pink on Panels c, both showing a strong oscillation in the lower regions of the slab. This discrete eigenvalue represents a global unstable slow mode since it is not part of the continuum, although it can be linked to an internal extremum as shown in Figure \ref{fig: nye-thomas-continua}.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{nye_thomas_nonadiabatic.png}
+  \caption{
+    Spectra and eigenfunctions for the $\beta^2 = 0.5$ setup in Section \ref{ss: parallel_propagation}, with non-adiabatic effects included. Panel \textbf{a}: enlargement near the slow sequence, showing (part of) the thermal, slow, and Alfv\'en continua in green, red, and cyan, respectively, along with four unstable modes from the fast sequence. Inset: further enlargement on the slow continuum, revealing a single discrete mode.
+    Panel \textbf{b}: same as in Panel \textbf{a}, but without non-adiabatic effects. Panels \textbf{c}: $\rho$ (left) and $v_x$ (right) eigenfunctions of the discrete mode annotated in the inset. Panels \textbf{d}: $v_x$ eigenfunctions for the three fast modes annotated on Panel \textbf{a}. All eigenfunctions are normalised.
+  }
+  \label{fig: nye-thomas-nonadiabatic}
+\end{figure}
+
+The first few (unstable) modes of the fast sequence in Panel a overlap with the Alfv\'en continuum, which is decoupled due to $k_y$ being zero. The real part of these fast modes is approximately equal to the values shown on Figure \ref{fig: nye-thomas-ky0}, Panel b, where the first and second coloured modes on that panel would correspond to modes 2 and 3 on Figure \ref{fig: nye-thomas-nonadiabatic}, Panel a; the imaginary part is non nonzero due to the non-adiabatic effects included. The $v_x$ eigenfunctions of these fast modes are given in Panels d. All eigenfunctions on this figure are calculated using a shift-invert method near the eigenvalue of interest.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.65\textwidth]{nye_thomas_continua.png}
+  \caption{
+    The thermal (green), Alfv\'en (cyan), and slow (red) continua as a function of height, for the non-adiabatic case shown in Figure \ref{fig: nye-thomas-nonadiabatic}. The slow continuum shows an internal extremum. All continua are rescaled to $H / \soundspeed$, similar to the other figures in this Section.
+  }
+  \label{fig: nye-thomas-continua}
+\end{figure}
+
+Figure \ref{fig: nye-thomas-continua} shows all continua corresponding to the non-adiabatic case discussed here, rescaled using the scale height and sound speed in order to be consistent with Figure \ref{fig: nye-thomas-nonadiabatic}. The thermal continuum (green) has clear variation, but no internal extrema. The slow continuum on the other hand does have an internal maximum in its real part, which can be linked back to the unstable discrete mode we found, shown on the inset on Panel a, Figure \ref{fig: nye-thomas-nonadiabatic}. Note that this simple magnetised atmosphere model thus already gives us unstable parts in the thermal and slow continuum, and gives overstable discrete modes linked to both the slow and the fast mode sequences.
+
+What this implies for an initial value problem where this particular atmosphere would be realised in a numerical nonlinear MHD simulation with all the non-adiabatic effects included is as follows: since the thermal continuum has an unstable part that is almost two orders of magnitude larger than the unstable parts of either the slow or fast modes, one would expect that the most unstable thermal mode(s) would dominate the thermal behaviour, since these have the largest growth rates. Physically, this would mean that any perturbation would immediately lead to an in-situ condensation. However, the possibility of some form of coalescence between the unstable slow and fast modes and the thermal modes (or even a combination of all three) can not be excluded. In that case a cool and dense condensation will still form, but the way this happens (and it subsequent dynamics) may be much more intricate than a ``simple'' in-place condensation.
+
 
 \section{A realistic solar atmosphere model} \label{sec: solar_atmosphere}
 \subsection{The stratified, magnetised atmosphere} \label{ss: atmosphere_model}

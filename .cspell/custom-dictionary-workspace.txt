@@ -18,6 +18,7 @@ eigenspectrum
 eigensystem
 Eigensystem
 exempli
+extremum
 footpoints
 Frobenius
 Galerkin
