@@ -1401,6 +1401,11 @@ De appendices kunnen desgevallend worden gebundeld in een apart boekdeel.
 \fi
 \newcommand{\makefrontcovergeneralXII}[2]{%
   \typeout{adsphd.cls: Create cover with bleed (\the\rbleed,\the\lbleed)}
+  % % Place background cover page
+  \begin{textblock*}{\adsphdpaperwidth+\lbleed+\rbleed}(0mm-\lbleed+#1,0mm)
+  \textblockcolour{}
+  \includegraphics*[trim={0 28.27mm 0 0}, clip]{cover/cover.png}
+  \end{textblock*}
   %
   % Create header
   \frontcoverheaderXII{#1}
@@ -1441,7 +1446,7 @@ De appendices kunnen desgevallend worden gebundeld in een apart boekdeel.
   \textblockcolour{}
   \vspace{-\parskip}
   \raggedright
-  \coverfontsize{30}{34}\selectfont\sffamily{\color{kulprimaryblue}\@title}\\
+  \coverfontsize{30}{34}\selectfont\sffamily{\color{white}\@title}\\
   \coverfontsize{20}{25}\selectfont\sffamily{\@subtitle}
   \end{textblock*}
   %
@@ -1450,7 +1455,7 @@ De appendices kunnen desgevallend worden gebundeld in een apart boekdeel.
   \textblockcolour{}
   \vspace{-\parskip}
   \begin{flushright}
-  \coverfontsize{14}{19}\selectfont\sffamily\textbf{\@authorf\ \@authorl}
+  \coverfontsize{14}{19}\selectfont\sffamily\textbf{\color{white}\@authorf\ \@authorl}
   \end{flushright}
   \end{textblock*}
   %
@@ -1459,7 +1464,7 @@ De appendices kunnen desgevallend worden gebundeld in een apart boekdeel.
   \textblockcolour{}
   \vspace{-\parskip}
   \begin{minipage}[t]{67mm}
-  {\coverfontsize{12}{15}\selectfont\sffamily%
+  {\coverfontsize{12}{15}\selectfont\sffamily\color{white}%
   \begin{flushright}
   Dissertation presented in partial\\%
   \fulfillment\ of the requirements for the\\%
@@ -1475,7 +1480,7 @@ De appendices kunnen desgevallend worden gebundeld in een apart boekdeel.
   \vspace{-\parskip}
   \begin{minipage}[t]{67mm}
   \begin{flushright}
-  {\coverfontsize{12}{15}\selectfont\sffamily\@date}
+  {\coverfontsize{12}{15}\selectfont\sffamily\color{white}\@date}
   \end{flushright}
   \end{minipage}
   \end{textblock*}
@@ -1523,7 +1528,7 @@ De appendices kunnen desgevallend worden gebundeld in een apart boekdeel.
     \textblockcolour{}
     \vspace{-\parskip}
     \begin{minipage}[t]{67mm}
-      \coverfontsize{12}{15}\selectfont\sffamily
+      \coverfontsize{12}{15}\selectfont\sffamily\color{white}
       %\begin{tabular}[t]{p{6.9cm}}
       \dtlifnumlt{\DTLrowcount{supervisor}}{2}{Supervisor:}{Supervisors:}
       \DTLforeach{supervisor}{\name=name,\affiliation=affiliation}{%
@@ -1758,6 +1763,7 @@ in any form by print, photoprint, microfilm, electronic or any other means
 without written permission from the publisher.
 
 \medskip
+Cover images (both front and back cover) were generated using WOMBO Dream, an AI inspired artwork tool that generates images based on already available images and data on the web. Credit to Wombo.art.
 
 \ifthenelse{\equal{\@isbn}{}}{}{ISBN \@isbn\\}
 \ifthenelse{\equal{\@depot}{}}{}{D/\@depot}
@@ -1836,6 +1842,12 @@ without written permission from the publisher.
   }{}
   \thispagestyle{empty}
 
+  % Place background back cover page
+  \begin{textblock*}{\adsphdpaperwidth+\lbleed+\rbleed}(0mm-\lbleed+#1,0mm)
+  \textblockcolour{}
+  \includegraphics*[trim={0 26.5mm 0 0}, clip]{cover/cover_back.png}
+  \end{textblock*}
+
   % Blue lines in right corner
   %
   \begin{textblock*}{55mm}(#1+97.5mm,20mm)
@@ -1856,6 +1868,7 @@ without written permission from the publisher.
   %\parbox[c][20mm]{151.2mm+\rbleed}{
   \flushright
   %\vspace{-3mm}
+  \color{white}
   {\scriptsize {\sffamily\MakeUppercase\@faculty}}\\[-1mm]
   {\scriptsize {\sffamily\MakeUppercase\@department}}\\[-1mm]
   \ifdefempty{\@researchgroup}{}{{\scriptsize {\sffamily\MakeUppercase\@researchgroup}}\\[-1mm]}
@@ -2051,6 +2064,12 @@ without written permission from the publisher.
     \cleardoublepage \mbox{}%
   }{}
   %
+  % Place spine cover
+  \begin{textblock*}{\adsphdspinewidth}(0mm-\lbleed+#1,0mm)
+  \centering
+  \textblockcolour{}
+  \includegraphics*[trim={10cm, 26.5mm, 0, 0}, clip]{cover/cover_back.png}
+  \end{textblock*}
   \newlength{\authorlen}
   \settowidth{\authorlen}{\large\sffamily\@authorf\ \MakeUppercase\@authorl}
   \newlength{\authorlenpenalty}

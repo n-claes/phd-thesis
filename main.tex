@@ -1,4 +1,4 @@
-\documentclass[final, faculty=fw, department=wis, phddegree=mat, colorlinks=true]{adsphd}
+\documentclass[final, 10pt, faculty=fw, department=wis, phddegree=mat, colorlinks=true]{adsphd}
 
 \usepackage[round]{natbib}
 
@@ -6,7 +6,7 @@
 \input{misc/customisations.tex}
 
 %%% COVER: Settings %%%
-\title{My thesis title}
+\title{An MHD eigenspectrum approach to thermal instabilities}
 
 \author{Niels}{Claes}
 \supervisor{Prof.~dr. Rony Keppens}{}
@@ -27,8 +27,6 @@
 \copyyear{2022}
 
 \setlength{\adsphdspinewidth}{9mm}
-
-% \setcustomcoverpage{mycoverpage.tex} % mycoverpage.tex is the default
 
 %%% COVER: End settings %%%
 
@@ -74,7 +72,7 @@
 \input{misc/symbols.tex}
 
 {
-   % suppress underfull hbox
+   % suppress overfull hbox
   \hbadness=10000
   \makefrontcoverXII
   \maketitle
@@ -102,7 +100,7 @@
 \include{07-conclusions/conclusions}
 
 \appendix
-\include{07-appendices/appendixA}
+\include{08-appendices/appendixA}
 
 \backmatter
 \includebibliography
@@ -110,7 +108,7 @@
 \bibliography{bibfile}
 
 {
-  % suppress overful hbox
+  % suppress overfull hbox
   \hfuzz=\maxdimen
   \makebackcoverXII
 }
