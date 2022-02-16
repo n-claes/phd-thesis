@@ -117,8 +117,66 @@ What this implies for an initial value problem where this particular atmosphere 
 
 
 \section{A realistic solar atmosphere model} \label{sec: solar_atmosphere}
+We now extend the study of waves and instabilities in stratified, magnetised atmospheres to a fully realistic atmosphere description. This requires us to specify the equilibrium (Section \ref{ss: atmosphere_model}), after which we look at the non-adiabatic continua governed by Equation \eqref{eq: slow_thermal_continuum}. Then, we show full MHD spectra for the solar atmosphere, focusing on specific regions of interest. All models in this Section assume solid wall boundaries on both sides of the stratified slab.
+
 \subsection{The stratified, magnetised atmosphere} \label{ss: atmosphere_model}
+As discussed before in Section \ref{ss: equilibrium conditions} the choice of equilibrium profile together with the system of equations considered yields two conditions for the background, here the equations governing the force-balanced state are given by \eqref{eq: force_equilibrium}--\eqref{eq: thermal_equilibrium}. In the cases discussed in this Chapter we ignore flow effects, such that the equations simplify considerably:
+\begin{gather}
+  \left(\rho_0 T_0 + \frac{1}{2}B_0^2\right)' = -\rho_0 g, \label{eq: simple_force_balance} \\
+  \left(\kappaperp T_0'\right)' = \rho_0 \HLF_0, \label{eq: simple_thermal_balance}
+\end{gather}
+where as before the prime denotes the derivative, in this case with respect to the height coordinate $x$ since we are looking at Cartesian geometries (and thus $\eps = 1$ and $\eps' = 0$). The heating function $\HLFheat$ is assumed to be constant such that it balances out radiative losses, perpendicular thermal conduction is ignored, hence Equation \eqref{eq: simple_thermal_balance} is naturally satisfied and thermal balance is ensured.
+
+In the model considered here, we assume a Cartesian slab parallel to the solar surface infinitely extended along the $y$- and $z$-directions, with a variation along $x$ in the equilibrium quantities and an external gravitational field directed downward towards the solar surface. For the temperature profile we use a solar atmospheric model proposed by \citet{avrett2008}, which is based on detailed radiative transfer calculations and observations. This profile is interpolated at high resolution using a local second-order polynomial approximation, similar to how the radiative cooling curves are treated (see Figure \ref{fig: coolingcurves}). For the gravitational field we assume the following profile,
+\begin{equation} \label{eq: solar_gravity}
+  g(x) = \gdot \left(\frac{\Rdot}{\Rdot + x}\right)^2,
+\end{equation}
+where $\gdot = 274$ ms$^{-2}$ denotes the solar gravitational constant and $\Rdot = 6.96 \times 10^{10}$ cm the solar radius. The magnetic field is assumed to be uniform and horizontal (aligned along $z$). Note that this is similar to the analytic case discussed before, and it still avoids horizontal magnetic fields that shear or vary in magnitude with height. Also, no vertical magnetic field components are considered here ($B_{01} = 0$). Since this kind of equilibrium is numerical and relies on interpolated temperature profiles, the density profile has to be calculated in order to achieve a force-balanced state. Once the temperature, gravity, and magnetic field profiles are chosen, Equation \eqref{eq: simple_force_balance} can be rewritten in terms of density as the following first order differential equation
+\begin{equation} \label{eq: density_ode}
+  \rho_0'(x) = -\frac{T_0'(x) + g(x)}{T_0(x)}\rho_0(x) - \frac{B_{0y}(x)B_{0y}'(x) + B_{0z}(x)B_{0z}'(x)}{T_0(x)}.
+\end{equation}
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.8\textwidth]{profile.png}
+  \caption{
+    Equilibrium temperature profile (red) based on the solar atmospheric model by \citet{avrett2008}, with corresponding integrated density profile ($n_\text{H}$, black) from the ODE in Equation \eqref{eq: density_ode}. The magnetic field has a uniform $z$-component of 10G; the gravitational field is given by Equation
+    \eqref{eq: solar_gravity}.
+  }
+  \label{fig: temperature-density-profile}
+\end{figure}
+The uniform magnetic field adopted implies that only the first term here enters, but one could allow for non-uniform, non force-free magnetic field variations by including this second term. The temperature derivative has to be done numerically and is calculated based on the high resolution interpolated profile using sixth order accurate finite difference methods, with forward and backward differences near the start and end of the grid, respectively, and central differences in between.
+
+
+Equation \eqref{eq: density_ode} is then integrated for $\rho_0(x)$ using a fifth-order accurate Runge-Kutta method to obtain the density profile, which is then substituted back into the ODE in order to retrieve the density derivative. This approach in calculating the density derivative -- instead of numerically differentiating the obtained density profile -- satisfies the force-balance Equation \eqref{eq: simple_force_balance} as close as numerically possible. As unit normalisations we choose a reference temperature of 1 MK, magnetic field of 10 Gauss, and a unit length of 1000 km, which automatically constrains all other normalisations following the ideal gas law using a mean molecular weight of one. This results in a profile that corresponds to observational values of the solar atmosphere, as for example given by \citet{book_priest}. Figure \ref{fig: temperature-density-profile} shows the resulting temperature and density profiles as a function of height, extending up to 25 Mm above the solar surface, for a uniform magnetic field of 10 Gauss along the $z$-direction. These equilibria are subsequently passed on to {\legolas} with a given wave vector to calculate the spectra. Thermal conduction parallel to the magnetic field is included, together with optically thin radiative losses based on the {\spexdm} cooling curve by \citet{schure2009} as in Figure \ref{fig: coolingcurves}.
+
+
 \subsection{Non-adiabatic continua} \label{ss: non_adiabatic_continua}
+Before diving into the complex spectroscopy of a realistic solar atmosphere model, it is useful to have a first indication of stable and unstable configurations in order to locate possible parameter regions of interest. To that end we solve the continuum Equation \eqref{eq: slow_thermal_continuum} using the profiles discussed here for a range in wave numbers. Figure \ref{fig: continua_vsk} shows stability regions for both the thermal and slow continua over the entire temperature range shown in Figure \ref{fig: temperature-density-profile}, for a wave vector parallel to the magnetic field ($k_y = 0$) with $k_z$ varying between 0.05 and 10. The temperature profile is superimposed on both figures with a black line. Regions where the continua are unstable are coloured in green for the thermal continuum (Panel a) and in red for the slow continuum (Panel b). It can immediately be seen that the entire chromosphere up to the transition region at $\approx 2$ Mm has an unstable thermal continuum for the full range in wave number, and as soon as the lower corona is reached this becomes more and more stable, until only large-scale perturbations (small $k_z$) lead to unstable continuum regions. The high thermal instability of the solar chromosphere is mainly a consequence of the low temperature present there, which results in diminished parallel thermal conduction effects ($\sim T^{5/2}$) and hence less stability since temperature gradients are less efficiently smoothed out. The slow continuum on the other hand is completely stable in the chromosphere and is characterised by only a narrow unstable region in the lower corona. Panels c and d correspond to the horizontally dotted line at $k_z = 1$, and show the imaginary parts of the thermal (c) and slow (d) continua for that particular $k_z$-value as a function of height.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{{continua_SA_0-50_250pts_k3_0.05-10.0}.png}
+  \caption{
+    Panels \textbf{a} and \textbf{b}: stability regions of the thermal and slow continua for the temperature profile in Figure \ref{fig: temperature-density-profile}, for a range in $k_z$. Unstable regions are coloured in green and red for the thermal and slow continua, respectively. The black line denotes the temperature profile vs. height. Panels \textbf{c} and \textbf{d}: continuum solutions as a function of height for $k_z$ = 1, corresponding to the dotted line in Panels \textbf{a} and \textbf{b}.
+  }
+  \label{fig: continua_vsk}
+\end{figure}
+
+It should be noted that, in contrast to those for the analytic case in Figure \ref{fig: nye-thomas-continua}, the continua show sharp transitions and spiked behaviour, which is an unavoidable consequence of the cooling curve used. In the case of Figure \ref{fig: nye-thomas-continua} the continua are smooth because the equilibrium temperature was uniform, such that we only needed to evaluate the cooling curve and its derivatives in a single value. Here however we have a wide range in temperature, and while the heat-loss function $\HLFheat$ itself is continuous, the cooling curve has discontinuous derivatives since we do a local second-order approximation in between two data points (that is, between two ``original'' table values) in order to preserve the original table as closely as possible. As a consequence of this it is entirely possible that for some spatially varying temperature profiles there may be jumps in the continuum curves near temperature transitions between two table points. If one were to use a different representation for the cooling curve, that is, one that also has continuous derivatives $\dHLFrho$ and $\dHLFT$, this would yield smooth curves in the complex eigenvalue plane.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{{continua_SA_0-50_250pts_thetavary_k3_cost_k2_sint}.png}
+  \caption{
+    Panels \textbf{a} and \textbf{b}: stability regions of the thermal and slow continua for the temperature profile in Figure \ref{fig: temperature-density-profile}, for various angles between the wave vector $\bk$ and the magnetic field $\bb_0$. Unstable regions are coloured in green and red for the thermal and slow continua, respectively. Panels \textbf{c} and \textbf{d}: continuum solutions as a function of height for $\theta = 3\pi/8$, corresponding to the dotted line in Panels \textbf{a} and \textbf{b}.
+  }
+  \label{fig: continua_vstheta}
+\end{figure}
+
+Figure \ref{fig: continua_vstheta} keeps the magnitude of $k$ equal but varies the angle $\theta$ between the wave vector $\bk$ and the magnetic field $\bb_0$, hence $k_y = k_0\sin\theta$ and $k_z = k_0\cos\theta$. Stability regions for the thermal and slow continua are shown for $k_0 = 1$ and $\theta$ between 0 and $2\pi$, the case with $\theta = 0$ corresponds to the dotted line case at $k_z = 1$ in Figure \ref{fig: continua_vsk}. As the wave vector becomes more perpendicular to the magnetic field, the thermal continuum becomes more and more unstable, due to the fact that parallel thermal conduction is less efficient for larger angles. For near-perpendicular propagation the thermal continuum is unstable over the entire domain, owing to the almost complete loss of stability provided by parallel conduction. The slow continuum is mostly stable, with a few unstable regions similar to the previous case. In this Figure \ref{fig: continua_vstheta}, Panels c and d show the continua as a function of height, corresponding to the dotted horizontal line at $\theta = 3\pi/8$. We conclude that in the framework of single-fluid MHD adopted here, the entire chromosphere to corona of our realistic model is found liable to thermal instability, while the lower coronal regions in addition demonstrate slow continuum overstabilities, with corresponding travelling, singular modes at altitudes between $\approx 2.5 -- 8$ Mm.
+
+
+
 \subsection{MHD spectra for the solar corona} \label{ss: corona_spectra}
 \subsection{MHD spectra for the solar chromosphere} \label{ss: chromosphere_spectra}
 

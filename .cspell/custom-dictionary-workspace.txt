@@ -33,6 +33,7 @@ Hermite
 isocontours
 Jonghe
 Keppens
+Kutta
 LAPACK
 LEDAFLOW
 Legolas
@@ -52,6 +53,7 @@ nontrivial
 nonzero
 nucleous
 overdamped
+overstabilities
 overstability
 overstable
 photospheric
@@ -63,6 +65,7 @@ pressureless
 quadblock
 quadblocks
 quadrupolar
+Runge
 selfgravity
 Selfgravity
 Shafranov
