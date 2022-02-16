@@ -178,7 +178,77 @@ Figure \ref{fig: continua_vstheta} keeps the magnitude of $k$ equal but varies t
 
 
 \subsection{MHD spectra for the solar corona} \label{ss: corona_spectra}
+We now purely focus on the solar corona, limiting the lower boundary of the slab to just above the transition region at $x = 2.5$ Mm, with the upper boundary set to $x = 25$ Mm. The magnetic field is still aligned along the $z$-axis with a magnitude of 10 Gauss; the wave numbers are chosen to be $k_y = 0$ and $k_z = 0.8$ in normalised units. The latter corresponds of a wavelength of $\approx 7.8$ Mm, compared to a slabsize of 22.5 Mm thickness. Based on Figure \ref{fig: continua_vsk} this will bring the equilibrium into the unstable thermal and slow continuum regions.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{SA_corona.png}
+  \caption{
+    Spectrum with eigenfunctions of a solar coronal slab, based on the profiles in Figure \ref{fig: temperature-density-profile} for $x \in [2.5, 25]$ Mm, $B_{0z} = 10$ G and $k_z = 0.8$. Panel \textbf{a}: part of the full spectrum with focus on the unstable thermal continuum. Panel \textbf{b}: enlargement near the slow continuum, the inset focuses on the set of discrete stable slow modes. Panel \textbf{c}: enlargement of Panel \textbf{a}, showing the Alfv\'en and partially unstable fast sequences. Panels \textbf{d}: thermal and slow continua as a function of height. Panels \textbf{e}: $v_x$ eigenfunctions of the six discrete slow modes marked in Panel \textbf{b}, inset. Panels \textbf{f}: $v_x$ eigenfunctions of the four fast modes marked in Panel \textbf{c}. All eigenfunctions are normalised.
+  }
+  \label{fig: spectrum_corona}
+\end{figure}
+
+Figure \ref{fig: spectrum_corona} shows the spectrum with corresponding eigenfunctions of such a coronal slab, obtained through {\legolas} using 500 gridpoints. Panel a focuses mostly on the unstable thermal modes, with the continuum range annotated by a green line. As expected from Figure \ref{fig: continua_vsk} this has both a stable and unstable part, with growth rates approximately two orders of magnitude larger than the unstable modes in the fast or slow sequences. The two continua are given as a function of height in Figure \ref{fig: spectrum_corona}, Panels d, with the thermal continuum shown in the top panel and the real and imaginary parts of the slow continuum shown in the second and third panels on the right, respectively. Panel b represents a zoomed view near the slow continuum, annotated in red, tracing out an intricate profile in the complex eigenvalue plane with various discontinuities due to the jumps in the derivatives of the cooling curve. The slow continuum is partially unstable and loops back on itself, revealing six discrete damped slow modes, annotated with numbers 1 through 6. Their $v_x$ eigenfunctions are given in Panels e. No other discrete modes were found; the seemingly discrete unstable slow mode near Re$(\omega) \approx 0.57$ is actually a continuum mode, characterised by a $1/x$ behaviour in its eigenfunctions. This mode is essentially a remnant of the discontinuity in the continuum present here, since there are no modes underneath the solid red line.
+
+Technically speaking the continuum in this case consists of various segments, which is immediately clear from the regions of clustered eigenvalues in the continuum range. The gaps between these segments correspond to the various discontinuous jumps in the continuum. Panel c shows the (purely real) Alfv\'en continuum, the range of which is annotated with cyan arrows, together with the first few modes of the fast sequence which accumulates to infinity. The first three fast modes are overstable, then the sequence becomes (and remains) damped. The $v_x$ eigenfunctions of the first two overstable modes and two damped modes are given in Panels f. All eigenfunctions are normalised and colour-coded to their annotations in the corresponding panels. Hence, this particular full spectrum at prechosen wavenumber for the solar corona demonstrates unstable thermal and slow continua, as well as the possibility of overstable fast modes in the Alfv\'en continuum range -- which in this case are uncoupled with it due to $k_y = 0$.
+
+Next we look at a more general case, where the wave vector $\bk$ is no longer parallel to $\bb_0$. Based on our continuum analysis this will lead to configurations that are more unstable due to the partial loss of stabilisation provided by parallel thermal conduction. Here we take the magnitude of $\bk$ equal to one and take an angle $\theta = 3\pi/8$ between the wave vector and the magnetic field, corresponding to the horizontal dashed line in Figure \ref{fig: continua_vstheta}. The spectrum, calculated using 500 gridpoints, is shown in Figure \ref{fig: spectrum_corona_kxky}.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{SA_corona_kx_ky.png}
+  \caption{
+    Spectrum with eigenfunctions of a solar coronal slab, based on the profiles in Figure \ref{fig: temperature-density-profile} for $x \in [2.5, 25]$ Mm, $B_{0z} = 10 G$, $k_0 = 1$ and an angle $\theta = 3\pi/8$ between $\bk$ and $\bb_0$. Panel \textbf{a}: part of the full spectrum with focus on the unstable thermal continuum. Panel \textbf{b}: zoomed view near the slow continuum. Panel \textbf{c}: focus on the Alfv\'en continuum and unstable fast branch with density and velocity eigenfunctions in Panels \textbf{e}. Panels \textbf{d}: thermal, Alfv\'en, and slow continua as a function of height. All eigenfunctions are normalised.
+  }
+  \label{fig: spectrum_corona_kxky}
+\end{figure}
+
+On large scales (Panel a) this looks quite similar to the parallel case: the thermal continuum is again mostly unstable with dominating growth rates compared to the other mode sequences. Panel b shows the slow continuum, which in this case does not loop back on itself and has no discrete modes associated with it. The thermal, Alfv\'en, and slow continua are shown as a function of height in Panels d from top to bottom, respectively. Panel c enlarged the Alfv\'en continuum (cyan line) and fast mode sequence, with no overlap between the various eigenvalues. A few overstable fast mode overtones are annotated with their density and $v_x$ eigenfunctions shown in Panels e. Contrary to the parallel case, the fast branch crosses the marginal stability line $\omega_\text{I} = 0$ again after a few stable modes, hence most of the fast sequence of discrete modes here are overstable. Note that at this angle, the fast sequence shows no overlap with the Alfv\'en continuum, so no resonant behaviour is at play and their overstability is entirely due to the non-adiabatic effects (thermal conduction and optically thin radiative losses) included.
+
+
 \subsection{MHD spectra for the solar chromosphere} \label{ss: chromosphere_spectra}
+Lastly we shift our focus to the chromosphere; as such we take our slab between $x = 0$ and $x = 2.1$ Mm, which ends just before the transition region (see Figure \ref{fig: temperature-density-profile}). The wave vector $\bk$ is taken to be parallel to the magnetic field. The choice of magnetic field strength will strongly influence the plasma-$\beta$ magnitude, including the height at which the crossing $\beta > 1$ to $\beta < 1$ occurs, which in turn as a major effect on the behaviour of the slow continua. Hence, we will perform a magnetic field-strength study in this Section, and look how the varying magnetic field affects the spectra (and continua) as a whole. The slabsize will remain the same in all cases.
+
+\subsubsection{A peculiar slow continuum}
+Before looking into the actual spectra themselves it is worth having a short discussion on a very special case of the continuum Equation \eqref{eq: slow_thermal_continuum}. In most cases, including the ones discussed up to now, the solutions of this equation correspond to one purely imaginary solution (the thermal continuum) and two complex conjugate solutions (the forwards and backwards slow continua). However, this equation is essentially nothing more than a third order polynomial in $\omega$, such that in some cases the possibility exists to have three purely imaginary solutions, which implies that the slow continua lie \emph{on} the imaginary axis. If this occurs, then it is a priori difficult to say which one of those three imaginary solutions belongs to the thermal continuum, and which ones belong to the forward (i.e. positive) or backward (i.e. negative) slow continua. The criterion for a third order polynomial to have three completely imaginary solutions is defined purely by a function of its coefficients, and as such can be quantified analytically. It can be shown that the continuum Equation \eqref{eq: slow_thermal_continuum} will have three completely imaginary solutions if the following condition is satisfied:
+\begin{equation} \label{eq: imaginary_slow_continuum}
+  \begin{gathered}
+    \gmone^2 \left\{
+      2\gmone^2 \Qai^3 + 9\alfvenspeed^2 \kpara^2 \rho_0^2\left(\alfvenspeed^2 + \soundspeed^2\right)\Bigl[
+        3\Qi\left(\alfvenspeed^2 + \soundspeed^2\right) - \Qai \soundspeed^2
+      \Bigr]
+    \right\}^2 \\
+    - 4\left[
+      \gmone^2 \Qai^2 - 3\alfvenspeed^2\soundspeed^2\kpara^2 \rho_0^2\left(\alfvenspeed^2 + \soundspeed^2\right)
+    \right]^3 \leq 0,
+  \end{gathered}
+\end{equation}
+where we defined
+\begin{equation}
+  \begin{gathered}
+    \Qi = \Qifull, \\
+    \Qai = \Qaifull
+  \end{gathered}
+\end{equation}
+for brevity. Figure \ref{fig: parametric_imaginary} shows parametric plots of Equation \eqref{eq: imaginary_slow_continuum}, where we used our solar atmosphere model and varied the wavenumber $k_z$ (Panel a), the magnetic field component $B_{0z}$ (Panel b), and the angle between the $\bk$ vector and $\bb_0$ (Panel c) in the chromosphere and lower corona. The shaded regions indicate conditions where Equation \eqref{eq: imaginary_slow_continuum} is satisfied and where we thus have three purely imaginary solutions to the continuum equation. The temperature profile is overlaid with a black line in all panels.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{imaginarysolutions.png}
+  \caption{
+    Parametric plots of Equation \eqref{eq: imaginary_slow_continuum} for varying $k_z$ (Panel \textbf{a}),
+    $B_{0z}$ (Panel \textbf{b}), and angle $\theta$ between $\bk$ and $\bb_0$ (Panel \textbf{c}). Shaded regions indicate conditions where the continuum Equation \eqref{eq: slow_thermal_continuum} has three purely imaginary solutions. The black line denotes the temperature profile; all quantities are normalised to a length scale of 1 Mm, magnetic field of 10 Gauss, and temperature of 1 MK.
+  }
+  \label{fig: parametric_imaginary}
+\end{figure}
+
+Note that in adiabatic MHD there is no confusion between the forward and backward slow continua possible, and since our equilibrium is static (no flow), the two wavelike solutions then lie symmetrically with respect to the marginal frequency on the real frequency axis. In non-adiabatic MHD, the common situation for the slow continuum is to have two complex conjugate solutions, still symmetric against mirror reflection around the imaginary Re$(\omega) = 0$ axis. Now, the possibility exists for these to merge into purely non-propagating modes, and these ``ascend'' and ``descend'' on the imaginary axis as $x$ is varied. Together with the thermal mode, then three such non-propagating modes may exist for each $x$-location, and their mutual ordering is \emph{not} fixed.
+
+This can be related to work by \citet{waters2019} in hydrodynamics (see their Table 1), where they investigate mode stability of acoustic waves and thermal modes, and they also encounter certain regions where all of these are purely imaginary. These authors argue then to relabel these modes as E, S and F indicating entropy, slow, and fast isochoric modes. However, relabelling the modes (acoustic waves and the entropy mode) based on their growth rates -- that is, based on $\omega_\text{I}$ -- does not make much sense. The core of (ideal) MHD spectral theory is the existence of slow and Alfv\'en continua, together with the fast accumulation point at infinite real frequency, and this is here extended to non-adiabatic settings. It is entirely possible that scenarios exist where the thermal mode is stable, for example, but it lies in between or below the imaginary slow modes on the imaginary axis. Hence, once should be careful about stating that the mode with highest imaginary growth rate is always the thermal mode, since this is not guaranteed to be the case. This will ultimately be reflected in the mode eigenfunctions, which are singular for all continuum modes.
+
+\subsubsection{Chromospheric spectra and slow mode behaviour}
+As it turns out, the interesting slow mode behaviour discussed in Figure \ref{fig: parametric_imaginary} actually occurs in the solar chromosphere when the magnetic field crosses a certain threshold.
 
 \section{Discussion}
 
