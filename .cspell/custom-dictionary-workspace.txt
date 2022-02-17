@@ -14,6 +14,7 @@ datapoints
 eigenmode
 eigenmodes
 eigenoscillations
+eigenspectra
 eigenspectrum
 eigensystem
 Eigensystem
@@ -78,6 +79,7 @@ subblock
 subblocks
 submatrix
 subpanel
+subpanels
 subspectra
 Suydam
 timestep
