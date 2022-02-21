@@ -911,12 +911,31 @@ The essential boundary conditions as described earlier have to be implemented ex
 
 Of course, ``just'' zeroing out rows and columns in a matrix has the unpleasant side effect that the matrices become singular. For the $\amat$-matrix, this is not necessarily a problem; however, the $\bmat$ matrix is not allowed to be singular because it is inverted when solving the general eigenvalue problem using the QR-algorithm. Therefore, we introduce a one on $\bmat$'s diagonal at the location that was zeroed out, and an element $\delta$ on $\amat$'s diagonal. The effect of this is that one essentially ``forces'' the boundary condition, because this implies that $\delta x_j^i = \omega x_j^i$. By extension, if $\delta$ is taken to be a large number (we take $\delta = 10^{20}$), this means that $x_j^i = 0$ which corresponds to the essential boundary we want to impose. The only side effect of this approach is that it introduces eigenvalues equal to $\delta$. However, because $\delta$ is taken to be large, these will not influence the spectrum in any way, and they can be easily filtered out during postprocessing. This method thus provides a relatively easy and straightforward way to impose Dirichlet boundary conditions at the edges. The imposed boundary conditions are noticeable on Panel a of Figure \ref{fig: matrix_assembly}, especially for the first node. The odd rows and columns that were zeroed out can clearly be seen, together with the elements introduced on the main diagonal.
 
-\section{Closing remarks}
+\subsubsection{Assembly of the eigenfunctions}
+When solving the eigenvalue problem the eigenvectors associated with each eigenvalue are (optionally) calculated as well. These eigenvectors are obtained within the finite element formalism, and hence still need to be transformed to the actual eigenfunction representation. Since they are calculated along with the eigenvalues in the matrix eigenvalue problem, all eigenvectors have a similar structure as Figure \ref{fig: matrix_assembly}. One row of a $16 \times 16$ subblock in a single quadblock (and hence corresponding to one particular grid point) is shown in Figure \ref{fig: subblock_row}, and every eigenvector can be thought of as having $N$ of these rows next to each other. This implies that the information of all eight (in MHD) eigenfunctions is contained in the single eigenvector associated with that particular eigenvalue, hence every eigenfunction corresponds to a single specific set $\{k_2, k_3, \omega\}$.
 
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{subblock_row.png}
+  \caption{
+    One row of a single subblock in a single quadblock, visualising (part of) the internal structure of an eigenvector. Every eigenvector has $N$ of these blocks.
+  }
+  \label{fig: subblock_row}
+\end{figure}
 
+Linking the structure in Figure \ref{fig: subblock_row} back to the layout of the matrix in Figure \ref{fig: matrix_assembly}, the $v_1$ eigenfunction, for example, can be assembled per grid point $j$ as
+\begin{equation}
+  v_{1, j} = E_{v, j}(3)C_j^{12} + E_{v, j}(4)C_j^{22} + E_{v, j}(3 + 16)C_j^{11} + E_{v, j}(4 + 16)C_j^{21},
+\end{equation}
+where $E_{v, j}$ indicates the eigenvector subblock corresponding to the $j$-th grid point; $C_j$ denotes the cubic basis functions since we are calculating the regular $v_1$ eigenfunction (which is a cubic variable). The indices in the eigenvector subblock correspond to 3, 4, 3 + 16 and 4 + 16, as we need $v_1$ and 16 is the size of the subblock. The basis functions are calculated using the position corresponding to the current grid point. In reality an eigenfunction has $2N - 1$ points for a grid of $N$ points, which is related to the fact that we overlay the bottom-right part of the previous quadblock with the top-left part of the current quadblock, per grid point; the minus one comes from no overlaying for the first quadblock. In the first grid point the eigenfunction is sampled on the left edge of the current interval; for all the following quadblocks the eigenfunction is sampled in the middle and right edge of the grid interval for every grid point. In the end the entire eigenfunction is assembled for every eigenvalue, taking into account the finite element representation and basis functions. The obtained eigenfunctions still have to be transformed back to ``regular'' values by undoing the transformation applied in Equation \eqref{eq: transformation}.
 
-% \subsubsection{Assembly of the eigenfunctions}
-% \subsubsection{Derived eigenfunction quantities}
-
+Similarly, we can calculate physical quantities of interest derived from the eigenfunctions. An example is the perturbed magnetic field $\bb_1 = \nabla \times \ba_1$, which can be constructed using the eigenfunctions of the vector potential as
+\begin{equation}
+  \bb_1 =
+    \icomplex \left(\frac{k_2}{\eps}a_3 - k_3 a_2\right)\uunit{1}
+    + \left(\icomplex k_3 a_1 - a_3'\right)\uunit{2}
+    + \frac{1}{\eps}\left[\bigl(\eps a_2\bigr)' - \icomplex k_2 a_1 \right]\uunit{3},
+\end{equation}
+Due to the $\nabla$-operator present we also need the derivatives of the eigenfunctions, which can be assembled in a similar manner as the standard eigenfunctions but using the derivatives of the basis functions instead. Similarly, once we have $\bb_1$ we can also calculate its divergence and curl. Other quantities of interest may be the divergence and curl of the velocity perturbation, representing the compressibility and vorticity, respectively; or the entropy. Additionally, whenever we have a background magnetic field the perturbed vector quantities can be expressed in a reference frame with one component parallel and two components perpendicular to the field lines, which may also be of interest for certain use cases.
 
 \cleardoublepage
