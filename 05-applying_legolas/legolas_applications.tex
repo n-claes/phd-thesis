@@ -479,8 +479,72 @@ Based on the conclusions drawn here, it is clear that the resolution required de
 
 
 \section{The Legolas testing framework} \label{ss: legolas_testing}
+As with any newly developed numerical code, a proper and extensive testing framework is (supposed to be) an integral part of the development process. Every step of the way a developer should make sure that newly added code actually works and does what it is supposed to do; at the same time proper care must be taken to make sure that previously working code does not get broken due to newly added changes or features. For small codebases this can be done through a quick manual check, but this rapidly becomes cumbersome and even impossible for larger projects. {\legolas} falls in this second category, where it becomes unfeasible to manually check every single equilibrium against known results for every change made to the code. Ideally then, this process should happen automatically, which is where the testing framework comes in. Before simply writing ``tests'' however, one should carefully think about \emph{what} should be tested and \emph{how} tests are written. A test should be robust, meaning that it should be easily ported over to other platforms; and at the same time be as sensitive as possible to any breaking changes, meaning tests should fail as soon as inconsistencies are introduced. Additionally, tests should be able to run in a reasonably small amount of time. Care should also be taken to make the tests as independent of the code itself as possible: a scenario where the tests themselves have to be continuously modified following minor changes in the code base should be avoided at all cost.
 
-depending on length of thesis either add this or don't
+The {\legolas} testing framework is split up in three main parts: \emph{unit tests}, which test individual code subroutines completely independently of one another; \emph{regression tests}, which test spectra and eigenfunctions against known results; and \emph{Pylbo tests}, which test the data reading routines and post-processing logic. These latter tests are linked to the post-processing framework \textsf{Pylbo}, which was developed along with {\legolas}, but we will not go into detail on those here.
+
+\subsubsection{Unit tests}
+The backbone of the testing framework is the unit tests, which are specifically designed to ensure that a particular part of the code (a ``unit'') works as intended. Usually one or more unit tests target a single subroutine, call it with a particular set of parameters that are chosen in such a way that the expected result is known, and the subroutine's output is compared against this known result. In most cases one subroutine is accompanied by multiple tests, where every single test handles one specific case. This also includes ``edge cases'', that is, sets of parameters that may trigger some special behaviour in a subroutine. For example, consider a subroutine with as sole purpose to find a specific value in an array and return its index. This may have a couple of tests: one or two are checking that returned values are actually the ones that we expect; at least one test is checking that the routine fails to return anything if the value is not found in the array; and at least one test checks that edge cases are properly handled, such as multiple elements with the same value in the array or accessing the array out-of-bounds.
+
+The main advantage of unit tests is that they are independent of other routines, hence bugs that are introduced can be quickly narrowed down based on the failing units -- provided these properly cover all parts of the source code. Confidence in newly developed routines will increase considerably if tests pass, and potential bugs can be caught early on. {\legolas} makes use of the open-source pFUnit framework, originally created by developers from NASA and specifically designed for unit testing of (MPI-parallel) software written in Fortran. Figure \ref{fig: unit_test} shows an example of a unit test, where the \textsf{{@}test} decorator above the subroutine marks this as a test. In this particular case an elemental function \textsf{is\_NaN} is tested, which checks a given double-precision value or array for NaN (Not a Number) values. The \textsf{{@}assertFalse} and \textsf{{@}assertTrue} statements in turn check that the function returns what is expected, and the test will fail if one or more conditions are not true when they should be, or vice-versa.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.80\textwidth]{unit_testing.png}
+  \caption{
+    Example of a {\legolas} unit test, using the pFUnit framework.
+  }
+  \label{fig: unit_test}
+\end{figure}
+
+\subsubsection{Regression tests}
+The most important part of the testing framework are the regression tests. While unit tests are a necessary requirement to check individual subroutines and functions, they do not guarantee that the solutions to the eigenvalue problem are still the same after a code change. Additionally, it is quite difficult for the unit tests to cover everything; the matrix elements for example are quite difficult to test individually, and for those we have to resort to other approaches. The idea behind the regression tests is quite straightforward: compare the solutions, that is, both the eigenvalues and eigenfunctions, to previously (known) solutions for the implemented equilibria. However, there are a few caveats that must be addressed first: the main problem here is that we want to compare \emph{numerically calculated eigenvalues} on large scales, meaning that the actual testing is not as simple as ``just comparing solutions''. Suppose we have calculated eigenvalues for a certain equilibrium, and we know that these are correct based on a comparison with theoretically derived solutions. We call these results the ``base'' answers and store them in an array $S_\text{base}$. After a while the tests are being rerun after a change in the code base, and the solutions to the exact same problem are calculated again using the ``new'' code. Say these results are stored in an array $S_\text{test}$, resulting in the following six solutions
+
+\begin{equation}
+  \begin{aligned}
+    S_\text{base} &=
+      &&1.5
+      &&-2 + 3\icomplex
+      &&\quad 0
+      &&\qquad\quad 2\icomplex
+      &&-0.5\icomplex
+      &&-1 - 1.0\text{e}^{-8}\icomplex \\
+    S_\text{test} &=
+      &&1.5
+      &&-2 + 3\icomplex
+      &&1\text{e}^{-15}
+      &&-1\text{e}^{-16} + 2\icomplex
+      &&-0.5\icomplex
+      &&-1 - 1.1\text{e}^{-8}\icomplex
+  \end{aligned}
+\end{equation}
+
+Note that these tests may run on different machines running different operating systems; additionally different compilers or library versions (such as for BLAS and LAPACK) may be used, which in turn can give slightly varying solutions. One can naively start comparing these two arrays, but will quickly run into a couple of problems. First of all, there is no strict guarantee that the \emph{ordering} of the solutions is the same, meaning the array needs to be sorted first. If we decide to sort based on the real part first, followed by the complex part, then the test for the above two arrays will immediately fail. While the third and fourth item of $S_\text{base}$ are saved as 0 and $2\icomplex$, the third and fourth item of $S_\text{test}$ have \emph{numerically zero} parts, with a very small but finite (up to machine precision) value deviating from zero. When $S_\text{base}$ gets sorted, 0 will be placed before $2\icomplex$, while for $S_\text{test}$ the $1\text{e}^{-15}$ solution will be sorted \emph{after} $-1\text{e}^{-16} + 2\icomplex$; resulting in the wrong eigenvalues being compared with one another.
+
+One could argue here that a solution would be to force small values deviating from zero to actually be zero. This immediately gives rise to another problem: what is ``small''? Note that we are not comparing fixed arrays with machine precision variations, we are comparing numerical solutions to an eigenvalue problem where machine precision variations may give rise to solutions that actually differ more than machine precision. Furthermore the tolerance is eigenvalue-dependent: imagine a difference between base and test results of $10^{-6}$; for an eigenvalue of 2.5 this is perfectly fine, and the test should pass. However, for an eigenvalue of $3 \times 10^{-6}$ this is clearly too much, and the test should fail. These situations are fairly common, as the complexity of MHD spectra may result in solutions that differ many orders of magnitude for a single spectrum.
+
+We could try opting for a percentage-based comparison, or absolute versus relative differences, but then again, \emph{how do we specify the tolerance}? As we just mentioned this is problem-specific, and we do not want our tolerances to be too robust since then we might miss out on important changes in the spectrum. No matter the solution employed here -- be it checking for absolute values, relative differences, separate real/imaginary parts, etc. -- we will eventually always run into a special case in which our strategy will fail due to numerical variations in calculating the eigenvalues.
+
+Clearly, directly comparing eigenvalues to each other is not the right approach. A much better strategy is to compare the \emph{locations} in the spectral plane, where we actually plot the spectrum and highlight position shifts in the eigenvalues. This will eliminate much of our numerical issues, and we can ensure that the way the spectrum is drawn happens in exactly the same manner across different platforms. In {\legolas}, the regression tests are handled as follows
+\begin{enumerate}
+  \item[i)] For a given test, load the file with stored results and plot (at least one) spectrum with given limits for the real and imaginary axes, save the image(s) as baseline.
+  \item[ii)] Execute the corresponding test, plot the spectrum for the obtained results with the exact same settings used to create the baseline figure. Save the image(s).
+  \item[iii)] Load both the test and baseline images, remove everything (background, axes, axes ticks etc.) except the eigenvalues. Calculate the Root-Mean-Squared (RMS) pixel difference between the two images as
+  \begin{equation}
+    \text{RMS} = \sqrt{\text{mean}\Bigl(\left(\text{expected} - \text{actual}\right)^2\Bigr)}.
+  \end{equation}
+  \item[iv)] Set a strict RMS tolerance, check whether the calculated RMS lies within this tolerance. If this is not the case fail the test, otherwise flag it as a pass.
+\end{enumerate}
+The above testing strategy has proven to be very successful, both in terms of robustness and reliability. An example is given in Figure \ref{fig: regression_test}, where the Suydam cluster spectrum from Equation \eqref{eq: suydam_equilibrium} is shown both as a baseline and for a small shift in parameters. At first sight both spectra are similar, however the RMS shows clear difference between the spectra, failing the test. The main advantage of this approach is that we can generate as much image comparisons as required: for one equilibrium we typically calculate the solutions to the eigenvalue problem once, and then generate baseline images for different parts of the spectrum. This allows for spectrum testing at different scales, where we can zoom in and focus on different regions for more accurate testing.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{regression_testing.png}
+  \caption{
+    A typical example of a {\legolas} regression test, here for the Suydam cluster equilibrium. The top two images indicate the baseline spectrum (stored answer) and test spectrum (calculated answer), respectively. The bottom image shows the Root-Mean-Squared pixel difference between the top two images, the calculated RMS ($\approx 10$) is much larger than the tolerance RMS ($= 2.2$).
+  }
+  \label{fig: regression_test}
+\end{figure}
 
 \section{Discussion} \label{ss: legolas_discussion}
 In the previous Chapter we introduced the novel finite element code {\legolas}, meant to tackle the complete MHD spectrum including all kinds of physical effects, and able to look at various realistic equilibrium configurations. The general formalism introduced can handle both Cartesian and cylindrical geometries, and with the various physics included in the formalism this makes {\legolas} the first MHD spectral code to combine the effects of flow, resistivity, gravity, radiative cooling, and anisotropic thermal conduction, even supplemented with selfgravity, viscosity or Hall MHD. This opens the door to novel, in-depth studies of the complete MHD spectrum, which was up to now impossible with existing numerical tools.
@@ -492,8 +556,5 @@ We speculate that these spectral structures have a physical meaning, which can b
 Also in nonadiabatic cases interesting things were encountered: the outer modes of the magnetothermal sequence are again in perfect correspondence with modes found in the original work; however, near the origin -- a region that has never been investigated until now -- there are indications of a splitting of the magnetothermal sequence in its thermal and magnetic counterparts with various modes scattered in between. An in-depth study of magnetothermal instabilities is called for, a topic of research that essentially stopped progressing for the last two decades. Now that high-resolution MHD simulations start to reveal the complexity of thermal-instability-driven evolutions, a revival of this topic is urgently needed.
 
 All of the above is clear indication that a thorough investigation of the entire spectrum is needed in order to yield new insights in (M)HD instabilities. For solar applications alone, the effect of thermal conduction on the modes as indicated by \citet{vanderlinden1991} has never investigated in fully realistic setups, possibly allowing for a deeper understanding of fine structure in solar prominences. Since {\legolas} is such a versatile code the possibilities are endless: from various hydrodynamic configurations to more magnetically oriented astronomical cases like accretion disks or astrophysical jets. The discussion of the more ``advanced'' cases in this Chapter alone reveals how much of the MHD spectrum is still not thoroughly investigated, and it becomes crystal clear that modern MHD spectroscopy will no doubt shed new light on various physical phenomena.
-
-
-
 
 \cleardoublepage

@@ -7,6 +7,7 @@ AMRVAC
 anisotropical
 asteroseismology
 BHAC
+BLAS
 Claes
 clumpiness
 counterclockwise
@@ -64,6 +65,7 @@ postprocessing
 prechosen
 preflare
 pressureless
+Pylbo
 quadblock
 quadblocks
 quadrupolar
