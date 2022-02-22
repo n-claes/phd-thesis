@@ -3,8 +3,10 @@
 # Custom Dictionary Words
 adjointness
 Alfv
+ambipolar
 AMRVAC
 anisotropical
+Arnoldi
 asteroseismology
 BHAC
 BLAS
