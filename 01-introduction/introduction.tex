@@ -7,7 +7,7 @@
   ``and go on till you come to the end: then stop.
 \end{chapterquote}
 
-In this introductory Chapter we briefly introduce the field of solar physics, after which we will elaborate a bit further on the sun itself. Some general terminology will be introduced while also discussing certain features observable in the solar atmosphere, since they are quite relevant in the scope of early Chapters. Eventually we bring waves and instabilities into play, as they are in essence a main topic in this thesis, and discuss their importance both in a solar physical context as well as in more general (astro)physical settings.
+In this introductory Chapter we briefly introduce the field of solar physics and elaborate a bit further on the outer layers of the sun itself. Some general terminology will be introduced while also discussing certain features observable in the solar atmosphere, since they are quite relevant in the scope of early Chapters. Eventually we bring waves and instabilities into play, as they are in essence a main topic in this thesis, and discuss their importance both in a solar physical context as well as in more general (astro)physical settings.
 
 \section{A very brief history of astrophysics}
 The wonderful field of astrophysics encompasses a plethora of different disciplines. Historically, astrophysics has its roots in astronomy, which is in itself a millennia-old science. Back in ancient Greece people were already wondering about various heavenly objects and how to explain their peculiar motions, and centuries later it was realised that these objects actually obey natural laws. Since then the field of astrophysics has greatly expanded, including not only observational astronomy, but also computational and theoretical astrophysics, quantum mechanics, nuclear physics and even chemistry; and the list has recently been expanded even further, now also including gravitational wave astronomy. All these fields are intricately linked, depending on the objects that are being studied. While historically astronomy ``only'' studied the motions of stars and planets, we now know that there are a myriad of fascinating objects all around us: stars actually exist in all sorts and sizes, depending on how far along they are in their evolutionary process; ranging from huge supergiants to regular sized stars such as the sun, to baby proto-stars that are not even ``born'' yet. The list can be further extended with planetary systems, nebulae, and more exotic objects such as neutron stars or black holes, with the latter typically being accompanied with high-energy jets.
@@ -20,23 +20,71 @@ The wonderful field of astrophysics encompasses a plethora of different discipli
   }
 \end{figure}
 
-In most (if not all) fields related to astrophysics research deals with \emph{plasma}, as it is by far the most abundant form of ordinary matter in the universe (we say ``ordinary'' here as we explicitly exclude dark matter and dark energy, whatever they might be). A plasma can be simplified as an ionised gas, hence a significant part of it are charged particles which in turn implies that electromagnetic fields are of extreme importance. Depending on the amount of neutral particles present a plasma can either be fully ionised (no neutrals) or partially ionised (some neutrals). In this thesis we only consider a fully ionised plasma, which will be quite sufficient for (most of) our applications.
+In most (if not all) fields related to astrophysics research deals with \emph{plasma}, as it is by far the most abundant form of ordinary matter in the universe (we say ``ordinary'' here as we explicitly exclude exotic stuff such as dark matter and dark energy). A plasma can be simplified as an ionised gas, hence a significant part of it are charged particles which in turn implies that electromagnetic fields are of extreme importance. Depending on the amount of neutral particles present a plasma can either be fully ionised (no neutrals) or partially ionised (some neutrals). In this thesis we only consider a fully ionised plasma, which will be quite sufficient for (most of) our applications.
 
 The tools used to study astrophysics vary greatly, and similar to the various disciplines depend on which objects are being studied. In the time of Newton and Galilei tools mostly consisted of early telescopes and basic mathematical methods. Over the years new theories have been developed, where Einstein's general relativity is probably the most notable in an astrophysical context, which came accompanied with numerous advances and physical insights. From an observational viewpoint we evolved from using basic, simple telescopes to (arrays of) huge ground and space based telescopes and observatories designed to probe the deepest reaches of our universe. Additionally, with the advent of the computer age a completely new set of tools became available: suddenly it was possible to numerically solve systems of equations that were previously unsolvable using analytical methods, and this in turn sparked a whole new branch of computational astrophysics. Large-scale numerical codes have been developed since then, which can exploit a huge number of computational resources in parallel using the most powerful supercomputers on the planet. This has opened a completely new door into the wonderful world of astrophysics, where it is now possible to numerically probe and visualise even the most exotic astrophysical objects at extreme resolutions.
 
-The field of solar physics studies, as the name suggests, our sun. Even here research topics are widely spread out, ranging from the solar interior to features on the solar surface, to the entire solar atmosphere and the link of the solar wind on space weather, to name a few. In this thesis we will mainly focus on waves and instability aspects from a spectroscopic standpoint, which can be directly linked to interesting structures in the solar atmosphere, that is, parts of the solar corona and chromosphere. We will mainly rely on numerical approaches, supplemented with a strong mathematical foundation.
+The field of solar physics studies, as the name suggests, our sun. Even here research topics are widely spread out, ranging from the solar interior to features on the solar surface, to the entire solar atmosphere, the link between the solar wind and space weather, to name a few. In this thesis we will mainly focus on waves and instability aspects from a spectroscopic standpoint, which can be directly linked to interesting structures in the solar atmosphere, that is, parts of the solar corona and chromosphere. We will mainly rely on numerical approaches, supplemented with a strong mathematical foundation.
 
 
 \section{The Sun in a nutshell}
-% briefly discuss the solar atmosphere, general structure, prominences, etc
-% max 4 pages
+Our sun, at a distance of approximately 150 million kilometres, is the closest star to Earth and is directly responsible for all life on this planet. Roughly five billion years ago a ``baby'' sun (or proto-star) formed as a contracting molecular cloud, slowly heating up in the process. Once the proto-star's core temperature became high enough nuclear fusion kicked in, converting hydrogen to helium. This signalled a delicate balance between inwards gravitational forces and the outwards push of energy in the form of luminosity, contraction ceased, and our sun entered its main sequence phase as a standard G-type main sequence star. Since then it has been happily burning hydrogen and turning it to helium in its core, and will continue to do so for roughly another 5 billion years. At that point all hydrogen in the core will be exhausted and the star will expand into a red giant, eventually turning into a white dwarf.
+
+The sun is essentially a giant ball of plasma with various internal regions having different physical properties. We will not discuss the overall structure of the solar interior here, but focus only on the solar atmosphere. The sun does not have a strict ``surface'', in the sense that there is no abrupt border between the atmosphere and interior like we have here on Earth, but rather is defined as the part of the sun where photons can easily escape into space. This is marked by an optical depth of $\tau_\nu \approx 1$, which is a measure of how a given intensity is absorbed when it passes through a certain layer, in essence the transparency of this layer. The solar interior has an optical depth which is much larger than one, whereas the solar exterior has an optical depth much less than one, and can (for the most part) be considered to be optically thin. For an extensive discussion on the properties of the solar interior and exterior, see \citet{book_priest}.
+
+Figure \ref{fig: solar_profile} shows a sketch of the solar atmosphere, which can be divided into three separate regions. While in reality the entire atmosphere is highly dynamic and varying in time, for all intents and purposes we can conveniently model it as three layers with different properties. The first one is called the \emph{photosphere}, which is a thin layer only a few 100 kms thick emitting most of the sun's visible light. It is pervaded with granulation of different sizes, owing their existence to convective cells originating from within the solar interior, implying that there is quite a lot of turbulence present throughout the entire solar photosphere.
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{solar_profile.png}
+  \caption{
+    Schematic of the mean variation of the temperature and density in the solar atmosphere as a function of height.
+    Figure taken from \citet{book_priest}.
+  }
+  \label{fig: solar_profile}
+\end{figure}
+
+The second layer is called the \emph{chromosphere}, which starts at the upper photosphere and has a fairly constant temperature with decreasing density for increasing distance from the surface. The chromosphere also contains the transition from $\beta > 1$ to $\beta < 1$, in which $\beta$ is given by
+\begin{equation} \label{eq: plasma_beta}
+  \beta = \frac{p_\text{gas}}{p_\text{magnetic}} = 2\mu_0 \frac{p_\text{gas}}{B^2}.
+\end{equation}
+Here $B$ denotes the magnetic field and $\mu_0$ the magnetic permeability in vacuum, equal to $4\pi$ in the centimetre-gram-second (cgs) unit system. The above quantity, called the \emph{plasma-$\beta$}, is defined as the ratio between gas pressure and magnetic pressure and is thus a measure of the relative importance of the magnetic field. For $\beta > 1$ the plasma dominates, which is for example the case in the solar photosphere. On the other hand, $\beta < 1$ indicates that the magnetic field is dominant, which is the case for (most of) the solar chromosphere and solar corona.
+
+The chromosphere ends at the sudden rise in temperature and drop in density which is called the
+\emph{transition region}. In this very narrow region of approximately 100 km the plasma jumps from approximately 20 000 K in the upper chromosphere to over a million K, which marks the start of the \emph{solar corona}, the third and final region in the schematic shown in Figure \ref{fig: solar_profile} and the outermost layer of the solar atmosphere. The entire corona is full of fascinating structures such as solar prominences and coronal loops, and at high altitudes the corona gives rise to the solar wind, continuously blowing plasma and particles into space.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.6\textwidth]{solar_prominence.png}
+  \caption{
+    Eruptive prominence in He II at 304 \AA from 10 March 2010, the size of the Earth is indicated on the figure for scale. Figure from NASA/SDO/AIA.
+  }
+  \label{fig: solar_prominence}
+\end{figure}
+
+We will briefly discuss solar prominences in this introductory part, as they are highly relevant in the scope of Chapter \ref{ch: thermal instability}. In essence, solar prominences are large, cool, and dense loops that have their footpoints near the photosphere and extend thousands of kilometres outwards into the hot corona.
+They form through the process of thermal instability, where a runaway radiative cooling effect leads to increased energy losses through radiation, eventually leading to plasma motions that locally increase the density while energy losses drastically lower the temperature further. The resulting condensations are orders of magnitude denser and hotter than their surroundings and initial conditions, with their plasma suspended by magnetic fields high above the solar surface. If these structures become unstable they can burst outwards as an eruptive prominence. Figure \ref{fig: solar_profile} shows such a large, eruptive prominence in He II at 304 \AA, from 10 March 2010; the Earth is superimposed for scale, making the enormous size of these structures apparent. It immediately becomes clear that waves and instabilities play a major role here. How, why and when do these structures become unstable? Can it be traced back to instabilities during their formation process? Or are there new instabilities that arise? If so, where do they come from? Furthermore, most prominences show intriguing fine structure, and it is at present still largely unknown where that originates from.
 
 \section{The importance of instabilities}
-% discuss everyday role of waves and instabilities
-% max 3 pages
+The questions mentioned in the previous paragraph highlight the importance of wave and instability studies in all kinds of settings, not only limited to solar applications but highly relevant to a wide range of scientific disciplines. In hydrodynamics (fluids and gasses), one of the most well-known instabilities is the Kelvin-Helmholtz instability, originating from a velocity shear at the interface between two fluids. This type of instability is commonly found in many laboratory, astrophysical and space plasmas, with some common examples being characteristic cloud formations here on Earth, ripples at the interface between solar prominences and the corona; and even near the Great Red Spot on Jupiter (see Figure \ref{fig: kh_instability}).
+
+\begin{figure}[b]
+  \centering
+  \includegraphics[width=\textwidth]{instabilities.png}
+  \caption{
+    Examples of Kelvin-Helmholtz instabilities in cloud formations (left) and near Jupiter's Great Red Spot (right), note the characteristic vortices for both cases. Left figure by Brocken Inaglory, right figure by NASA/JPL.
+  }
+  \label{fig: kh_instability}
+\end{figure}
+
+As mentioned earlier thermal instability lies at the basis of solar prominence formation, but is directly relevant to a broader astrophysical context as well. Thermal instabilities have been encountered in dense molecular clouds in the warm interstellar medium, where they can be responsible for high density filaments in star-forming regions; in galactic clusters and haloes; and even in thin discs accretion onto stellar-mass black holes where they can cause a vertical collapse of the disk. Thermal instability can occur both in hydrodynamics as in magnetohydrodynamics (plasmas), where in case of the latter the addition of a magnetic field further complicates the picture; thereby not only affecting thermal instability but all other aforementioned instabilities as well.
+
+Magnetic fields may give rise to an even richer collection of possible instabilities in a given system. One of the more dramatic changeovers in magnetohydrodynamics lies in the introduction of magneto-rotational routes to turbulence, at play in accretion disks around black holes or in protoplanetary disks around newly formed stars. The relevance of waves and instabilities does not limit itself to astrophysical settings, but also holds for magnetised applications accessible to laboratory experiments. This even extends to controlled nuclear fusion research, where MHD spectroscopy -- that is, classifying the various linear waves and (in)stabilities of a system -- is already the pre-eminent tool used to delimit operational windows: instabilities can strongly disrupt a given system and are to be avoided at all costs.
+
 
 \section{General outline}
-% thesis outline summarised in 1 page
+Due to the huge applicability and interdisciplinary importance of linear stability studies the topic is vast and numerous research has been done over the past decades.
+
+
 
 
 \cleardoublepage
