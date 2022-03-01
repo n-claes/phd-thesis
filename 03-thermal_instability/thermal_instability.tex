@@ -43,7 +43,16 @@ Plasmas that are thermally stable will eventually return to thermal equilibrium 
 
 If thermal conduction is also present then this will \emph{always} have a stabilising effect on the thermal instability. Initial temperature perturbations will be smoothened out due to thermal conduction effects, and even if the runaway cooling process has already started it will try and continue to do so. Generally speaking this stabilising behaviour will lead to a reduction of the thermal instability growth rate, but actually \emph{preventing} instability will only occur in a few select cases. The high anisotropy of thermal conduction plays a major role in magnetised plasmas as the effect is several orders of magnitude stronger parallel to the magnetic field lines than across, allowing for strong temperature gradients across field lines (and hence large $\dHLFT$ values). This implies that the direction of the wave vector is important, since perturbations more parallel to the magnetic field will be strongly stabilised, while wave vectors (near) perpendicular to the field lines will undergo almost no stabilisation by thermal conduction.
 
-\textbf{TODO: insert cooling curve comparison figure (forgot)}
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{coolcurve_comparison.png}
+  \caption{
+    Normalised growth rates $\omega_\text{I}$ as a function of temperature for the thermal (green), slow (red) and fast (blue) MHD modes, for an angle $\theta = \pi/4$ between the wave vector and magnetic field; thermal conduction and radiative cooling are included. Panel \textbf{a}: growth rates for the {\spexdm} cooling curve; Panel \textbf{b}: growth rates for the {\jccorona} cooling curve. Density is equal to unity (normalised), the uniform magnetic field is taken to be 10 Gauss.
+  }
+  \label{fig: coolcurve_comparison}
+\end{figure}
+
+Figure \ref{fig: coolcurve_comparison} shows a comparison between growth rates for the {\spexdm} (Panel a) and {\jccorona} (Panel b) cooling curves as a function of temperature. Radiative losses and thermal conduction are included; the angle between the wave vector $\bk$ and the uniform magnetic field $\bb_0$ is $\theta = \pi/4$. Overall mode stability, especially for the slow and fast modes, is quite dependent on the choice of cooling curve. The sharp cut-off near 20 000 K on Panel b is due to the {\jccorona} curve not having any tabulated values for lower temperatures (see Figure \ref{fig: coolingcurves}).
 
 All of the above, which assumes a plasma at uniform temperature and a constant heating term, is ideal to get an intuitive feeling what thermal instability is and how it originates. In reality however things are much more complicated: the plasma is certainly not uniform, and in general the heat-loss function will have a complicated dependency on other (thermodynamic) variables. This implies that the process of thermal instability is much more intricate in fully realistic plasmas with regard to (in)stability, but the general idea holds: an unstable thermal mode triggers a runaway radiative cooling reaction, which in turn leads to high-density, low-temperature condensations.
 
@@ -107,7 +116,7 @@ This retrieves the original homogeneous $\bb_0$ when calculating $\bb_0 = \nabla
 \subsection{Thermal stability regions}
 Before fixing all equilibrium conditions, that is, choosing a temperature value and a particular magnetic field orientation, we have to pay special attention to the actual stability and instability regimes of the thermal mode in the presence of thermal conduction. As discussed before the latter always has a stabilising effect on thermal instability since temperature variations are rapidly smoothed out by field-aligned thermal conduction. However, we can always quantify the critical wave number $\kcrit$ as done in \citet{field1965}. In essence, perturbations with a wave number above $\kcrit$ (or equivalently, with a small enough wavelength) are completely stabilised by thermal conduction. By changing the length scale of our numerical domain, we effectively change the wave number in the direction that the perturbation is applied, while still keeping a single oscillation to satisfy the periodic boundary conditions. In taking a longer wavelength, we are able to excite an unstable thermal mode even with the inclusion of thermal conduction. Thermal instability itself is not triggered if the homogeneous equilibrium configuration is stable to the thermal mode.
 
-\begin{figure}[b]
+\begin{figure}[t]
   \centering
   \includegraphics[width=\textwidth]{w_vs_kx.png}
   \caption{
@@ -148,7 +157,7 @@ Figure \ref{fig: 2d_instability_onsets} shows the onset of TI, just after the hi
 \subsubsection{Ram pressure and filament fragmentation}
 The onset of filament formation depicted in Figure \ref{fig: 2d_instability_onsets} indicates that in all cases the high-density filament seems to form nearly perpendicular to the magnetic field, such that material is literally flowing towards the high-density region along the field lines. This effect in turn creates a velocity difference on opposite sides of the filament, consisting of two counter-streaming flows of matter and a high-density region in-between.
 
-\begin{figure}[b]
+\begin{figure}[t]
   \centering
   \includegraphics[width=0.8\textwidth]{2d_velocity_plots.png}
   \caption{
@@ -163,7 +172,7 @@ In order to investigate this effect in greater detail we chose one of the simula
 
 Figure \ref{fig: 2d_velocity_plots} shows a detailed view of the formation process of the high-density region, at four different snapshots. The magnitude of the velocity field is shown, starting at the onset of filament formation. There is clearly a large velocity difference on either side of the high-density region owing to the infalling matter on a trajectory aligned with the magnetic field. The filament itself appears mostly stationary, representing an in-situ formation process. It is enclosed by an outwards moving shock front on both sides. The slow and Alfv\'en wave velocities can be roughly estimated near to the shocked region, yielding $\approx 60-70$ km s$^{-1}$ and $\approx 400$ km s$^{-1}$, respectively, such that we are dealing with slow MHD shocks enclosing the filament. These findings are in line with previous results obtained in \citet{xia2012} and \citet{fang2015}, where this rebound shock phenomenon was also encountered in their simulations on prominence formation and coronal rain, respectively.
 
-\begin{figure}[b]
+\begin{figure}[t]
   \centering
   \includegraphics[width=\textwidth]{2d_lineplots.png}
   \caption{
@@ -218,7 +227,7 @@ Next we look at how the above translates to a 3D setup in which three slow waves
 
 The left side of Figure \ref{fig: 3d_onset_pressure_velocity} shows the onset of the high-density region in three dimensions for the same equilibrium parameters as the 0.5 MK simulation in 2D (Figures \ref{fig: 2d_velocity_plots} -- \ref{fig: 2d_density_fragmentation}). The only exception is that in this case the magnetic field has a different alignment due to the 3D setup, making an angle $\theta = 0.3\pi$ and $\delta=\pi/4$. Density isocontours are shown, and similar to the 2D case the formation of the high-density region appears to occur almost perpendicular to the magnetic field lines, which are drawn in red on the figure. The right side of this figure depicts slices diagonally taken across the 3D domain, parallel to the $z$-axis, showing the ram pressure distribution and velocity magnitude. Various regions of higher ram pressure surround the filament, alternated by lower ram pressure voids. Similar to the 2D case, outwards travelling rebound shocks can be seen that sweep up and shock heat the plasma. The actual pressure and velocity values in these regions are comparable to the 2D results and are again slow wave shocks. The pinching effect caused by the expanding shock fronts is again present, albeit less pronounced than for the 2D case discussed before.
 
-\begin{figure}[b!]
+\begin{figure}[t]
   \centering
   \includegraphics[width=0.62\textwidth]{3d_density_evolution.png}
   \caption{
