@@ -40,16 +40,16 @@
 }
 \makenomenclature
 
-\usepackage{glossaries}
-\newcommand{\glossname}{List of Abbreviations}
-\newcommand{\myprintglossary}{
-  \renewcommand{\glossaryname}{\glossname}
-  \cleardoublepage
-  \printglossary[title=\glossname]
-  \chaptermark{\glossname}
-  \addcontentsline{toc}{chapter}{\glossname}
-}
-\makeglossaries
+% \usepackage{glossaries}
+% \newcommand{\glossname}{List of Abbreviations}
+% \newcommand{\myprintglossary}{
+%   \renewcommand{\glossaryname}{\glossname}
+%   \cleardoublepage
+%   \printglossary[title=\glossname]
+%   \chaptermark{\glossname}
+%   \addcontentsline{toc}{chapter}{\glossname}
+% }
+% \makeglossaries
 
 \usepackage{textcomp} % nice greek alphabet
 \usepackage{pifont}   % Dingbats
@@ -67,7 +67,7 @@
 
 \begin{document}
 % include list of abbreviations
-\input{misc/abbreviations.tex}
+% \input{misc/abbreviations.tex}
 % include defined symbols
 \input{misc/symbols.tex}
 
@@ -84,7 +84,7 @@
 \include{00c-abstract_nl/abstract_nl}
 
 \myprintnomenclature
-\myprintglossary
+% \myprintglossary
 
 \tableofcontents
 % \listoffigures
