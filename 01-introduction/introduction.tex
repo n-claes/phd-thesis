@@ -30,7 +30,7 @@ The field of solar physics studies, as the name suggests, our sun. Even here res
 \section{The Sun in a nutshell}
 Our sun, at a distance of approximately 150 million kilometres, is the closest star to Earth and is directly responsible for all life on this planet. Roughly five billion years ago a ``baby'' sun (or proto-star) formed as a contracting molecular cloud, slowly heating up in the process. Once the proto-star's core temperature became high enough nuclear fusion kicked in, converting hydrogen to helium. This signalled a delicate balance between inwards gravitational forces and the outwards push of energy in the form of luminosity, contraction ceased, and our sun entered its main sequence phase as a standard G-type main sequence star. Since then it has been happily burning hydrogen and turning it to helium in its core, and will continue to do so for roughly another 5 billion years. At that point all hydrogen in the core will be exhausted and the star will expand into a red giant, eventually turning into a white dwarf.
 
-The sun is essentially a giant ball of plasma with various internal regions having different physical properties. We will not discuss the overall structure of the solar interior here, but focus only on the solar atmosphere. The sun does not have a strict ``surface'', in the sense that there is no abrupt border between the atmosphere and interior like we have here on Earth, but rather is defined as the part of the sun where photons can easily escape into space. This is marked by an optical depth of $\tau_\nu \approx 1$, which is a measure of how a given intensity is absorbed when it passes through a certain layer, in essence the transparency of this layer. The solar interior has an optical depth which is much larger than one, whereas the solar exterior has an optical depth much less than one, and can (for the most part) be considered to be optically thin. For an extensive discussion on the properties of the solar interior and exterior, see \citet{book_priest}.
+The sun is essentially a giant ball of plasma with various internal regions having different physical properties. We will not discuss the overall structure of the solar interior here, but focus only on the solar atmosphere. The sun does not have a strict ``surface'', in the sense that there is no abrupt border between the atmosphere and interior like we have here on Earth; it rather is defined as the part of the sun where photons can easily escape into space. This is marked by an optical depth of $\tau_\nu \approx 1$, which is a measure of how a given intensity is absorbed when it passes through a certain layer, in essence the transparency of this layer. The solar interior has an optical depth which is much larger than one, whereas the solar exterior has an optical depth much less than one, and can (for the most part) be considered to be optically thin. For an extensive discussion on the properties of the solar interior and exterior, see \citet{book_priest}.
 
 Figure \ref{fig: solar_profile} shows a sketch of the solar atmosphere, which can be divided into three separate regions. While in reality the entire atmosphere is highly dynamic and varying in time, for all intents and purposes we can conveniently model it as three layers with different properties. The first one is called the \emph{photosphere}, which is a thin layer only a few 100 kms thick emitting most of the sun's visible light. It is pervaded with granulation of different sizes, owing their existence to convective cells originating from within the solar interior, implying that there is quite a lot of turbulence present throughout the entire solar photosphere.
 \begin{figure}[t]
@@ -56,7 +56,7 @@ The chromosphere ends at the sudden rise in temperature and drop in density whic
   \centering
   \includegraphics[width=0.6\textwidth]{solar_prominence.png}
   \caption{
-    Eruptive prominence in He II at 304 \AA from 10 March 2010, the size of the Earth is indicated on the figure for scale. Figure from NASA/SDO/AIA.
+    Eruptive prominence in He II at 304 {\AA} from 10 March 2010, the size of the Earth is indicated on the figure for scale. Figure from NASA/SDO/AIA.
   }
   \label{fig: solar_prominence}
 \end{figure}
@@ -82,7 +82,23 @@ Magnetic fields may give rise to an even richer collection of possible instabili
 
 
 \section{General outline}
-Due to the huge applicability and interdisciplinary importance of linear stability studies the topic is vast and numerous research has been done over the past decades.
+Due to the huge applicability and interdisciplinary importance of linear stability studies the topic is vast and numerous research has been done over the past decades. However, research in this field usually takes one of two main approaches: either direct numerical simulations are done in two or three dimensions, which is quite resource intensive and time-consuming; or a theoretical approach is considered in which the required dispersion relation makes it necessary to use (greatly) simplifying assumptions due to the complexity of the problem at hand. In this thesis we plan to take a different approach to waves and instabilities, and tackle (thermal) instabilities from a spectroscopic viewpoint. We therefore take a stepwise approach and formulate the following:
+\begin{enumerate}
+  \item[i)] How do linear waves trigger or evolve into nonlinear thermal instability for local coronal volumes?
+  \item[ii)] In the nonlinear regime, is there a link between thermal instability and fine structure?
+  \item[iii)] Moving away from simplified setups, what does the spectrum of a realistic solar atmosphere look like?
+  \item[iv)] What role do thermal instabilities have in this?
+\end{enumerate}
+
+These can be regarded as the three ``science questions'' we want to look at in this thesis, with point iii) and iv)  being quite challenging. In order to lay a solid foundation we dedicate Chapter \ref{ch: spectroscopy} to a thorough introduction to MHD spectroscopy, paying special attention to the non-adiabatic terms.
+
+Chapter \ref{ch: thermal instability} builds further upon this, where a combined numerical and theoretical approach in a simplified uniform setup allows us to derive eigenfunctions for slow MHD modes, which can then be excited in a numerical domain with solar coronal conditions. We can make sure that the thermal mode is unstable, and we can take a close-up look at the dynamical and temporal evolution of the system as a whole. This gives us a first answer to points i) and ii).
+
+In order to look at point iii) we need to move away from ``simple'' setups, which implies that problems can no longer be treated analytically. Therefore, in Chapter \ref{ch: legolas} we lay the foundations for the development of a brand new numerical tool, {\legolas}, which will allow us to do MHD spectroscopy of one-dimensional equilibria with a plethora of physical effects, for a general configuration that achieves force and thermodynamic balance. We introduce the weak Galerkin form of the linearised and Fourier-analysed MHD equations, which in turn transforms the set of equations in a generalised eigenvalue problem that can be solved using various linear algebra routines. This results in a complete set of eigenvalues and eigenfunctions for a given state, allowing us to probe the various waves and (in)stabilities at high resolutions.
+
+In Chapter \ref{ch: legolas_applications} we test {\legolas} against a whole range of well-established results, from p and g modes in magnetised, stratified atmospheres, to modes relevant for coronal loop seismology, thermal instabilities, and instability studies of astrophysical jet flows. We show an excellent correspondence with known results, thereby thoroughly testing the implementation of our new code.
+
+Finally, with {\legolas} we are in a place to answer points iii) and iv), and hence look at a realistic, empirical solar atmosphere model in Chapter \ref{ch: solar_atmosphere} and calculate the full eigenvalue spectrum for different chromospheric and coronal regions. This yields new insights in the behaviour of the thermal and slow continua, as well as in the thermal stability of these kinds of configurations.
 
 
 
