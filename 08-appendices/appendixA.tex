@@ -16,9 +16,9 @@ and in the case of selfgravity we have a ninth index $x^9$ corresponding to the 
     \amat(1, 2) &= -\int \rho_0'\hj{1}\hk{2}  - \int \rho_0 \hj{1}\dhk{2} &\\
     \amat(1, 3) &= \int \rho_0 k_2 \hj{1}\hk{3} &\\
     \amat(1, 4) &= \int \rho_0 k_3 \hj{1}\hk{4} &\\
-    \flowmat(1, 1) &= \int\Bigl(\Vplus - iv_{01}'\Bigr)\hj{1}\hk{1} - \int i v_{01}\hj{1}\dhk{1} &\\
+    \flowmat(1, 1) &= \int\Bigl(\Vplus - iv_{01}'\Bigr)\hj{1}\hk{1} - \int i v_{01}\hj{1}\dhk{1}
   \end{flalign*}
-}
+}% percentage is needed here to avoid extra space
 
 \subsubsection{Matrix elements momentum-1 equation}
 {
@@ -57,7 +57,7 @@ and in the case of selfgravity we have a ninth index $x^9$ corresponding to the 
     %
     \flowmat(2, 3) &= -\int 2\eps'\rho_0 v_{02}\hj{2}\hk{3}
   \end{flalign*}
-}
+}%
 
 \subsubsection{Matrix elements momentum-2 equation}
 {
@@ -90,7 +90,7 @@ and in the case of selfgravity we have a ninth index $x^9$ corresponding to the 
     \flowmat(3, 3) &= \int \rho_0\Bigl(-i\eps'v_{01} + \eps \Vplus\Bigr)\hj{3}\hk{3}
       - \int i\eps\rho_0v_{01}\hj{3}\dhk{3}
   \end{flalign*}
-}
+}%
 
 \subsubsection{Matrix elements momentum-3 equation}
 {
@@ -126,17 +126,27 @@ and in the case of selfgravity we have a ninth index $x^9$ corresponding to the 
       + \int \left[
         \rho_0\left(\Vplus + iv_{01}'\right) + \left(\frac{\eps'}{\eps}\rho_0 + \rho_0'\right)iv_{01}
       \right]\hj{4}\hk{4} \\
-      &+ \int i\rho_0 v_{01} \dhj{4}\hk{4} &\\
+      &+ \int i\rho_0 v_{01} \dhj{4}\hk{4}
   \end{flalign*}
-}
+}%
 
 \newcommand{\oneminusBoneB}{\left(1 - \frac{B_{01}^2}{B_0^2}\right)}
 \newcommand{\kpplus}{\left(\kappapfK{0} + \dkappaperpdB\right)}
+\newcommand{\kpplusshort}{\kappapfK{0}^{+}}
 \newcommand{\kpplusplus}{
   \left[\oneminusBoneB\dkappaperpdB - \frac{B_{01}^2}{B_0^2}\kappapfK{0}\right]
 }
+\newcommand{\kpplusplusshort}{\kappapfK{0}^{++}}
 
 \subsubsection{Matrix elements energy equation}
+In the matrix elements corresponding to thermal conduction we introduce the following quantities for brevity
+{
+  \customEquationFont
+  \begin{equation}
+    \kpplusshort = \kpplus \qquad \text{and} \qquad \kpplusplusshort = \kpplusplus,
+  \end{equation}
+}%
+which are modified variants of the conductivity prefactor $\kappapfK{0}$ defined in Equation \eqref{eq: kappapfk}.
 {
   \customEquationFont
   \allowdisplaybreaks
@@ -198,37 +208,37 @@ and in the case of selfgravity we have a ninth index $x^9$ corresponding to the 
       &-\int i\gmone \left(2B_{01}^2\kappapfK{0} + \skappaperp{0}\right)\dhj{5}\dhk{5} &\\
     %
     \condmat(5, 6) &=
-      - 2i\gmone \eps T_0'\Gmin \kpplusplus \hj{5}\hk{6} \\
-      &- \int 2\gmone \eps T_0'\Gmin \kpplus\frac{B_{01}}{B_0^2}\left(
+      - 2i\gmone \eps T_0'\Gmin \kpplusplusshort \hj{5}\hk{6} \\
+      &- \int 2\gmone \eps T_0'\Gmin \kpplusshort\frac{B_{01}}{B_0^2}\left(
         \frac{\eps'}{\eps}iB_{01} + \Fplus
       \right)\hj{5}\hk{6} \\
-      &+ \int 2i\gmone \eps T_0' \Gmin \kpplusplus\dhj{5}\hk{6} &\\
+      &+ \int 2i\gmone \eps T_0' \Gmin \kpplusplusshort\dhj{5}\hk{6} &\\
     %
     \condmat(5, 7) &=
-      2\gmone k_3 T_0' B_{01}\kpplusplus\hj{5}\hk{7}  \\
-      &+ 2i\gmone T_0' B_{03}\kpplusplus\hj{5}\dhk{7} \\
+      2\gmone k_3 T_0' B_{01}\kpplusplusshort\hj{5}\hk{7}
+      + 2i\gmone T_0' B_{03}\kpplusplusshort\hj{5}\dhk{7} \\
       &+ \int \gmone k_3 \kappapfK{0} \left(B_{01}T_0'' + iT_0'\Fplus\right) \hj{5}\hk{7} \\
-      &+ \int \gmone k_3 B_{01}T_0'\left[\kappapfK{0}' - 2i\frac{B_{01}}{B_0^2}\kpplus\left(
+      &+ \int \gmone k_3 B_{01}T_0'\left[\kappapfK{0}' - 2i\frac{B_{01}}{B_0^2}\kpplusshort\left(
         \frac{\eps'}{\eps}iB_{01} + \Fplus
       \right)\right] \hj{5}\hk{7} \\
-      &+ \int\gmone T_0' B_{01}\left[2\frac{B_{03}}{B_0^2}\kpplus\left(
+      &+ \int\gmone T_0' B_{01}\left[2\frac{B_{03}}{B_0^2}\kpplusshort\left(
         \frac{\eps'}{\eps}iB_{01} + \Fplus
       \right) - k_3\kappapfK{0}\right]\hj{5}\dhk{7} \\
-      &- \int 2\gmone T_0' B_{01}k_3\kpplusplus \dhj{5}\hk{7} \\
-      &- \int 2i\gmone T_0' B_{03}\kpplusplus \dhj{5}\dhk{7} &\\
+      &- \int 2\gmone T_0' B_{01}k_3\kpplusplusshort \dhj{5}\hk{7}
+      - \int 2i\gmone T_0' B_{03}\kpplusplusshort \dhj{5}\dhk{7} &\\
     %
     \condmat(5, 8) &=
-      -2\gmone B_{01}k_2 T_0' \kpplusplus \hj{5}\hk{8} \\
-      &- 2i\gmone B_{02}\eps T_0' \kpplusplus \hj{5}\dhk{8} \\
+      -2\gmone B_{01}k_2 T_0' \kpplusplusshort \hj{5}\hk{8}
+      - 2i\gmone B_{02}\eps T_0' \kpplusplusshort \hj{5}\dhk{8} \\
       &- \int \gmone k_2 \kappapfK{0}\left(B_{01}T_0'' + iT_0'\Fplus\right) \hj{5}\hk{8} \\
-      &- \int \gmone k_2 B_{01}T_0'\left[\kappapfK{0}' - 2i\frac{B_{01}}{B_0^2}\kpplus\left(
+      &- \int \gmone k_2 B_{01}T_0'\left[\kappapfK{0}' - 2i\frac{B_{01}}{B_0^2}\kpplusshort\left(
         \frac{\eps'}{\eps}iB_{01} + \Fplus
       \right)\right] \hj{5}\hk{8} \\
-      &- \int \gmone T_0' B_{01} \left[2\frac{\eps B_{02}}{B_0^2}\kpplus \left(
+      &- \int \gmone T_0' B_{01} \left[2\frac{\eps B_{02}}{B_0^2}\kpplusshort \left(
         \frac{\eps'}{\eps}iB_{01} + \Fplus
       \right) - k_2 \kappapfK{0}\right] \hj{5}\dhk{8} \\
-      &+ \int 2\gmone T_0' B_{01}k_2 \kpplusplus\dhj{5}\hk{8} \\
-      &+ \int 2i\gmone T_0' \eps B_{02}\kpplusplus \dhj{5}\dhk{8} &\\
+      &+ \int 2\gmone T_0' B_{01}k_2 \kpplusplusshort\dhj{5}\hk{8}
+      + \int 2i\gmone T_0' \eps B_{02}\kpplusplusshort \dhj{5}\dhk{8} &\\
     %
     \etamat(5, 5) &=
       \int i\gmone \frac{d\eta}{dT}\left[
@@ -262,7 +272,7 @@ and in the case of selfgravity we have a ninth index $x^9$ corresponding to the 
       \right]\hj{5}\dhk{8} \\
       &+ \int 2i\gmone \left(\eps B_{02}\right)'\eta_0 \dhj{5}\dhk{8}
   \end{flalign*}
-}
+}%
 
 \subsubsection{Matrix elements induction-1 equation}
 {
@@ -287,7 +297,7 @@ and in the case of selfgravity we have a ninth index $x^9$ corresponding to the 
     %
     \etamat(6, 8) &= \int i \eta_0 \eps k_3  \hj{6}\dhk{8}
   \end{flalign*}
-}
+}%
 
 \subsubsection{Matrix elements induction-2 equation}
 {
@@ -321,7 +331,7 @@ and in the case of selfgravity we have a ninth index $x^9$ corresponding to the 
     %
     \etamat(7, 8) &= \int i\eta_0 k_2 k_3 \hj{7}\hk{8}
   \end{flalign*}
-}
+}%
 
 \subsubsection{Matrix elements induction-3 equation}
 {
@@ -356,7 +366,7 @@ and in the case of selfgravity we have a ninth index $x^9$ corresponding to the 
       - \int i\eta_0 \eps \dhj{8}\dhk{8}
     %
   \end{flalign*}
-}
+}%
 
 \subsubsection{Matrix elements selfgravity equation}
 {
@@ -375,7 +385,7 @@ and in the case of selfgravity we have a ninth index $x^9$ corresponding to the 
     %
     \amat(9, 4) &= 4\pi \int \rho_0 k_3 \hj{9}\hk{4} &\\
     %
-    \flowmat(9, 1) &= 4\pi \int \Bigl(\Vplus - iv_{01}'\Bigr)\hj{9}\hk{1} - 4\pi G \int iv_{01}\hj{9}\dhk{1} &
+    \flowmat(9, 1) &= 4\pi \int \Bigl(\Vplus - iv_{01}'\Bigr)\hj{9}\hk{1} - 4\pi \int iv_{01}\hj{9}\dhk{1} &
   \end{flalign*}
-}
+}%
 \cleardoublepage
