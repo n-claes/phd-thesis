@@ -40,9 +40,9 @@ We start from the same set of MHD equations as in Chapter \ref{ch: spectroscopy}
   \rho\frac{\partial T}{\partial t} &=
     -\rho \bv\cdot\nabla T - \gmone p\nabla \cdot \bv - \gmone\rho\HLF
     + \gmone\nabla \cdot (\bkappa \cdot \nabla T) \label{eq: energy} \\
-    &\quad + \gmone\eta(\nabla \times \bb)^2 + \mu\left|\nabla \bv \right|^2 \nonumber \\
+    &\quad + \gmone\eta(\nabla \times \bb)^2, \nonumber \\
   \frac{\partial \bb}{\partial t} &=
-    \nabla \times (\bv \times \bb) - \nabla \times (\eta\nabla \times \bb) \label{eq: induction}
+    \nabla \times (\bv \times \bb) - \nabla \times (\eta\nabla \times \bb). \label{eq: induction}
 \end{flalign}
 Here $\eta$ denotes the resistivity and $\bg$ the gravitational acceleration.
 
@@ -84,7 +84,7 @@ The resistivity contribution in the energy equation is given by $\gmone \eta (\n
 \begin{equation}
   \begin{gathered}
     \gmone\left(\eta_0 + \eta_1\right)\left(\nabla \times \bb_0 + \nabla \times \bb_1\right)^2 \\
-    = 2\gmone \eta_0 \left(\nabla \times \bb_0\right) \cdot \left(\nabla \times \bb_1\right)
+    \simeq 2\gmone \eta_0 \left(\nabla \times \bb_0\right) \cdot \left(\nabla \times \bb_1\right)
       + \gmone\eta_1 \left(\nabla \times \bb_0\right) \cdot \left(\nabla \times \bb_0\right),
   \end{gathered}
 \end{equation}
@@ -146,9 +146,9 @@ where $\unit{B} = \bb/B_0$ is the unit vector along the magnetic field. So in ad
 \end{equation}
 In what follows we can use the identity
 \begin{equation} \label{eq: divergence_expression}
-  \nabla \cdot (\bb_0 f) = f\nabla \cdot \bb + \bb_0 \cdot \nabla f,
+  \nabla \cdot (\bb_0 f) = f\nabla \cdot \bb_0 + \bb_0 \cdot \nabla f,
 \end{equation}
-with $f$ a scalar term, the first term drops out since $\nabla \cdot \bb = 0$. Additionally, to shorten the notation we introduce the symbol
+with $f$ a scalar term, the first term drops out since $\nabla \cdot \bb_0 = 0$. Additionally, to shorten the notation we introduce the symbol
 \begin{equation} \label{eq: kappapfk}
   \kappapfK{j} \equiv \frac{\skappapara{j} - \skappaperp{j}}{B_0^2},
 \end{equation}
@@ -200,10 +200,9 @@ and
 where we used $\dfrac{\partial \kappaperp}{\partial (B^2)} = \dfrac{\partial \kappaperp}{\partial B}\dfrac{1}{2B}$.
 
 \subsubsection{Additional physics}
-It is worth noting that {\legolas} also includes a full Hall MHD treatment along with viscosity and viscous heating. We explicitly omit these additional physics in our current formalism, since adding the extra terms would lead to even longer equations; viscosity and Hall are also not used in any of the applications in this thesis. We give a (very) brief description of these additional terms here, but will not discuss them further.
+It is worth noting that {\legolas} also includes a full Hall MHD treatment along with viscosity and viscous heating, discussed in \citet{dejonghe2022}. We explicitly omit these additional physics in our current formalism, since adding the extra terms would lead to even longer equations; viscosity and Hall are also not used in any of the applications in this thesis. We give a (very) brief description of these additional terms here, but will not discuss them further.
 
-The viscous force addition to the momentum equation is given in tensorial form by
-$\mathbf{F}_{\mathrm{visc}} = -\nabla\cdot\left(\mu\mathbf{\Pi}\right)$, which for constant dynamic viscosity $\mu$ can be simplified to good approximation to
+The viscous force addition to the right-hand side of the momentum Equation \eqref{eq: momentum} is given in tensorial form by $\mathbf{F}_{\mathrm{visc}} = -\nabla\cdot\left(\mu\mathbf{\Pi}\right)$, which for constant dynamic viscosity $\mu$ can be simplified to good approximation to
 \begin{equation}
 	\mathbf{F}_{\mathrm{visc}} \simeq \mu \left[ \nabla^2\bv + \frac{1}{3} \nabla\left(\nabla\cdot\bv\right)\right].
 \end{equation}
@@ -211,7 +210,7 @@ This relies on splitting the tensor in a symmetric and antisymmetric part, as ex
 \begin{equation}
   \mu\left[\nabla^2\bv_1 + \frac{1}{3}\nabla(\nabla \cdot \bv_1)\right].
 \end{equation}
-In the energy equation we have a viscous heating term $\mu \left|\nabla \bv\right|^2$ on the right hand side, where we assume that the norm here (which is essentially the norm of a matrix) represents the Frobenius norm such that
+In the energy Equation \eqref{eq: energy} we have a viscous heating term $\gmone\text{H}_\text{visc}$ to be added to the right-hand side, where the source term is given by $\text{H}_\text{visc} = -(\boldsymbol{\Pi} \cdot \nabla) \cdot \bv$. To good approximation we can set $\text{H}_\text{visc} \simeq \mu \left|\nabla \bv\right|^2$ as explained in for example \citet{book_MHD}. We assume that the norm here (which is essentially the norm of a matrix) represents the Frobenius norm such that
 \begin{equation}
   \mu\left|\nabla \bv\right|^2 = \mu\sum_{i=1}^{3}\sum_{j=1}^{3}\left(\nabla \bv\right)_{ij}^2,
 \end{equation}
@@ -325,12 +324,12 @@ $v_{01} \neq 0$ and incompressible if $v_{01} = 0$. It should be noted that also
 {\customEquationFont
 
 \begin{equation} \label{eq: linearised_continuity}
-  \frac{\partial \rho_1}{\partial t} = -\nabla \cdot (\rho_0 \bv) - \nabla \cdot (\rho_1 \bv),
+  \frac{\partial \rho_1}{\partial t} = -\nabla \cdot (\rho_0 \bv_1) - \nabla \cdot (\rho_1 \bv_0),
 \end{equation}
 
 \begin{equation} \label{eq: linearised_momentum}
   \begin{aligned}
-    \rho_0\frac{\bv_1}{\partial t} =&
+    \rho_0\frac{\partial \bv_1}{\partial t} =&
       -\nabla(T_0\rho_1 + \rho_0 T_1)
       - \rho_0 \bv_0 \cdot \nabla\bv_1
       - \rho_0\bv_1 \cdot \nabla \bv_0
@@ -768,12 +767,12 @@ For the other side of the equal sign we can write the matrix element as
         \text{dv} = \left(\dfrac{\rho_0}{\eps}\hk{5}\right)'\text{d}u_1
           \rightarrow \text{v} = \dfrac{\rho_0}{\eps}\hk{5}
       \end{cases} \\
-      &= \bigl.\rho_0 \hj{2}\hk{5}\bigr|_\Omega
+      &= \rho_0 \hj{2}\hk{5}\Bigr|_{\partial \Omega}
         - \int \frac{\eps'}{\eps}\rho_0 \hj{2}\hk{5}du_1
         - \int \rho_0 \dhj{2}\hk{5}du_1,
   \end{aligned}
 \end{equation}
-where we applied integration by parts using the standard notation ``u'' and ``v'' to denote the parts, and the first term has to be evaluated over the domain $\Omega$.
+where we applied integration by parts using the standard notation ``u'' and ``v'' to denote the parts, and the first term has to be evaluated at the edges of the domain, annotated by $\partial\Omega$.
 
 The same strategy is applied to all equations in the linear system, from which it follows that $\bmat$ will only have equal-number matrix elements (i.e. only $(1, 1)$, $(2, 2)$, etc.), implying that $\bmat$ is fully symmetric and real. The $\amat$-matrix on the other hand, will have cross-term elements such that it is, in general, not symmetric. Furthermore, $\amat$ might be complex, depending on the included physical effects. Terms that contain derivatives of the state vector components, as for example $(v_1, T_1)$, are integrated by parts.
 
