@@ -16,7 +16,7 @@ and in the case of selfgravity we have a ninth index $x^9$ corresponding to the 
     \amat(1, 2) &= -\int \rho_0'\hj{1}\hk{2}  - \int \rho_0 \hj{1}\dhk{2} &\\
     \amat(1, 3) &= \int \rho_0 k_2 \hj{1}\hk{3} &\\
     \amat(1, 4) &= \int \rho_0 k_3 \hj{1}\hk{4} &\\
-    \flowmat(1, 1) &= \int\Bigl(\Vplus - iv_{01}'\Bigr)\hj{1}\hk{1} - \int i v_{01}\hj{1}\dhk{1}
+    \flowmat(1, 1) &= \int\Bigl(\Vplus - iv_{01}'\Bigr)\hj{1}\hk{1} - \int \icomplex v_{01}\hj{1}\dhk{1}
   \end{flalign*}
 }% percentage is needed here to avoid extra space
 
@@ -51,9 +51,9 @@ and in the case of selfgravity we have a ninth index $x^9$ corresponding to the 
     %
     \flowmat(2, 1) &= \int\left(v_{01}v_{01}' - \frac{\eps'}{\eps}v_{02}^2\right)\hj{2}\hk{1} &\\
     %
-    \flowmat(2, 2) &= -i\rho_0v_{01}\hj{2}\hk{2}
+    \flowmat(2, 2) &= -\icomplex\rho_0v_{01}\hj{2}\hk{2}
       + \int\left[\rho_0\Vplus + \left(\frac{\eps'}{\eps}\rho_0 + \rho_0'\right)iv_{01}\right]\hj{2}\hk{2}
-      + \int i\rho_0v_{01}\dhj{2}\hk{2} &\\
+      + \int \icomplex\rho_0v_{01}\dhj{2}\hk{2} &\\
     %
     \flowmat(2, 3) &= -\int 2\eps'\rho_0 v_{02}\hj{2}\hk{3}
   \end{flalign*}
@@ -70,16 +70,16 @@ and in the case of selfgravity we have a ninth index $x^9$ corresponding to the 
     %
     \amat(3, 5) &= \int \frac{k_2}{\eps}\rho_0\hj{3}\hk{5} &\\
     %
-    \amat(3, 6) &= i\eps k_3B_{01}\hj{3}\hk{6}
-      - \int i\eps k_3 B_{01}\dhj{3}\hk{6}
+    \amat(3, 6) &= \icomplex\eps k_3B_{01}\hj{3}\hk{6}
+      - \int \icomplex\eps k_3 B_{01}\dhj{3}\hk{6}
       - \int \left(\frac{k_2^2}{\eps} + \eps k_3^2\right) B_{03}\hj{3}\hk{6}	&\\
     %
-    \amat(3, 7) &= \int\frac{k_3}{\eps}\Bigl((\eps B_{02})' - i k_2 B_{01}\Bigr)\hj{3}\hk{7}
+    \amat(3, 7) &= \int\frac{k_3}{\eps}\Bigl((\eps B_{02})' - \icomplex k_2 B_{01}\Bigr)\hj{3}\hk{7}
       + \int \frac{k_2}{\eps}B_{03}\hj{3}\dhk{7} &\\
-    \amat(3, 8) &= -i\eps B_{01}\hj{3}\dhk{8}
-      + \int \frac{k_2}{\eps}\Bigl(i k_2 B_{01} - (\eps B_{02})'\Bigr) \hj{3}\hk{8}
+    \amat(3, 8) &= -\icomplex\eps B_{01}\hj{3}\dhk{8}
+      + \int \frac{k_2}{\eps}\Bigl(\icomplex k_2 B_{01} - (\eps B_{02})'\Bigr) \hj{3}\hk{8}
       + \int \eps k_3 B_{03}\hj{3}\dhk{8} \\
-      &+ \int i\eps B_{01}\dhj{3}\dhk{8} &\\
+      &+ \int \icomplex\eps B_{01}\dhj{3}\dhk{8} &\\
     %
     \sgravmat(3, 9) &= \int \rho_0 k_2 \hj{3}\hk{9} &\\
     %
@@ -87,8 +87,8 @@ and in the case of selfgravity we have a ninth index $x^9$ corresponding to the 
     %
     \flowmat(3, 2) &= -\int \frac{(\eps v_{02})'}{\eps}\rho_0\hj{3}\hk{2} &\\
     %
-    \flowmat(3, 3) &= \int \rho_0\Bigl(-i\eps'v_{01} + \eps \Vplus\Bigr)\hj{3}\hk{3}
-      - \int i\eps\rho_0v_{01}\hj{3}\dhk{3}
+    \flowmat(3, 3) &= \int \rho_0\Bigl(-\icomplex\eps'v_{01} + \eps \Vplus\Bigr)\hj{3}\hk{3}
+      - \int \icomplex\eps\rho_0v_{01}\hj{3}\dhk{3}
   \end{flalign*}
 }%
 
@@ -103,30 +103,30 @@ and in the case of selfgravity we have a ninth index $x^9$ corresponding to the 
     %
     \amat(4, 5) &= \int k_3 \rho_0 \hj{4}\hk{5} &\\
     %
-    \amat(4, 6) &= -i k_2 B_{01} \hj{4}\hk{6}
+    \amat(4, 6) &= -\icomplex k_2 B_{01} \hj{4}\hk{6}
       + \int \left[
-        i \frac{\eps'}{\eps} k_2 B_{01} + B_{02}\left(\frac{k_2^2}{\eps} + \eps k_3^2\right)
+        \icomplex \frac{\eps'}{\eps} k_2 B_{01} + B_{02}\left(\frac{k_2^2}{\eps} + \eps k_3^2\right)
       \right] \hj{4}\hk{6} \\
       &+ \int ik_2 B_{01} \dhj{4}\hk{6} &\\
     %
     \amat(4, 7) &= iB_{01}\hj{4}\dhk{7}
       + \int k_3\Bigl(B_{03}' - ik_3B_{01}\Bigr)\hj{4}\hk{7}
-      - \int \frac{1}{\eps} \Bigl(k_2B_{02} + i\eps'B_{01}\Bigr)\hj{4}\dhk{7} \\
+      - \int \frac{1}{\eps} \Bigl(k_2B_{02} + \icomplex\eps'B_{01}\Bigr)\hj{4}\dhk{7} \\
       &- \int iB_{01}\dhj{4}\dhk{7} &\\
     %
     \amat(4, 8) &= \int k_2\Bigl(iB_{01}k_3 - B_{03}'\Bigr)\hj{4}\hk{8} - \int \eps k_3 B_{02}\hj{4}\dhk{8} &\\
     %
     \sgravmat(4, 9) &= \int \rho_0 \eps k_3 \hj{4}\hk{9} &\\
     %
-    \flowmat(4, 1) &= -\int i v_{01}v_{03}'\hj{4}\hk{1} &\\
+    \flowmat(4, 1) &= -\int \icomplex v_{01}v_{03}'\hj{4}\hk{1} &\\
     %
     \flowmat(4, 2) &= -\int \rho_0 v_{03}'\hj{4}\hk{2} &\\
     %
-    \flowmat(4, 4) &= -i\rho_0 v_{01}\hj{4}\hk{4}
+    \flowmat(4, 4) &= -\icomplex\rho_0 v_{01}\hj{4}\hk{4}
       + \int \left[
         \rho_0\left(\Vplus + iv_{01}'\right) + \left(\frac{\eps'}{\eps}\rho_0 + \rho_0'\right)iv_{01}
       \right]\hj{4}\hk{4} \\
-      &+ \int i\rho_0 v_{01} \dhj{4}\hk{4}
+      &+ \int \icomplex\rho_0 v_{01} \dhj{4}\hk{4}
   \end{flalign*}
 }%
 
@@ -159,53 +159,57 @@ which are modified variants of the conductivity prefactor $\kappapfK{0}$ defined
     %
     \amat(5, 4) &= \int \gmone k_3 \rho_0 T_0 \hj{5}\hk{4} &\\
     %
-    \flowmat(5, 1) &= -\int i\gmone \frac{\left(\eps v_{01}\right)'}{\eps}T_0 \hj{5}\hk{1} &\\
+    \flowmat(5, 1) &= -\int \icomplex\gmone \frac{\left(\eps v_{01}\right)'}{\eps}T_0 \hj{5}\hk{1} &\\
     %
-    \flowmat(5, 5) &= -i \rho_0 v_{01}\hj{5}\hk{5}
-      + \int \rho_0\left[\Vplus + iv_{01}' - i\gmone \frac{\left(\eps v_{01}\right)'}{\eps}\right]\hj{5}\hk{5} \\
+    \flowmat(5, 5) &= -\icomplex \rho_0 v_{01}\hj{5}\hk{5}
+      + \int \rho_0\left[
+        \Vplus + iv_{01}' - \icomplex\gmone \frac{\left(\eps v_{01}\right)'}{\eps}
+      \right]\hj{5}\hk{5} \\
       &+ \int iv_{01}\left(\frac{\eps'}{\eps}\rho_0 + \rho_0'\right)\hj{5}\hk{5}
-      + \int i\rho_0v_{01} \dhj{5}\hk{5} &\\
+      + \int \icomplex\rho_0v_{01} \dhj{5}\hk{5} &\\
     %
-    \coolmat(5, 1) &= -\int i \gmone \Bigl(\HLF_0 + \rho_0 \dHLFrho\Bigr) \hj{5}\hk{1} &\\
+    \coolmat(5, 1) &= -\int \icomplex \gmone \Bigl(\HLF_0 + \rho_0 \dHLFrho\Bigr) \hj{5}\hk{1} &\\
     %
-    \coolmat(5, 5) &= -\int i \gmone \rho_0 \dHLFT\hj{5}\hk{5} &\\
+    \coolmat(5, 5) &= -\int \icomplex \gmone \rho_0 \dHLFT\hj{5}\hk{5} &\\
     %
-    \condmat(5, 1) &= i \gmone T_0' \dkappaperpdrho \oneminusBoneB \hj{5}\hk{1} \\
+    \condmat(5, 1) &= \icomplex \gmone T_0' \dkappaperpdrho \oneminusBoneB \hj{5}\hk{1} \\
       &+ \int \gmone T_0'\frac{B_{01}}{B_0^2}\dkappaperpdrho \left(
           \frac{\eps'}{\eps}iB_{01} + \Fplus
         \right) \hj{5}\hk{1} \\
-      &- \int i\gmone T_0'\dkappaperpdrho \oneminusBoneB \dhj{5}\hk{1} &\\
+      &- \int \icomplex\gmone T_0'\dkappaperpdrho \oneminusBoneB \dhj{5}\hk{1} &\\
     %
     \condmat(5, 5) &=
       \gmone \left[
         -B_{01}\kappapfK{0}\left(2\frac{\eps'}{\eps}iB_{01} + 3\Fplus\right)
-        - \frac{\eps'}{\eps}i \skappaperp{0}
+        - \frac{\eps'}{\eps}\icomplex \skappaperp{0}
       \right]\hj{5}\hk{5} \\
-      &+ \gmone i T_0'\left[\frac{B_{01}^2}{B_0^2}\dkappaparadT + \dkappaperpdT\oneminusBoneB\right]\hj{5}\hk{5} &\\
-		  &+ i\gmone \left(2B_{01}^2\kappapfK{0} + \skappaperp{0}\right)\hj{5}\dhk{5} \\
+      &+ \gmone \icomplex T_0'\left[
+        \frac{B_{01}^2}{B_0^2}\dkappaparadT + \dkappaperpdT\oneminusBoneB
+      \right]\hj{5}\hk{5} &\\
+		  &+ \icomplex\gmone \left(2B_{01}^2\kappapfK{0} + \skappaperp{0}\right)\hj{5}\dhk{5} \\
 		  &+ \gmone \int \left[
         B_{01}\Fplus\kappapfK{0}'
-        - i\frac{1}{\eps}\left(\frac{k_2^2}{\eps} + \eps k_3^2\right)\skappaperp{0}
-        + \kappapfK{0}\left(B_{01}\Fplus' - i\Fplus^2\right)
+        - \icomplex\frac{1}{\eps}\left(\frac{k_2^2}{\eps} + \eps k_3^2\right)\skappaperp{0}
+        + \kappapfK{0}\left(B_{01}\Fplus' - \icomplex\Fplus^2\right)
       \right]\hj{5}\hk{5} \\
       &- \gmone \int \left[
         \frac{B_{01}}{B_0^2}T_0'\left(\dkappaparadT - \dkappaperpdT\right)\left(
-          \frac{\eps'}{\eps}i B_{01} + \Fplus
+          \frac{\eps'}{\eps}\icomplex B_{01} + \Fplus
         \right)
       \right] \hj{5}\hk{5} \\
       &+ \gmone \int \kappapfK{0}B_{01}\frac{\eps'}{\eps}\left(
-        2\frac{\eps'}{\eps}i B_{01} + 3\Fplus
+        2\frac{\eps'}{\eps}\icomplex B_{01} + 3\Fplus
       \right)\hj{5}\hk{5}
       - \int 2i\gmone \frac{\eps'}{\eps}B_{01}^2\kappapfK{0} \hj{5}\dhk{5} \\
       &+ \gmone \int \left[
         B_{01}\kappapfK{0}\left(
-          2\frac{\eps'}{\eps} i B_{01} + 3\Fplus
-        \right) + i\frac{\eps'}{\eps}\skappaperp{0}
+          2\frac{\eps'}{\eps} \icomplex B_{01} + 3\Fplus
+        \right) + \icomplex\frac{\eps'}{\eps}\skappaperp{0}
       \right] \dhj{5}\hk{5} \\
-      &- i \gmone \int T_0'\left[
+      &- \icomplex \gmone \int T_0'\left[
         \frac{B_{01}^2}{B_0^2}\dkappaparadT + \dkappaperpdT\oneminusBoneB
       \right]\dhj{5}\hk{5} \\
-      &-\int i\gmone \left(2B_{01}^2\kappapfK{0} + \skappaperp{0}\right)\dhj{5}\dhk{5} &\\
+      &-\int \icomplex\gmone \left(2B_{01}^2\kappapfK{0} + \skappaperp{0}\right)\dhj{5}\dhk{5} &\\
     %
     \condmat(5, 6) &=
       - 2i\gmone \eps T_0'\Gmin \kpplusplusshort \hj{5}\hk{6} \\
@@ -241,7 +245,7 @@ which are modified variants of the conductivity prefactor $\kappapfK{0}$ defined
       + \int 2i\gmone T_0' \eps B_{02}\kpplusplusshort \dhj{5}\dhk{8} &\\
     %
     \etamat(5, 5) &=
-      \int i\gmone \frac{d\eta}{dT}\left[
+      \int \icomplex\gmone \frac{d\eta}{dT}\left[
         \left(\frac{\left(\eps B_{02}\right)'}{\eps}\right)^2 + B_{03}'^2
       \right]\hj{5}\hk{5} &\\
     \etamat(5, 6) &=
@@ -291,11 +295,11 @@ which are modified variants of the conductivity prefactor $\kappapfK{0}$ defined
     %
     \flowmat(6, 8) &= -\int \eps v_{03}\hj{6}\dhk{8} &\\
     %
-    \etamat(6, 6) &= -\int i \eta_0 \left(\frac{k_2^2}{\eps} + \eps k_3^2\right) \hj{6}\hk{6} &\\
+    \etamat(6, 6) &= -\int \icomplex \eta_0 \left(\frac{k_2^2}{\eps} + \eps k_3^2\right) \hj{6}\hk{6} &\\
     %
-    \etamat(6, 7) &= \int i \eta_0 \frac{k_2}{\eps}\hj{6}\dhk{7} &\\
+    \etamat(6, 7) &= \int \icomplex \eta_0 \frac{k_2}{\eps}\hj{6}\dhk{7} &\\
     %
-    \etamat(6, 8) &= \int i \eta_0 \eps k_3  \hj{6}\dhk{8}
+    \etamat(6, 8) &= \int \icomplex \eta_0 \eps k_3  \hj{6}\dhk{8}
   \end{flalign*}
 }%
 
@@ -310,7 +314,7 @@ which are modified variants of the conductivity prefactor $\kappapfK{0}$ defined
     %
     \amat(7, 4) &= \int iB_{01}\hj{7}\hk{4} &\\
     %
-    \flowmat(7, 6) &= \int i v_{01}k_2 \hj{7}\hk{6} &\\
+    \flowmat(7, 6) &= \int \icomplex v_{01}k_2 \hj{7}\hk{6} &\\
     %
     \flowmat(7, 7) &= \int k_3 v_{03} \hj{7}\hk{7} - \int iv_{01}\hj{7}\dhk{7} &\\
     %
@@ -319,17 +323,17 @@ which are modified variants of the conductivity prefactor $\kappapfK{0}$ defined
     \etamat(7, 5) &= \int iB_{03}'\frac{d\eta}{dT}\hj{7}\hk{5} &\\
     %
     \etamat(7, 6) &=
-      -i\eta_0 k_2 \hj{7}\hk{6}
-      + \int i k_2 \left(\frac{\eps'}{\eps}\eta_0 + \eta_0'\right)\hj{7}\hk{6}
-      + \int i\eta_0 k_2\dhj{7}\hk{6} &\\
+      -\icomplex\eta_0 k_2 \hj{7}\hk{6}
+      + \int \icomplex k_2 \left(\frac{\eps'}{\eps}\eta_0 + \eta_0'\right)\hj{7}\hk{6}
+      + \int \icomplex\eta_0 k_2\dhj{7}\hk{6} &\\
     %
     \etamat(7, 7) &=
-      i\eta_0 \hj{7}\dhk{7}
-      - \int i\eta_0 k_3^2\hj{7}\hk{7}
-      - \int i\left(\frac{\eps'}{\eps}\eta_0 + \eta_0'\right)\hj{7}\dhk{7}
-      - \int i\eta_0 \dhj{7}\dhk{7} &\\
+      \icomplex\eta_0 \hj{7}\dhk{7}
+      - \int \icomplex\eta_0 k_3^2\hj{7}\hk{7}
+      - \int \icomplex\left(\frac{\eps'}{\eps}\eta_0 + \eta_0'\right)\hj{7}\dhk{7}
+      - \int \icomplex\eta_0 \dhj{7}\dhk{7} &\\
     %
-    \etamat(7, 8) &= \int i\eta_0 k_2 k_3 \hj{7}\hk{8}
+    \etamat(7, 8) &= \int \icomplex\eta_0 k_2 k_3 \hj{7}\hk{8}
   \end{flalign*}
 }%
 
@@ -342,7 +346,7 @@ which are modified variants of the conductivity prefactor $\kappapfK{0}$ defined
     %
     \amat(8, 2) &= \int B_{02}\hj{8}\hk{2} &\\
     %
-    \amat(8, 3) &= -\int i \eps B_{01} \hj{8}\hk{3} &\\
+    \amat(8, 3) &= -\int \icomplex \eps B_{01} \hj{8}\hk{3} &\\
     %
     \flowmat(8, 6) &= \int \eps k_3 iv_{01}\hj{8}\hk{6} &\\
     %
@@ -350,20 +354,20 @@ which are modified variants of the conductivity prefactor $\kappapfK{0}$ defined
     %
     \flowmat(8, 8) &= \int k_2 v_{02}\hj{8}\hk{8} - \int iv_{01}\hj{8}\dhk{8} &\\
     %
-    \etamat(8, 5) &= -\int i\frac{\left(\eps B_{02}\right)'}{\eps}\frac{d\eta}{dT}\hj{8}\hk{5} &\\
+    \etamat(8, 5) &= -\int \icomplex\frac{\left(\eps B_{02}\right)'}{\eps}\frac{d\eta}{dT}\hj{8}\hk{5} &\\
     %
     \etamat(8, 6) &=
-      -i\eta_0 \eps k_3 \hj{8}\hk{6}
-      + \int i\eta_0' \eps k_3 \hj{8}\hk{6}
-      + \int i\eta_0 \eps k_3 \dhj{8}\hk{6} &\\
+      -\icomplex\eta_0 \eps k_3 \hj{8}\hk{6}
+      + \int \icomplex\eta_0' \eps k_3 \hj{8}\hk{6}
+      + \int \icomplex\eta_0 \eps k_3 \dhj{8}\hk{6} &\\
     %
-    \etamat(8, 7) &= \int i\eta_0 \frac{k_2 k_3}{\eps}\hj{8}\hk{7} &\\
+    \etamat(8, 7) &= \int \icomplex\eta_0 \frac{k_2 k_3}{\eps}\hj{8}\hk{7} &\\
     %
     \etamat(8, 8) &=
-      i\eta_0 \eps \hj{8}\dhk{8}
-      - \int i\eta_0 \frac{k_2^2}{\eps}\hj{8}\hk{8}
-      - \int i\eta_0'\eps \hj{8}\dhk{8}
-      - \int i\eta_0 \eps \dhj{8}\dhk{8}
+      \icomplex\eta_0 \eps \hj{8}\dhk{8}
+      - \int \icomplex\eta_0 \frac{k_2^2}{\eps}\hj{8}\hk{8}
+      - \int \icomplex\eta_0'\eps \hj{8}\dhk{8}
+      - \int \icomplex\eta_0 \eps \dhj{8}\dhk{8}
     %
   \end{flalign*}
 }%

@@ -149,12 +149,12 @@ which both have to be evaluated in the equilibrium quantities $\rho_0$ and $T_0$
 
 This set of linearised equations is still a system of partial differential equations. However, since the homogeneous equilibrium quantities $(\rho_0, \bv_0, T_0, \bb_0)$ do not depend on time we can consider plane-wave perturbations of the form
 \begin{equation} \label{eq: plane_wave_homogeneous}
-  f_1(\bx, t) = \tilde{f_1}\exp\Bigl(i\bk \cdot \bx - \icomplex\omega t\Bigr),
+  f_1(\bx, t) = \tilde{f_1}\exp\Bigl(\icomplex\bk \cdot \bx - \icomplex\omega t\Bigr),
 \end{equation}
 where $\bx = (x, y, z)$ is the (Cartesian) position vector, $\omega$ a complex frequency, $\bk = (k_x, k_y, k_z)$ the wave vector and $\tilde{f_1}$ a (complex) constant denoting the amplitude of the plane wave. We are essentially doing a Fourier analysis in three ``ignorable'' dimensions. The wonderful consequence of doing this is that it transforms the temporal and spatial derivatives of the perturbed variables $f_1(\bx, t)$ into
 \begin{equation}
   \frac{\partial}{\partial t} \rightarrow -\icomplex\omega, \qquad\qquad
-  \nabla \rightarrow i\bk,
+  \nabla \rightarrow \icomplex\bk,
 \end{equation}
 which reduces the system of partial differential equations to a system of \emph{algebraic} equations given by
 \begin{gather}
@@ -264,7 +264,7 @@ In the previous Subsection we omitted all non-ideal terms in the energy equation
   \resizebox{\hsize}{!}{$
     \begin{pmatrix}
       0 & \kperp \rho_0 & 0 & \kpara \rho_0 & 0 & 0 & 0 & 0 \\
-      \dfrac{T_0}{\rho_0}\kperp & 0 & 0 & 0 & \kperp & 0 & \dfrac{i B_0}{\rho_0}k_0^2 & 0 \\
+      \dfrac{T_0}{\rho_0}\kperp & 0 & 0 & 0 & \kperp & 0 & \dfrac{\icomplex B_0}{\rho_0}k_0^2 & 0 \\
       0 & 0 & 0 & 0 & 0 & -\dfrac{\icomplex B_0}{\rho_0}\kpara^2 & 0 & \dfrac{\icomplex B_0}{\rho_0}\kpara \kperp \\
       \dfrac{T_0}{\rho_0}\kpara & 0 & 0 & 0 & \kpara & 0 & 0 & 0 \\
       -\icomplex\gmone \dHLFrho &
