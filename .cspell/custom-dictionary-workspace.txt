@@ -27,6 +27,7 @@ Eigensystem
 exempli
 extremum
 fijnstructuur
+footpoint
 footpoints
 Frobenius
 Galerkin
@@ -71,6 +72,7 @@ overstability
 overstable
 perturbaties
 photospheric
+plasmoids
 poloidal
 postprocessing
 prechosen
