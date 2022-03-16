@@ -124,7 +124,7 @@ The thermal conduction term $\nabla \cdot (\bkappa \cdot \nabla T)$ in the energ
 \begin{equation}
   \nabla \cdot \left(\bkappa_0 \cdot \nabla T_1\right) + \nabla \cdot \left(\bkappa_1 \cdot \nabla T_0\right).
 \end{equation}
-However, as we are dealing with a tensor quantity to model the anisotropy in MHD, the linearisation process is tricky. Rewriting the tensor expression \eqref{eq: conduction} as
+However, as we are dealing with a tensor quantity to model the anisotropy in MHD, the linearisation process is tricky. We rewrite the tensor expression \eqref{eq: conduction} as
 \begin{equation}
   \bkappa = \left(\kappapara - \kappaperp\right)\unit{B}\unit{B} + \kappaperp\idmat,
 \end{equation}
@@ -299,7 +299,7 @@ For a general heating function $\HLFheat(\rho, T)$ the thermal balance equation 
 This can be thought of as splitting the heating term in a $(\rho ,T)$ dependent and independent part, and since $\mathcal{C}_\HLFheat$ is locally constant (but again, possibly spatially varying) it does not influence the temperature and density derivatives of $\HLFheat$. We can again distinguish between
 
 \begin{enumerate}
-  \item[\textbf{a)}] $B_{01} = v_{01} = \skappaperp{0} = 0$. From the thermal balance equation it follows that $\HLF = 0$ must hold. This therefore implies that $\HLFheat_0 = \rho_0 \Lambda(T_0)$ following Equation \ref{eq: thermal_equilibrium}.
+  \item[\textbf{a)}] $B_{01} = v_{01} = \skappaperp{0} = 0$. From the thermal balance equation it follows that $\HLF_0 = 0$ must hold. This therefore implies that $\HLFheat_0 = \rho_0 \Lambda(T_0)$ following Equation \eqref{eq: thermal_equilibrium}.
   \item[\textbf{b)}] Any of $\{B_{01}, v_{01}, \skappaperp{0}\} \neq 0$. Similar to the constant heating case $\HLF_0 \neq 0$, and $\HLFheat$ has additional terms governed by Equation \eqref{eq: general_thermal_equilibrium}.
 \end{enumerate}
 
@@ -315,11 +315,11 @@ For both constant and non-constant heating it holds that
           &= \dHLFrho \rho_1 + \dHLFT T_1,
   \end{aligned}
 \end{equation}
-which for constant heating reduces to the previous expression \eqref{eq: dHLF_homogeneous}. For the remainder of this thesis we will only consider a constant term here: as convenient as possible so that thermal balance is satisfied, but possibly locally varying over the domain.
+which for constant heating reduces to the previous expression \eqref{eq: dHLF_homogeneous}. For the remainder of this thesis we will only consider a constant heating term: taken to be as convenient as possible so that thermal balance is satisfied, but possibly locally varying over the domain.
 
 \subsection{The linearised equations}
 With all the necessary terms calculated in the previous Section we are now in a position to linearise Equations \eqref{eq: continuity}--\eqref{eq: induction} around the background specified by Equation \eqref{eq: legolas_equilibrium}. We again denote the unperturbed time-independent parts with a subscript 0 and the perturbed time-dependent parts with a subscript 1. It follows from the adopted equilibrium configuration that $\nabla \cdot \bb_0 = 0$, such that the divergence-free condition on the magnetic field is fulfilled and that the equilibrium flow field is compressible if
-$v_{01} \neq 0$ and incompressible if $v_{01} = 0$. It should be noted that also in the latter case the perturbed quantities can represent both compressible and incompressible eigenoscillations. Furthermore the no-monopole condition should also be taken into account for the perturbed magnetic field, we therefore adopt a vector potential to write $\bb_1 = \nabla \times \ba_1$ such that $\nabla \cdot \bb_0 = 0$ is automatically satisfied. The system of linearised equations is then given by
+$v_{01} \neq 0$ and incompressible if $v_{01} = 0$. It should be noted that also in the latter case the perturbed quantities can represent both compressible and incompressible eigenoscillations. Furthermore the no-monopole condition should also be taken into account for the perturbed magnetic field, we therefore adopt a vector potential to write $\bb_1 = \nabla \times \ba_1$ such that $\nabla \cdot \bb_1 = 0$ is automatically satisfied. The system of linearised equations is then given by
 
 {\customEquationFont
 
@@ -576,7 +576,7 @@ The final set of Fourier-analysed linearised equations is given below, where the
     + \gmone B_{01}\left(T_0' \kappapfK{0}\right)' \left(k_3 a_2 - k_2 a_3\right) \\
     &
     + \icomplex \gmone \left(T_0' \skappaperp{1}\eps\right)'
-    + \icomplex \gmone \left[\skappaperp{0}\eps \left(\frac{T_1}{\eps}\right)'\right]',
+    + \icomplex \gmone \left[\skappaperp{0}\eps \left(\frac{T_1}{\eps}\right)'\right]'
   \end{aligned}
 \end{equation}
 }%
@@ -625,7 +625,7 @@ The final set of Fourier-analysed linearised equations is given below, where the
     - \icomplex T_1 \frac{d\eta}{dT} \frac{\left(B_{02} \eps\right)'}{\eps}
     + \icomplex \eta_0 \frac{k_2 k_3}{\eps} a_2
     - \icomplex \eta_0 \frac{k_2^2}{\eps}a_3
-    - \icomplex \eta_0 \Bigl(\eps k_3 a_1 - \eps a_3'\Bigr)'.
+    - \icomplex \eta_0 \Bigl(\eps k_3 a_1 - \eps a_3'\Bigr)'
   \end{aligned}
 \end{equation}
 }%

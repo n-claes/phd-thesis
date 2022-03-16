@@ -84,15 +84,15 @@ Naturally, it is clear that higher resolutions result in much finer cells, which
 \section{Introduction to MHD spectroscopy}
 The main question that spectroscopy tries to answer is ``\emph{How do you know, without explicitly solving the entire set of equations, whether a given dynamical system is stable or not}''? Figure \ref{fig: stability} gives an illustration of the theoretical approach to linear stability analysis. Consider a solid ball at rest at an initial time $t = 0$ on some sort of hill in a gravitational field. If no forces are acting on this ball, then it will remain in this initial position indefinitely. When a small perturbation is applied, i.e. moving the ball slightly away from its equilibrium position, a number of things may happen depending on the shape of the surface the ball is resting on.
 
-\begin{figure}[b]
+In Panel a the ball is clearly laying on top of a hill, and any shift in initial position will cause it to roll downwards under the influence of gravity. This is called an \emph{unstable} configuration: no matter how small the perturbation is, there is no way to restore the initial equilibrium after the perturbation is applied.
+In Panel b we have the exact opposite: shift the ball away from its initial location and it will simply roll downwards again, oscillating back and forth around its position at $t = 0$. Assuming there is some friction present between the ball and the surface, it will eventually come to a standstill again after some time $t$ in the same position as it started in. This is called a \emph{stable} configuration, and in this case even relatively large perturbations will have no major effect on the system as a whole.
+
+\begin{figure}[t]
   \centering
   \includegraphics[width=\textwidth]{stability.png}
   \caption{Panel \textbf{a}: Unstable system; Panel \textbf{b}: Stable system; Panel \textbf{c}: Linearly stable, nonlinearly unstable system.}
   \label{fig: stability}
 \end{figure}
-
-In Panel a the ball is clearly laying on top of a hill, and any shift in initial position will cause it to roll downwards under the influence of gravity. This is called an \emph{unstable} configuration: no matter how small the perturbation is, there is no way to restore the initial equilibrium after the perturbation is applied.
-In Panel b we have the exact opposite: shift the ball away from its initial location and it will simply roll downwards again, oscillating back and forth around its position at $t = 0$. Assuming there is some friction present between the ball and the surface, it will eventually come to a standstill again after some time $t$ in the same position as it started in. This is called a \emph{stable} configuration, and in this case even relatively large perturbations will have no major effect on the system as a whole.
 
 Panel c on the other hand is much more interesting. Following the same train of thought as for the other two panels, \emph{small} perturbations will return the ball to its equilibrium position. However, if the perturbation is large enough the ball may gain enough energy to reach the peak on the right, roll over, and it will never be able to reach its equilibrium position again. This is called \emph{nonlinear instability}: a system that is stable for small perturbations, but may become unstable for larger perturbations.
 
