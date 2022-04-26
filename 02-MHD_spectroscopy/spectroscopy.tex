@@ -97,7 +97,7 @@ In Panel b we have the exact opposite: shift the ball away from its initial loca
 
 Panel c on the other hand is much more interesting. Following the same train of thought as for the other two panels, \emph{small} perturbations will return the ball to its equilibrium position. However, if the perturbation is large enough the ball may gain enough energy to reach the peak on the right, roll over, and it will never be able to reach its equilibrium position again. This is called \emph{nonlinear instability}: a system that is stable for small perturbations, but may become unstable for larger perturbations.
 
-Thermal instabilities (TI), the main topic of the next Chapter, can be classified in this latter category. These instabilities are called \emph{thermal} since they originate from the non-adiabatic terms in the energy equation \eqref{eq: nonad_energy}, in particular the radiative cooling terms. A system that is losing energy through radiation and gaining energy through background heating may be stable to small temperature fluctuations, where a restoring force such as magnetic tension/pressure or thermal conduction (which smoothens out variations in temperatures if they are small enough) can counteract the instability and bring the system back in thermal equilibrium. This is the linearly stable regime on the left side of Panel c, Figure \ref{fig: stability}. If the fluctuations are large enough to overcome the restoring forces analogous to the right side of Panel c then a thermal runaway reaction occurs (instability), drastically lowering the temperature. A thorough discussion on the nature of thermal instabilities will be given in the next Chapter.
+Thermal instabilities (TI), the main topic of the next Chapter, can be classified in the ``unstable'' and ``nonlinearly unstable'' categories, depending on the conditions. These instabilities are called \emph{thermal} since they originate from the non-adiabatic terms in the energy equation \eqref{eq: nonad_energy}, in particular the radiative cooling terms. A system that is losing energy through radiation and gaining energy through background heating may be stable to small temperature fluctuations, where a restoring force such as magnetic tension/pressure or thermal conduction (which smoothens out variations in temperatures if they are small enough) can counteract the instability and bring the system back in thermal equilibrium. This is the linearly stable regime on the left side of Panel c, Figure \ref{fig: stability}. If the fluctuations are large enough to overcome the restoring forces analogous to the right side of Panel c then a thermal runaway reaction occurs (instability), drastically lowering the temperature. On the other hand, systems that are inherently thermally unstable only need a very small perturbation to trigger the thermal runaway reaction. A thorough discussion on the nature of thermal instabilities will be given in the next Chapter.
 
 \subsection{Linearisation of the system}
 Now that we have given a simplified example as to get a feel for linear stability analysis, we can start tackling the problem mathematically. Starting with the simplest case, that of a homogeneous background, will already prove quite instructive and will pave the path for more complex treatments later on.
@@ -192,7 +192,7 @@ From this the physical role of both components becomes clear: for purely real ei
   \item$\omega_\text{R} \neq 0$ and $\omega_\text{I} < 0$: \emph{overdamped modes}. The opposite of the previous case, with again eigenvalues that are genuinely complex. These eigenvalues represent propagating waves with decreasing amplitude, eventually dying out such that the system returns to its equilibrium state.
 \end{enumerate}
 
-\begin{figure}[b]
+\begin{figure}[t]
   \centering
   \includegraphics[width=0.9\textwidth]{spectral_plane.png}
   \caption{Graphical representation of various (in)stability regions and their terminology.}
@@ -243,13 +243,7 @@ The final four solutions are called the \emph{slow} and \emph{fast magnetosonic 
 \end{equation}
 with $\theta$ denoting the angle between the wave vector $\bk$ and $\bb_0$, the sound speed is given by $\soundspeed^2 = \gamma T_0$. The plus ($+$) and minus ($-$) signs denote the fast and slow MHD waves, respectively. Magnetosonic waves are also anisotropic, although the fast waves are (much) less anisotropic than the slow MHD waves. This follows directly from the definition \eqref{eq: fs_mhd_waves}: if $\cos^2\theta = 0$ (propagation perpendicular to the field lines) then this expression reaches its maximum for the fast wave solution and collapses to zero for the slow wave solution, implying that fast waves propagate faster perpendicular to the magnetic field while slow waves do not propagate in that direction. On the other hand, for $\cos^2\theta = 1$ (parallel propagation) the eigenfrequency for the slow waves reaches its maximum while the fast wave solutions become minimal.
 
-All of these eigenfrequencies follow a strict ordering:
-\begin{equation} \label{eq: omega_ordening}
-  0 \leq \omega_\text{s}^2 \leq \omega_\text{a}^2 \leq \omega_\text{f}^2 < \infty,
-\end{equation}
-which is a general property that will be of the utmost importance in spectroscopy, since it determines \emph{the overall structure of an MHD spectrum}. This property will even hold (in one form or another) when we move on to inhomogeneous backgrounds and/or additional physical effects. Figure \ref{fig: adiabatic_spectrum} shows this strict ordering of the eigenfrequencies in the spectral plane, for a general solution of the ideal MHD eigenvalue problem. Note that all eigenfrequencies lie on the real axis, as it should be, owing to the self-adjointness of the matrix operator.
-
-\begin{figure}[t]
+\begin{figure}[b]
   \centering
   \includegraphics[width=\textwidth]{spectrum_adiabatic.png}
   \caption{
@@ -258,6 +252,13 @@ which is a general property that will be of the utmost importance in spectroscop
   }
   \label{fig: adiabatic_spectrum}
 \end{figure}
+
+All of these eigenfrequencies follow a strict ordering:
+\begin{equation} \label{eq: omega_ordening}
+  0 \leq \omega_\text{s}^2 \leq \omega_\text{a}^2 \leq \omega_\text{f}^2 < \infty,
+\end{equation}
+which is a general property that will be of the utmost importance in spectroscopy, since it determines \emph{the overall structure of an MHD spectrum}. This property will even hold (in one form or another) when we move on to inhomogeneous backgrounds and/or additional physical effects. Figure \ref{fig: adiabatic_spectrum} shows this strict ordering of the eigenfrequencies in the spectral plane, for a general solution of the ideal MHD eigenvalue problem. Note that all eigenfrequencies lie on the real axis, as it should be, owing to the self-adjointness of the matrix operator.
+
 
 \subsection{The non-adiabatic MHD spectrum}
 In the previous Subsection we omitted all non-ideal terms in the energy equation \eqref{eq: nonad_energy}, and with the basics in place we can now wonder what will happen to the spectrum when these terms are not omitted. First and foremost, including radiative cooling and/or thermal conduction effects will lift the self-adjointness of the matrix operator, such that genuine complex solutions become possible. The ideal matrix \eqref{eq: ideal_matrix} transforms into its non-adiabatic counterpart
@@ -332,7 +333,6 @@ From this the wide range in complexity for an MHD spectrum becomes clear: depend
 
 
 \subsection{A first approximation to inhomogeneity}
-Consider an inhomogeneous medium along $x$ that is bounded between $x = 0$ and $x = L$ but infinite in the $y$ and $z$ directions. As explained in the introductory paragraph we can no longer Fourier analyse along $x$ and a much more intricate treatment is needed. However, we can roughly approximate this medium by a collection of bounded slabs as shown in Figure \ref{fig: bounded_slab} in an effort to understand the general implications that inhomogeneity brings. We can approximately treat the first slab as being bounded between $x = 0$ and $x = a$ and having homogeneous density, temperature and pressure. Due to the bounded nature of this smaller slab the wave number along $x$ will be quantised: $k_x = n\pi / a$ where $n$ is an integer. This in turn introduces a quantisation of the spectrum itself: for every value of $k_x$ we will have a solution to the ideal, homogeneous eigenvalue problem, leading to a discrete spectrum.
 
 \begin{figure}[b]
   \centering
@@ -342,6 +342,8 @@ Consider an inhomogeneous medium along $x$ that is bounded between $x = 0$ and $
   }
   \label{fig: bounded_slab}
 \end{figure}
+
+Consider an inhomogeneous medium along $x$ that is bounded between $x = 0$ and $x = L$ but infinite in the $y$ and $z$ directions. As explained in the introductory paragraph we can no longer Fourier analyse along $x$ and a much more intricate treatment is needed. However, we can roughly approximate this medium by a collection of bounded slabs as shown in Figure \ref{fig: bounded_slab} in an effort to understand the general implications that inhomogeneity brings. We can approximately treat the first slab as being bounded between $x = 0$ and $x = a$ and having homogeneous density, temperature and pressure. Due to the bounded nature of this smaller slab the wave number along $x$ will be quantised: $k_x = n\pi / a$ where $n$ is an integer. This in turn introduces a quantisation of the spectrum itself: for every value of $k_x$ we will have a solution to the ideal, homogeneous eigenvalue problem, leading to a discrete spectrum.
 
 We can understand what this would look like, physically speaking, by turning to the eigenfrequency solutions given in Equations \eqref{eq: alfvenwaves}-\eqref{eq: fs_mhd_waves} while taking the limit of $k_x \rightarrow \infty$. Using the same assumptions as earlier for $\bk$ and $\bb_0$, that is, $\bb_0 = (0, 0, B_0)$ and $\bk = (\kperp, 0, \kpara)$, we get for the Alfv\'en waves
 \begin{equation} \label{eq: alfven_accumulation_point}
